@@ -8,15 +8,6 @@
   <!-- Filters -->
 
   <filter>
-    <filter-name>PratilipiFilter</filter-name>
-    <filter-class>com.pratilipi.servlet.PratilipiFilter</filter-class>
-  </filter>
-  <filter-mapping>
-    <filter-name>PratilipiFilter</filter-name>
-    <url-pattern>/*</url-pattern>
-  </filter-mapping>
-
-  <filter>
     <filter-name>ClaymusFilter</filter-name>
     <filter-class>com.claymus.servlet.ClaymusFilter</filter-class>
   </filter>
@@ -26,15 +17,6 @@
   </filter-mapping>
 
   <!-- Handlers for GWT Services -->
-
-  <servlet>
-    <servlet-name>PratilipiService</servlet-name>
-    <servlet-class>com.pratilipi.service.server.PratilipiServiceImpl</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>PratilipiService</servlet-name>
-    <url-pattern>/service.pratilipi</url-pattern>
-  </servlet-mapping>
 
   <servlet>
     <servlet-name>ClaymusService</servlet-name>
@@ -54,56 +36,6 @@
     <url-pattern>/service.sitemap</url-pattern>
   </servlet-mapping>
 
-  <!-- Handlers for Uploading and Serving Website Resources -->
-
-  <servlet>
-    <servlet-name>ResourcePratilipiCoverServlet</servlet-name>
-    <servlet-class>com.pratilipi.servlet.ResourcePratilipiCoverServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>ResourcePratilipiCoverServlet</servlet-name>
-    <url-pattern>/resource.pratilipi-cover/original/*</url-pattern>
-  </servlet-mapping>
-   
-  <servlet>
-    <servlet-name>ResourcePratilipiCover300Servlet</servlet-name>
-    <servlet-class>com.claymus.servlet.ResourceServlet</servlet-class>
-    <init-param>
-      <param-name>ResourceServletType</param-name>
-      <param-value>DOWNLOAD_ONLY</param-value>
-    </init-param>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>ResourcePratilipiCover300Servlet</servlet-name>
-    <url-pattern>/resource.pratilipi-cover/300/*</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-    <servlet-name>ResourceAuthorImageServlet</servlet-name>
-    <servlet-class>com.pratilipi.servlet.ResourceAuthorImageServlet</servlet-class>
-    <init-param>
-      <param-name>ResizeImage</param-name>
-      <param-value>300</param-value>
-    </init-param>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>ResourceAuthorImageServlet</servlet-name>
-    <url-pattern>/resource.author-image/original/*</url-pattern>
-  </servlet-mapping>
-   
-  <servlet>
-    <servlet-name>ResourceImageContentServlet</servlet-name>
-    <servlet-class>com.claymus.servlet.ResourceServlet</servlet-class>
-    <init-param>
-      <param-name>ResourceServletType</param-name>
-      <param-value>DOWNLOAD_ONLY</param-value>
-    </init-param>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>ResourceImageContentServlet</servlet-name>
-    <url-pattern>/resource.pratilipi-content/image/*</url-pattern>
-  </servlet-mapping>
-  
   <!-- Handlers for Task Queues -->
   
   <servlet>
@@ -133,50 +65,14 @@
     <url-pattern>/_ah/queue/reset-password</url-pattern>
   </servlet-mapping>
 
-  <servlet>
-    <servlet-name>QueueCreateOrUpdateDefaultCoverServlet</servlet-name>
-    <servlet-class>com.pratilipi.servlet.QueueCreateOrUpdateDefaultCoverServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>QueueCreateOrUpdateDefaultCoverServlet</servlet-name>
-    <url-pattern>/_ah/queue/create-or-update-default-cover</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-    <servlet-name>QueueHtmlToPratilipiServlet</servlet-name>
-    <servlet-class>com.pratilipi.servlet.QueueHtmlToPratilipiServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>QueueHtmlToPratilipiServlet</servlet-name>
-    <url-pattern>/_ah/queue/html-to-pratilipi</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-    <servlet-name>QueueWordToPratilipiServlet</servlet-name>
-    <servlet-class>com.pratilipi.servlet.QueueWordToPratilipiServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>QueueWordToPratilipiServlet</servlet-name>
-    <url-pattern>/_ah/queue/word-to-pratilipi</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-    <servlet-name>QueueUpdatePratilipiIndexServlet</servlet-name>
-    <servlet-class>com.pratilipi.servlet.QueueUpdatePratilipiIndexServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>QueueUpdatePratilipiIndexServlet</servlet-name>
-    <url-pattern>/_ah/queue/update-index-pratilipi</url-pattern>
-  </servlet-mapping>
-
   <!-- Main Claymus Handler -->
 
   <servlet>
-    <servlet-name>PratilipiMain</servlet-name>
-    <servlet-class>com.pratilipi.servlet.PratilipiMain</servlet-class>
+    <servlet-name>ClaymusMain</servlet-name>
+    <servlet-class>com.claymus.servlet.ClaymusMain</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>PratilipiMain</servlet-name>
+    <servlet-name>ClaymusMain</servlet-name>
     <url-pattern>/*</url-pattern>
   </servlet-mapping>
 

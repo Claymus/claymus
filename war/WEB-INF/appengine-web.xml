@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <appengine-web-app xmlns="http://appengine.google.com/ns/1.0">
 
-  <application>prod-pratilipi</application>
-  <module>gamma</module>
-  <version>mark-3p18</version>
+  <application>devo-claymus</application>
+  <module>default</module>
+  <version>mark-0p0</version>
 
   <threadsafe>true</threadsafe>
   <sessions-enabled>true</sessions-enabled>
@@ -26,26 +26,26 @@
     <property name="java.util.logging.config.file" value="WEB-INF/logging.properties"/>
 
 	<!-- Configure web domain -->
-    <property name="devo-pratilipi.domain" value="devo.pratilipi.com"/>
-    <property name="prod-pratilipi.domain" value="www.pratilipi.com"/>
+    <property name="devo-claymus.domain" value="devo.claymus.com"/>
+    <property name="prod-claymus.domain" value="www.claymus.com"/>
 
 	<!-- Configure resource path -->
-    <property name="devo-pratilipi.resource" value="/resource."/>
-    <property name="prod-pratilipi.resource" value="/resource."/>
+    <property name="devo-claymus.resource" value="/resource."/>
+    <property name="prod-claymus.resource" value="/resource."/>
 
-    <property name="devo-pratilipi.resource.static" value="/resource."/>
-    <property name="prod-pratilipi.resource.static" value="//static.pratilipi.com/"/>
+    <property name="devo-claymus.resource.static" value="/resource."/>
+    <property name="prod-claymus.resource.static" value="//static.claymus.com/"/>
 
 	<!-- Configure emails -->
-    <property name="devo-pratilipi.email.contact" value="dev-team@pratilipi.com"/>
-    <property name="prod-pratilipi.email.contact" value="contact@pratilipi.com"/>
+    <property name="devo-claymus.email.contact" value="dev-team@claymus.com"/>
+    <property name="prod-claymus.email.contact" value="contact@claymus.com"/>
 
-    <property name="devo-pratilipi.email.noreply" value="no-reply@pratilipi.com"/>
-    <property name="prod-pratilipi.email.noreply" value="no-reply@pratilipi.com"/>
+    <property name="devo-claymus.email.noreply" value="no-reply@claymus.com"/>
+    <property name="prod-claymus.email.noreply" value="no-reply@claymus.com"/>
 
 	<!-- Configure Blob Storage -->
-    <property name="devo-pratilipi.blobservice.gcs.bucket" value="devo-pratilipi.appspot.com"/>
-    <property name="prod-pratilipi.blobservice.gcs.bucket" value="static.pratilipi.com"/>
+    <property name="devo-claymus.blobservice.gcs.bucket" value="devo-claymus.appspot.com"/>
+    <property name="prod-claymus.blobservice.gcs.bucket" value="prod-claymus.appspot.com"/>
   </system-properties>
 
 </appengine-web-app>
