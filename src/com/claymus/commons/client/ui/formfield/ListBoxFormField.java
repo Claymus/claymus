@@ -65,7 +65,7 @@ public class ListBoxFormField extends FormField implements HasValueChangeHandler
 		if( hasPlaceholder ) {
 			listBox.setItemText( 0, placeholder );
 		} else {
-			listBox.insertItem( placeholder, (String) null, 0 );
+			listBox.insertItem( placeholder, "", 0 );
 			hasPlaceholder = true;
 		}
 	}
