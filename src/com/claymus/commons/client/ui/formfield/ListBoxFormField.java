@@ -4,21 +4,37 @@ import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
+import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.Panel;
 
-public class ListBoxFormField extends FormField {
+public class ListBoxFormField extends FormField implements HasValueChangeHandlers<String> {
 
 	private final Panel formGroup = new FlowPanel();
 	private final Element label = Document.get().createLabelElement();
 	private final ListBox listBox = new ListBox();
 	private final Element glyphicon = Document.get().createSpanElement();
 	
+	private boolean hasPlaceholder = false;
+	
 	
 	public ListBoxFormField() {
 		listBox.getElement().setAttribute( "data-container", "body" );
 		listBox.getElement().setAttribute( "data-placement", "top" );
+		listBox.addChangeHandler( new ChangeHandler() {
+			
+			@Override
+			public void onChange( ChangeEvent event ) {
+				ValueChangeEvent.fire( ListBoxFormField.this, getValue() );
+			}
+			
+		});
 		listBox.addBlurHandler( new BlurHandler() {
 			
 			@Override
@@ -46,7 +62,12 @@ public class ListBoxFormField extends FormField {
 	
 	
 	public void setPlaceholder( String placeholder ) {
-		addItem( placeholder, null );
+		if( hasPlaceholder ) {
+			listBox.setItemText( 0, placeholder );
+		} else {
+			listBox.insertItem( placeholder, (String) null, 0 );
+			hasPlaceholder = true;
+		}
 	}
 	
 	public void addItem( String item, String value ){
@@ -99,6 +120,11 @@ public class ListBoxFormField extends FormField {
 	@Override
 	public void resetValidation() {
 		markDefault();
+	}
+
+	@Override
+	public HandlerRegistration addValueChangeHandler( ValueChangeHandler<String> handler ) {
+		return addHandler( handler, ValueChangeEvent.getType() );
 	}
 
 	private void markDefault() {

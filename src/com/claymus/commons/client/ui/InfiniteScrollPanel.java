@@ -32,8 +32,11 @@ public abstract class InfiniteScrollPanel extends Composite implements Window.Sc
 		panel.add( child );
 	}
 
-	public void clear() {
+	public void reset() {
 		panel.clear();
+		loadingItems = false;
+		finisedLoading = false;
+		loadItemsIfRequired();
 	}
 
 	@Override
@@ -71,6 +74,7 @@ public abstract class InfiniteScrollPanel extends Composite implements Window.Sc
 
 	public void loadFailed() {
 		loadingItems = false;
+		loadItemsIfRequired();
 	}
 	
 	public void loadFinished() {
