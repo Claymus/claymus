@@ -91,10 +91,7 @@ public class Search extends Composite {
 	}
 	
 	public String getSearchQuery(){
-		if( inputGroupButton.getText().trim().equals( "All" ) )
-			return searchTextBox.getText();
-		else
-			return inputGroupButton.getText().trim() + " AND " + searchTextBox.getText();
+		return searchTextBox.getText();
 	}
 	
 	public void setSearchQuery( String searchQuery ){
@@ -112,5 +109,11 @@ public class Search extends Composite {
 		searchButton.setVisible( visible );
 	}
 
+	public String getPrefix() {
+		return inputGroupButton.getText().trim();
+	}
 	
+	public void setPrefix( String prefix ) {
+		inputGroupButton.getElement().setInnerHTML( prefix + " " + "<span class=\"caret\"></span>");
+	}
 }
