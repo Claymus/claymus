@@ -1,15 +1,15 @@
 package com.claymus.commons.shared;
 
-public enum PageTypeClaymus implements PageType {
+public enum ClaymusPageType implements PageType {
 
-	NONE( "/page/" ),
+	GENERIC( "/page/" ),
 	BLOG( "/blog/" );
 	
 
 	private String urlPrefix;
 	
 	
-	private PageTypeClaymus( String urlPrefix ) {
+	private ClaymusPageType( String urlPrefix ) {
 		this.urlPrefix = urlPrefix;
 	}
 	
