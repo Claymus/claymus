@@ -1,7 +1,9 @@
 package com.claymus.data.access.gae;
 
+import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
+import javax.jdo.annotations.PrimaryKey;
 
 import com.claymus.commons.shared.CommentStatus;
 import com.claymus.data.transfer.Comment;
@@ -11,7 +13,8 @@ import com.google.appengine.api.datastore.Text;
 @PersistenceCapable( table = "COMMENT" )
 public class CommentEntity implements Comment {
 
-	@Persistent( column = "COMMENT_ID" )
+	@PrimaryKey
+	@Persistent( column = "COMMENT_ID", valueStrategy = IdGeneratorStrategy.IDENTITY )
 	private Long id;
 
 	@Persistent( column = "PARENT_ID" )
