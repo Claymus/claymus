@@ -24,6 +24,7 @@ import com.google.apphosting.api.ApiProxy;
 public class ClaymusHelper implements Serializable {
 
 	public static final String SESSION_ATTRIB_CURRENT_USER_ID = "CurrentUserId";
+	public static final String SEARCH_INDEX_NAME = "GLOBAL_INDEX";
 	
 	public static final String URL_RESOURCE =
 			ClaymusHelper.getSystemProperty( "resource" );
