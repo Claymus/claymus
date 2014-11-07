@@ -20,7 +20,7 @@ public class BlogContentHelper extends PageContentHelper<
 	}
 
 
-	public static BlogContent newPostContent() {
+	public static BlogContent newBlogContent() {
 		return new BlogContentEntity();
 	}
 
