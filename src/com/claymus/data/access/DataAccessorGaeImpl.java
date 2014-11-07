@@ -13,6 +13,7 @@ import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.Query;
 
+import com.claymus.data.access.gae.CommentEntity;
 import com.claymus.data.access.gae.EmailTemplateEntity;
 import com.claymus.data.access.gae.PageContentEntityStub;
 import com.claymus.data.access.gae.PageEntity;
@@ -21,6 +22,7 @@ import com.claymus.data.access.gae.RoleAccessEntity;
 import com.claymus.data.access.gae.RoleEntity;
 import com.claymus.data.access.gae.UserEntity;
 import com.claymus.data.access.gae.UserRoleEntity;
+import com.claymus.data.transfer.Comment;
 import com.claymus.data.transfer.EmailTemplate;
 import com.claymus.data.transfer.Page;
 import com.claymus.data.transfer.PageContent;
@@ -350,7 +352,32 @@ public class DataAccessorGaeImpl implements DataAccessor {
 	public EmailTemplate newEmailTemplate() {
 		return new EmailTemplateEntity();
 	}
-	
+
+
+	@Override
+	public Comment newComment() {
+		return new CommentEntity();
+	}
+
+
+	@Override
+	public List<Comment> getCommentByRefId(Long refId) {
+		Query query =
+				new GaeQueryBuilder( pm.newQuery( CommentEntity.class ) )
+						.addFilter( "refId", refId )
+						.build();
+
+		@SuppressWarnings("unchecked")
+		List<Comment> commentList = (List<Comment>) query.execute( refId );
+		return (List<Comment>) pm.detachCopyAll( commentList );
+	}
+
+
+	@Override
+	public Comment createOrUpdateComment(Comment comment) {
+		return createOrUpdateEntity( comment);
+	}
+
 
 	@Override
 	public void destroy() {
