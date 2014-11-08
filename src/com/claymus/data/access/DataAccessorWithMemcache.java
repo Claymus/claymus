@@ -291,13 +291,9 @@ public class DataAccessorWithMemcache implements DataAccessor {
 	}
 
 	@Override
-	public List<Comment> getCommentByRefId( Long refId ) {
-		List<Comment> commentList = memcache.get( PREFIX_COMMENT_LIST + refId );
-		if( commentList == null ) {
-			commentList = dataAccessor.getCommentByRefId( refId );
-			memcache.put( PREFIX_COMMENT_LIST + refId, new ArrayList<>( commentList ) );
-		}
-		return commentList;
+	public DataListCursorTuple<Comment> getCommentByRefId(
+			String refId, String cursorStr, int resultCount  ) {
+		return dataAccessor.getCommentByRefId(refId, cursorStr, resultCount);
 	}
 
 	@Override

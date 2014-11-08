@@ -88,7 +88,7 @@ public interface DataAccessor extends Serializable {
 	
 	Comment newComment();
 	
-	List<Comment> getCommentByRefId( Long refId );
+	DataListCursorTuple<Comment> getCommentByRefId( String refId , String cursorStr, int resultCount );
 	
 	Comment createOrUpdateComment( Comment comment );
 	

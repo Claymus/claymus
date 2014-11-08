@@ -361,15 +361,28 @@ public class DataAccessorGaeImpl implements DataAccessor {
 
 
 	@Override
-	public List<Comment> getCommentByRefId(Long refId) {
+	public DataListCursorTuple<Comment> getCommentByRefId(String refId, String cursorStr, int resultCount ) {
 		Query query =
 				new GaeQueryBuilder( pm.newQuery( CommentEntity.class ) )
 						.addFilter( "refId", refId )
+						.addOrdering( "creationDate", false )
+						.setRange( 0, resultCount )
 						.build();
 
+		if( cursorStr != null ) {
+			Cursor cursor = Cursor.fromWebSafeString( cursorStr );
+			Map<String, Object> extensionMap = new HashMap<String, Object>();
+			extensionMap.put( JDOCursorHelper.CURSOR_EXTENSION, cursor );
+			query.setExtensions(extensionMap);
+		}
+		
 		@SuppressWarnings("unchecked")
 		List<Comment> commentList = (List<Comment>) query.execute( refId );
-		return (List<Comment>) pm.detachCopyAll( commentList );
+		Cursor cursor = JDOCursorHelper.getCursor( commentList );
+
+		return new DataListCursorTuple<Comment>(
+				(List<Comment>) pm.detachCopyAll( commentList ),
+				cursor == null ? null : cursor.toWebSafeString() );
 	}
 
 
