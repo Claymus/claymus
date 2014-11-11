@@ -13,6 +13,7 @@ import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.Query;
 
+import com.claymus.data.access.gae.CommentEntity;
 import com.claymus.data.access.gae.EmailTemplateEntity;
 import com.claymus.data.access.gae.PageContentEntityStub;
 import com.claymus.data.access.gae.PageEntity;
@@ -21,6 +22,7 @@ import com.claymus.data.access.gae.RoleAccessEntity;
 import com.claymus.data.access.gae.RoleEntity;
 import com.claymus.data.access.gae.UserEntity;
 import com.claymus.data.access.gae.UserRoleEntity;
+import com.claymus.data.transfer.Comment;
 import com.claymus.data.transfer.EmailTemplate;
 import com.claymus.data.transfer.Page;
 import com.claymus.data.transfer.PageContent;
@@ -350,7 +352,45 @@ public class DataAccessorGaeImpl implements DataAccessor {
 	public EmailTemplate newEmailTemplate() {
 		return new EmailTemplateEntity();
 	}
-	
+
+
+	@Override
+	public Comment newComment() {
+		return new CommentEntity();
+	}
+
+
+	@Override
+	public DataListCursorTuple<Comment> getCommentByRefId(String refId, String cursorStr, int resultCount ) {
+		Query query =
+				new GaeQueryBuilder( pm.newQuery( CommentEntity.class ) )
+						.addFilter( "refId", refId )
+						.addOrdering( "creationDate", false )
+						.setRange( 0, resultCount )
+						.build();
+
+		if( cursorStr != null ) {
+			Cursor cursor = Cursor.fromWebSafeString( cursorStr );
+			Map<String, Object> extensionMap = new HashMap<String, Object>();
+			extensionMap.put( JDOCursorHelper.CURSOR_EXTENSION, cursor );
+			query.setExtensions(extensionMap);
+		}
+		
+		@SuppressWarnings("unchecked")
+		List<Comment> commentList = (List<Comment>) query.execute( refId );
+		Cursor cursor = JDOCursorHelper.getCursor( commentList );
+
+		return new DataListCursorTuple<Comment>(
+				(List<Comment>) pm.detachCopyAll( commentList ),
+				cursor == null ? null : cursor.toWebSafeString() );
+	}
+
+
+	@Override
+	public Comment createOrUpdateComment(Comment comment) {
+		return createOrUpdateEntity( comment);
+	}
+
 
 	@Override
 	public void destroy() {

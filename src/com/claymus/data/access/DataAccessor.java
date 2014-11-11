@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.jdo.PersistenceManager;
 
+import com.claymus.data.transfer.Comment;
 import com.claymus.data.transfer.EmailTemplate;
 import com.claymus.data.transfer.Page;
 import com.claymus.data.transfer.PageContent;
@@ -83,6 +84,13 @@ public interface DataAccessor extends Serializable {
 
 	
 	EmailTemplate newEmailTemplate();
+	
+	
+	Comment newComment();
+	
+	DataListCursorTuple<Comment> getCommentByRefId( String refId , String cursorStr, int resultCount );
+	
+	Comment createOrUpdateComment( Comment comment );
 	
 	
 	void destroy();

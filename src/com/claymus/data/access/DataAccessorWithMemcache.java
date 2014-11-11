@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.jdo.PersistenceManager;
 
+import com.claymus.data.transfer.Comment;
 import com.claymus.data.transfer.EmailTemplate;
 import com.claymus.data.transfer.Page;
 import com.claymus.data.transfer.PageContent;
@@ -26,7 +27,8 @@ public class DataAccessorWithMemcache implements DataAccessor {
 	private final static String PREFIX_PAGE = "Page-";
 	private final static String PREFIX_PAGE_CONTENT = "PageConent-";
 	private final static String PREFIX_PAGE_CONTENT_LIST = "PageConentList-";
-	
+	private final static String PREFIX_COMMENT = "Comment-";
+	private final static String PREFIX_COMMENT_LIST = "CommentList-";
 	
 	private final DataAccessor dataAccessor;
 	private final Memcache memcache;
@@ -268,27 +270,47 @@ public class DataAccessorWithMemcache implements DataAccessor {
 
 	@Override
 	public PageLayout getPageLayout( Long id ) {
-		// TODO; enable caching
 		return dataAccessor.getPageLayout( id );
 	}
 
 	@Override
 	public PageLayout createOrUpdatePageLayout( PageLayout pageLayout ) {
-		// TODO; enable caching
 		return dataAccessor.createOrUpdatePageLayout( pageLayout );
 	}
 
 	
 	@Override
 	public EmailTemplate newEmailTemplate() {
-		// TODO; enable caching
 		return dataAccessor.newEmailTemplate();
 	}
-	
 
+	
+	@Override
+	public Comment newComment() {
+		return dataAccessor.newComment();
+	}
+
+	@Override
+	public DataListCursorTuple<Comment> getCommentByRefId(
+			String refId, String cursorStr, int resultCount  ) {
+		return dataAccessor.getCommentByRefId(refId, cursorStr, resultCount);
+	}
+
+	@Override
+	public Comment createOrUpdateComment( Comment comment ) {
+		comment = dataAccessor.createOrUpdateComment( comment );
+		memcache.put( PREFIX_COMMENT + comment.getId(), comment );
+		memcache.remove( PREFIX_COMMENT_LIST + comment.getRefId() );
+		return comment;
+	}
+
+	
 	@Override
 	public void destroy() {
 		dataAccessor.destroy();
 	}
+
+
+	
 	
 }
