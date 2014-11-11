@@ -2,7 +2,7 @@ package com.claymus.data.transfer;
 
 import java.io.Serializable;
 
-import com.claymus.commons.shared.CommentStatus;
+import com.claymus.commons.shared.CommentState;
 
 public interface Comment extends Serializable {
 	
@@ -24,8 +24,8 @@ public interface Comment extends Serializable {
 
 	void setContent( String content );
 
-	CommentStatus getStatus();
+	CommentState getStatus();
 
-	void setStatus( CommentStatus status );
+	void setStatus( CommentState status );
 
 }

@@ -359,9 +359,10 @@ public class DataAccessorGaeImpl implements DataAccessor {
 		return new CommentEntity();
 	}
 
-
 	@Override
-	public DataListCursorTuple<Comment> getCommentByRefId(String refId, String cursorStr, int resultCount ) {
+	public DataListCursorTuple<Comment> getCommentList(
+			String refId, String cursorStr, int resultCount ) {
+		
 		Query query =
 				new GaeQueryBuilder( pm.newQuery( CommentEntity.class ) )
 						.addFilter( "refId", refId )
@@ -387,8 +388,8 @@ public class DataAccessorGaeImpl implements DataAccessor {
 
 
 	@Override
-	public Comment createOrUpdateComment(Comment comment) {
-		return createOrUpdateEntity( comment);
+	public Comment createOrUpdateComment( Comment comment ) {
+		return createOrUpdateEntity( comment );
 	}
 
 

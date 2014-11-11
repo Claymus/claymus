@@ -1,9 +1,8 @@
-package com.claymus.pagecontent.comment.client;
+package com.claymus.pagecontent.comments.client;
 
 import com.claymus.commons.client.ui.formfield.RichTextInputFormField;
 import com.claymus.commons.client.ui.formfield.TextInputFormField;
-import com.claymus.commons.shared.CommentStatus;
-import com.claymus.pagecontent.comment.shared.CommentContentData;
+import com.claymus.pagecontent.comments.shared.CommentContentData;
 import com.claymus.service.client.ClaymusService;
 import com.claymus.service.client.ClaymusServiceAsync;
 import com.claymus.service.shared.SavePageContentRequest;
@@ -18,7 +17,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.RootPanel;
 
 
-public class CommentContent implements EntryPoint, ClickHandler {
+public class CommentsContent implements EntryPoint, ClickHandler {
 
 	private static final ClaymusServiceAsync claymusService =
 			GWT.create( ClaymusService.class );

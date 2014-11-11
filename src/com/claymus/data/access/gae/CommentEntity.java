@@ -5,7 +5,7 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
-import com.claymus.commons.shared.CommentStatus;
+import com.claymus.commons.shared.CommentState;
 import com.claymus.data.transfer.Comment;
 import com.google.appengine.api.datastore.Text;
 
@@ -30,7 +30,7 @@ public class CommentEntity implements Comment {
 	private Text content;
 	
 	@Persistent( column = "STATUS" )
-	private CommentStatus status;
+	private CommentState status;
 	
 	
 	@Override
@@ -80,12 +80,12 @@ public class CommentEntity implements Comment {
 	}
 
 	@Override
-	public CommentStatus getStatus() {
+	public CommentState getStatus() {
 		return status;
 	}
 
 	@Override
-	public void setStatus( CommentStatus status ) {
+	public void setStatus( CommentState status ) {
 		this.status = status;
 	}
 

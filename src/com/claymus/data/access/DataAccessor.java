@@ -62,7 +62,7 @@ public interface DataAccessor extends Serializable {
 
 	Page getPage( String pageType, Long primaryContentId );
 
-	DataListCursorTuple<Page> getPageList( String cursorStr, int resultCount );
+	DataListCursorTuple<Page> getPageList( String cursor, int resultCount );
 
 	Page createOrUpdatePage( Page page );
 	
@@ -71,7 +71,7 @@ public interface DataAccessor extends Serializable {
 
 	List<PageContent> getPageContentList( Long pageId );
 
-	DataListCursorTuple<BlogPostContent> getBlogPostContentList( Long blogId, String cursorStr, int resultCount );
+	DataListCursorTuple<BlogPostContent> getBlogPostContentList( Long blogId, String cursor, int resultCount );
 
 	PageContent createOrUpdatePageContent( PageContent pageContent );
 	
@@ -88,7 +88,7 @@ public interface DataAccessor extends Serializable {
 	
 	Comment newComment();
 	
-	DataListCursorTuple<Comment> getCommentByRefId( String refId , String cursorStr, int resultCount );
+	DataListCursorTuple<Comment> getCommentList( String refId , String cursor, int resultCount );
 	
 	Comment createOrUpdateComment( Comment comment );
 	
