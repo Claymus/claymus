@@ -21,6 +21,7 @@
   <servlet>
     <servlet-name>ClaymusService</servlet-name>
     <servlet-class>com.claymus.service.server.ClaymusServiceImpl</servlet-class>
+    <load-on-startup>1</load-on-startup>
   </servlet>
   <servlet-mapping>
     <servlet-name>ClaymusService</servlet-name>
@@ -70,6 +71,7 @@
   <servlet>
     <servlet-name>ClaymusMain</servlet-name>
     <servlet-class>com.claymus.servlet.ClaymusMain</servlet-class>
+    <load-on-startup>1</load-on-startup>
   </servlet>
   <servlet-mapping>
     <servlet-name>ClaymusMain</servlet-name>

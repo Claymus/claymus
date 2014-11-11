@@ -11,6 +11,8 @@
   <instance-class>F1</instance-class>
 
   <automatic-scaling>
+    <min-idle-instances>1</min-idle-instances>
+    <max-idle-instances>3</max-idle-instances>
     <max-pending-latency>10ms</max-pending-latency>
   </automatic-scaling>
     
