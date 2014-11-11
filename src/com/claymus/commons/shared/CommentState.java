@@ -2,10 +2,11 @@ package com.claymus.commons.shared;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-public enum CommentStatus implements IsSerializable{
+public enum CommentState implements IsSerializable{
 
-	APPROVED,
+	PENDING_APPROVAL,
 	REJECTED,
-	PENDING_APPROVAL
+	APPROVED,
+	AUTO_APPROVED,
 
 }

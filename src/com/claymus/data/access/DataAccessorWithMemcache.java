@@ -27,8 +27,6 @@ public class DataAccessorWithMemcache implements DataAccessor {
 	private final static String PREFIX_PAGE = "Page-";
 	private final static String PREFIX_PAGE_CONTENT = "PageConent-";
 	private final static String PREFIX_PAGE_CONTENT_LIST = "PageConentList-";
-	private final static String PREFIX_COMMENT = "Comment-";
-	private final static String PREFIX_COMMENT_LIST = "CommentList-";
 	
 	private final DataAccessor dataAccessor;
 	private final Memcache memcache;
@@ -270,11 +268,13 @@ public class DataAccessorWithMemcache implements DataAccessor {
 
 	@Override
 	public PageLayout getPageLayout( Long id ) {
+		// TODO; enable caching
 		return dataAccessor.getPageLayout( id );
 	}
 
 	@Override
 	public PageLayout createOrUpdatePageLayout( PageLayout pageLayout ) {
+		// TODO; enable caching
 		return dataAccessor.createOrUpdatePageLayout( pageLayout );
 	}
 
@@ -291,17 +291,15 @@ public class DataAccessorWithMemcache implements DataAccessor {
 	}
 
 	@Override
-	public DataListCursorTuple<Comment> getCommentByRefId(
-			String refId, String cursorStr, int resultCount  ) {
-		return dataAccessor.getCommentByRefId(refId, cursorStr, resultCount);
+	public DataListCursorTuple<Comment> getCommentList(
+			String refId, String cursor, int resultCount  ) {
+		
+		return dataAccessor.getCommentList(refId, cursor, resultCount);
 	}
 
 	@Override
 	public Comment createOrUpdateComment( Comment comment ) {
-		comment = dataAccessor.createOrUpdateComment( comment );
-		memcache.put( PREFIX_COMMENT + comment.getId(), comment );
-		memcache.remove( PREFIX_COMMENT_LIST + comment.getRefId() );
-		return comment;
+		return dataAccessor.createOrUpdateComment( comment );
 	}
 
 	
@@ -309,8 +307,5 @@ public class DataAccessorWithMemcache implements DataAccessor {
 	public void destroy() {
 		dataAccessor.destroy();
 	}
-
-
-	
 	
 }
