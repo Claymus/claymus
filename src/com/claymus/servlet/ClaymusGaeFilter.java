@@ -59,7 +59,8 @@ public class ClaymusGaeFilter implements Filter {
 					}
 				}
 				request.getSession().setAttribute( ClaymusHelper.SESSION_ATTRIB_CURRENT_USER_ID, user.getId() );
-				response.sendRedirect( userService.createLoginURL( "/" ) );
+				response.sendRedirect( "/" );
+
 			} else {
 				response.sendRedirect( userService.createLoginURL( "/login" ) );
 			}
