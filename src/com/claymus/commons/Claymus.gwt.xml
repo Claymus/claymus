@@ -1,4 +1,7 @@
 <module rename-to='claymus'>
+  <extend-property name="user.agent" values="opera" />
+  <extend-property name="user.agent" values="ie6" />
+
   <source path='client'/>
   <source path='shared'/>
 </module>

@@ -121,7 +121,7 @@ public class ClaymusMain extends HttpServlet {
 	}
 	
 	protected String getTemplateName() {
-		return null;
+		return "com/claymus/servlet/ClaymusTemplate.ftl";
 	}
 	
 	@SuppressWarnings("unchecked")

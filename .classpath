@@ -4,8 +4,8 @@
 	<classpathentry kind="src" output="test-classes" path="test"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 
-	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER/gwt-2.6.1"/>
-	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER/appengine-java-sdk-1.9.13"/>
+	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER/gwt-2.6.0"/>
+	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER/appengine-java-sdk-1.9.15"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 
 	<!-- FreeMarker for GAE -->
@@ -16,13 +16,13 @@
 	</classpathentry>
 
 	<!-- Google Cloud Storage integration -->
-	<classpathentry kind="con" path="com.google.gdt.eclipse.managedapis.MANAGED_API_CONTAINER/storage-v1r17lv1.18.0-rc"/>
+	<classpathentry kind="con" path="com.google.gdt.eclipse.managedapis.MANAGED_API_CONTAINER/storage-v1r19lv1.18.0-rc"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/appengine-gcs-client-0.4.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/guava-17.0.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/joda-time-2.4.jar"/>
 
 	<!-- Google Drive SDK -->
-	<classpathentry kind="con" path="com.google.gdt.eclipse.managedapis.MANAGED_API_CONTAINER/drive-v2r150lv1.18.0-rc"/>
+	<classpathentry kind="con" path="com.google.gdt.eclipse.managedapis.MANAGED_API_CONTAINER/drive-v2r151lv1.18.0-rc"/>
 
 	<!-- Set up for Apache Commons FileUpload -->
 	<classpathentry kind="lib" path="war/WEB-INF/lib/commons-fileupload-1.3.1.jar"/>
@@ -32,10 +32,10 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/commons-codec-1.9.jar"/>
 
 	<!-- Set up for GWT Super Dev mode -->
-	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/com.google.gwt.eclipse.sdkbundle_2.6.1/gwt-2.6.1/gwt-codeserver.jar"/>
+	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/com.google.gwt.eclipse.sdkbundle_2.6.0/gwt-2.6.0/gwt-codeserver.jar"/>
 
 	<!-- Set up for unit testing -->
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/com.google.appengine.eclipse.sdkbundle_1.9.13/appengine-java-sdk-1.9.13/lib/testing/appengine-testing.jar"/>
-	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/com.google.appengine.eclipse.sdkbundle_1.9.13/appengine-java-sdk-1.9.13/lib/impl/appengine-api-stubs.jar"/>
+	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/com.google.appengine.eclipse.sdkbundle_1.9.15/appengine-java-sdk-1.9.15/lib/testing/appengine-testing.jar"/>
+	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/com.google.appengine.eclipse.sdkbundle_1.9.15/appengine-java-sdk-1.9.15/lib/impl/appengine-api-stubs.jar"/>
 </classpath>
