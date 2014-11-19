@@ -2,27 +2,56 @@ body {
 	margin: 0px;
 }
 
-.opaqueOverlay {
-	position: absolute;
-	top: 0px;
-	left: 0px;
-	width: 100%;
-	height: 100%;
-
-	background-color: black;
-	opacity: 0.9;
-    filter: alpha(opacity=90);
-    z-index: 10000;
+.bg-blue {
+	background: #5677fc;
 }
 
-.transparentOverlay {
-	position: absolute;
-	top: 0px;
-	left: 0px;
-	width: 100%;
-	height: 100%;
-	
-	text-align: center;
-
-    z-index: 10000;
+.bg-green {
+ 	background: #259b24;
 }
+
+.bg-yellow {
+ 	background: #ffeb3b;
+}
+
+.bg-gray {
+ 	background: #eeeeee;
+}
+
+.pratilipi {
+	padding: 16px;
+	margin: 16px 5px 16px 5px;
+	background-color: #fff;
+	color: #555;
+	border: 1px solid #fff;
+	border-radius: 5px;
+	max-width: 1000px;
+}
+
+
+
+/* START :: Polymer Paper Elements :: START */
+
+core-toolbar core-icon-button {
+	margin: 0px !important;
+}
+
+core-toolbar a {
+	text-decoration: none;
+}
+
+core-toolbar.bg-green, core-toolbar.bg-green a {
+	color: white;
+}
+
+paper-slider.bg-green {
+	background-color: transparent;
+}
+
+paper-slider.bg-green::shadow #sliderKnobInner,
+paper-slider.bg-green::shadow #sliderKnobInner::before,
+paper-slider.bg-green::shadow #sliderBar::shadow #activeProgress {
+	background-color: #259b24;
+}
+
+/* END :: Polymer Paper Elements :: END */

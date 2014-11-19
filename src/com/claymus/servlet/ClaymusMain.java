@@ -120,7 +120,7 @@ public class ClaymusMain extends HttpServlet {
 		out.close();
 	}
 	
-	protected String getTemplateName() {
+	protected String getTemplateName( HttpServletRequest reqest ) {
 		return "com/claymus/servlet/ClaymusTemplate.ftl";
 	}
 	
@@ -181,7 +181,7 @@ public class ClaymusMain extends HttpServlet {
 		
 		try {
 			Template template = FREEMARKER_CONFIGURATION
-					.getTemplate( getTemplateName() );
+					.getTemplate( getTemplateName( request ) );
 			template.process( input, out);
 		} catch ( IOException | TemplateException e ) {
 			e.printStackTrace();
