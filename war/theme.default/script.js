@@ -16,23 +16,3 @@ jQuery( ".dropdown-menu li a" ).click(function() {
 	jQuery(this).parents( ".input-group-btn" ).find( '.btn' ).html( $(this).text() + " <span class='caret'></span>" );
 	jQuery(this).parents( ".input-group-btn" ).find( 'input' ).val( $(this).data( 'value' ) );
 });
-
-/* SCRIPT IS USED TO CHANGE HEIGHT OF LOGIN/SIGHNUP PANEL TO ACCOMODATE IN SMALL SCREENS */
-$(document).ready(function() {
-    // Optimalisation: Store the references outside the event handler:
-    var $window = $(window);
-
-    function checkWidth() {
-        var windowsize = $window.width();
-        if (windowsize > 768) {
-            $('#Pratilipi-Search-UserAccess').height( '50px' );
-        }
-        else
-        	$('#Pratilipi-Search-UserAccess').height( '80px' );
-    }
-    
-    // Execute on load
-    checkWidth();
-    // Bind event listener
-    $(window).resize(checkWidth);
-});
