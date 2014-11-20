@@ -12,12 +12,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.claymus.commons.server.ClaymusHelper;
+import com.claymus.commons.server.FreeMarkerUtil;
+import com.claymus.commons.shared.exception.UnexpectedServerException;
 import com.claymus.data.access.DataAccessor;
 import com.claymus.data.access.DataAccessorFactory;
 import com.claymus.data.transfer.Page;
-
-import freemarker.template.Template;
-import freemarker.template.TemplateException;
 
 @SuppressWarnings("serial")
 public class SiteMapServlet extends HttpServlet {
@@ -25,6 +24,7 @@ public class SiteMapServlet extends HttpServlet {
 	private static final Logger logger =
 			Logger.getLogger( SiteMapServlet.class.getName() );
 
+	
 	@Override
 	public void doGet(
 			HttpServletRequest request,
@@ -39,10 +39,10 @@ public class SiteMapServlet extends HttpServlet {
 		dataModel.put( "pageList", pageList );
 
 		try {
-			Template template = ClaymusMain.FREEMARKER_CONFIGURATION
-							.getTemplate( "com/claymus/servlet/SiteMapTemplate.ftl" );
-			template.process( dataModel, response.getWriter() );
-		} catch ( TemplateException | IOException e ) {
+			FreeMarkerUtil.processTemplate( dataModel,
+					"com/claymus/servlet/SiteMapTemplate.ftl",
+					response.getWriter() );
+		} catch( UnexpectedServerException e ) {
 			logger.log( Level.SEVERE, "Template processing failed.", e );
 			response.sendError( HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
 		}

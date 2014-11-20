@@ -1,30 +1,17 @@
 package com.claymus.pagecontent;
 
-import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import javax.servlet.http.HttpServletRequest;
 
 import com.claymus.commons.server.ClaymusHelper;
+import com.claymus.commons.server.FreeMarkerUtil;
 import com.claymus.commons.shared.exception.InsufficientAccessException;
 import com.claymus.commons.shared.exception.UnexpectedServerException;
 import com.claymus.data.access.DataAccessorFactory;
 import com.claymus.data.access.Memcache;
 import com.claymus.data.transfer.PageContent;
 import com.claymus.data.transfer.UserRole;
-import com.claymus.servlet.ClaymusMain;
-
-import freemarker.template.Template;
-import freemarker.template.TemplateException;
 
 public abstract class PageContentProcessor<T extends PageContent> {
-
-	private static final Logger logger =
-			Logger.getLogger( PageContentProcessor.class.getName() );
-
 
 	protected enum CacheLevel {
 		USER,
@@ -92,28 +79,11 @@ public abstract class PageContentProcessor<T extends PageContent> {
 	public String generateHtml( T pageContent, HttpServletRequest request )
 			throws InsufficientAccessException, UnexpectedServerException {
 		
-		return processTemplate( pageContent, getTemplateName() );
+		return FreeMarkerUtil.processTemplate( pageContent, getTemplateName() );
 	}
 	
 	protected String getTemplateName() {
 		return this.getClass().getName().replaceAll( "[.]", "/" ).replace( "Processor", ".ftl" );
 	}
 	
-	protected String processTemplate( Object dataModel, String templateName )
-			throws UnexpectedServerException {
-		
-		Writer writer = new StringWriter();
-
-		try {
-			Template template = ClaymusMain.FREEMARKER_CONFIGURATION
-							.getTemplate( templateName );
-			template.process( dataModel, writer );
-		} catch ( TemplateException | IOException e ) {
-			logger.log( Level.SEVERE, "Template processing failed.", e );
-			throw new UnexpectedServerException();
-		}
-		
-		return writer.toString();
-	}
-		
 }

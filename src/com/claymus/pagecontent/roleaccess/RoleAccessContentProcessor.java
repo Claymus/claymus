@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.claymus.commons.server.FreeMarkerUtil;
 import com.claymus.commons.shared.exception.InsufficientAccessException;
 import com.claymus.commons.shared.exception.UnexpectedServerException;
 import com.claymus.data.access.DataAccessor;
@@ -46,7 +47,7 @@ public class RoleAccessContentProcessor extends PageContentProcessor<RoleAccessC
 		
 
 		// Processing template
-		return super.processTemplate( dataModel, getTemplateName() );
+		return FreeMarkerUtil.processTemplate( dataModel, getTemplateName() );
 	}
 
 }

@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.claymus.commons.server.FreeMarkerUtil;
 import com.claymus.commons.shared.exception.InsufficientAccessException;
 import com.claymus.commons.shared.exception.UnexpectedServerException;
 import com.claymus.data.access.DataAccessor;
@@ -60,7 +61,7 @@ public class BlogContentProcessor extends PageContentProcessor<BlogContent> {
 				.getPageContentHelper( BlogPostContentData.class )
 				.hasRequestAccessToAddContent( request ) );
 		
-		return super.processTemplate( dataModel, getTemplateName() );
+		return FreeMarkerUtil.processTemplate( dataModel, getTemplateName() );
 	}
 
 }

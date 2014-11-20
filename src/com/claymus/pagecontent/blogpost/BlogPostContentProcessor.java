@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import com.claymus.commons.server.ClaymusHelper;
+import com.claymus.commons.server.FreeMarkerUtil;
 import com.claymus.commons.shared.exception.UnexpectedServerException;
 import com.claymus.pagecontent.PageContentProcessor;
 import com.claymus.pagecontent.PageContentRegistry;
@@ -40,7 +41,7 @@ public class BlogPostContentProcessor extends PageContentProcessor<BlogPostConte
 			dataModel.put( "pageUrl", "/blog/" + blogPostContent.getId() );
 		dataModel.put( "showEditOptions", showEditOptions );
 		
-		return super.processTemplate( dataModel, getTemplateName() );
+		return FreeMarkerUtil.processTemplate( dataModel, getTemplateName() );
 	}
 
 }

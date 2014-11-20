@@ -1,6 +1,5 @@
 package com.claymus.servlet;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Date;
@@ -15,6 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.claymus.commons.server.FreeMarkerUtil;
 import com.claymus.commons.shared.exception.InsufficientAccessException;
 import com.claymus.commons.shared.exception.UnexpectedServerException;
 import com.claymus.data.access.DataAccessor;
@@ -29,7 +29,6 @@ import com.claymus.pagecontent.PageContentRegistry;
 import com.claymus.pagecontent.blog.BlogContentHelper;
 import com.claymus.pagecontent.blogpost.BlogPostContent;
 import com.claymus.pagecontent.blogpost.BlogPostContentHelper;
-import com.claymus.pagecontent.html.HtmlContent;
 import com.claymus.pagecontent.html.HtmlContentHelper;
 import com.claymus.pagecontent.pages.PagesContentHelper;
 import com.claymus.pagecontent.roleaccess.RoleAccessContentHelper;
@@ -41,20 +40,12 @@ import com.claymus.websitewidget.header.HeaderWidgetHelper;
 import com.claymus.websitewidget.html.HtmlWidgetHelper;
 import com.claymus.websitewidget.navigation.NavigationWidgetHelper;
 
-import freemarker.template.Configuration;
-import freemarker.template.DefaultObjectWrapper;
-import freemarker.template.Template;
-import freemarker.template.TemplateException;
-import freemarker.template.TemplateExceptionHandler;
-import freemarker.template.Version;
-
 @SuppressWarnings("serial")
 public class ClaymusMain extends HttpServlet {
 	
 	private static final Logger logger = 
 			Logger.getLogger( ClaymusMain.class.getName() );
 
-	public static final Configuration FREEMARKER_CONFIGURATION;
 	
 	static {
 		PageContentRegistry.register( HtmlContentHelper.class );
@@ -68,24 +59,10 @@ public class ClaymusMain extends HttpServlet {
 		WebsiteWidgetRegistry.register( HeaderWidgetHelper.class );
 		WebsiteWidgetRegistry.register( FooterWidgetHelper.class );
 		WebsiteWidgetRegistry.register( NavigationWidgetHelper.class );
-		
-		FREEMARKER_CONFIGURATION = new Configuration();
-		try {
-			FREEMARKER_CONFIGURATION.setDirectoryForTemplateLoading(
-					new File( System.getProperty("user.dir") + "/WEB-INF/classes/" ) );
-		} catch ( IOException e ) {
-			logger.log(
-					Level.SEVERE,
-					"Failed to set directory for FreeMarker template loading.",
-					e );
-		}
-		FREEMARKER_CONFIGURATION.setObjectWrapper( new DefaultObjectWrapper() );
-		FREEMARKER_CONFIGURATION.setDefaultEncoding( "UTF-8" );
-		FREEMARKER_CONFIGURATION.setTemplateExceptionHandler( TemplateExceptionHandler.RETHROW_HANDLER );
-		FREEMARKER_CONFIGURATION.setIncompatibleImprovements( new Version(2, 3, 20) ); // FreeMarker 2.3.20
 	}
 
 	
+	@SuppressWarnings({ "unchecked", "unused" })
 	@Override
 	public void doGet(
 			HttpServletRequest request,
@@ -98,34 +75,8 @@ public class ClaymusMain extends HttpServlet {
 		WebsiteLayout websiteLayout = getWebsiteLayout();
 		
 		response.setCharacterEncoding( "UTF-8" );
-
-		if( pageContentList.size() == 0 ) {
-			response.setStatus( HttpServletResponse.SC_NOT_FOUND );
-			HtmlContent htmlContent = HtmlContentHelper.newHtmlContent();
-			htmlContent.setContent( "Page not found !" );
-			pageContentList.add( htmlContent );
-		}
-		
 		PrintWriter out = response.getWriter();
-		renderPage( page, pageContentList, websiteWidgetList, pageLayout, websiteLayout, out, request, response );
-		out.close();
-	}
-	
-	protected String getTemplateName( HttpServletRequest reqest ) {
-		return this.getClass().getName().replaceAll( "[.]", "/" ).replace( "Main", "Template.ftl" );
-	}
-	
-	@SuppressWarnings("unchecked")
-	private void renderPage(
-			Page page,
-			List<PageContent> pageContentList,
-			List<WebsiteWidget> websiteWidgetList,
-			PageLayout pageLayout,
-			WebsiteLayout websiteLayout,
-			PrintWriter out,
-			HttpServletRequest request,
-			HttpServletResponse response
-			) throws IOException {
+
 
 		Map<String, List<String>> websiteWidgetHtmlListMap = new HashMap<>();
 		for( WebsiteWidget websiteWidget : websiteWidgetList ) {
@@ -146,12 +97,13 @@ public class ClaymusMain extends HttpServlet {
 				String websiteWidgetHtml = websiteWidgetProcessor.generateHtml( websiteWidget, request );
 				websiteWidgetHtmlList.add( websiteWidgetHtml );
 			} catch( InsufficientAccessException e ) {
-				// TODO: add 405 messaage
+				// Do nothing
 			} catch( UnexpectedServerException e ) {
 				logger.log( Level.SEVERE, "Failed to generate website widget html.", e );
 				response.setStatus( HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
 			}
 		}
+		
 		
 		List<String> pageContentHtmlList = new LinkedList<>();
 		for( PageContent pageContent : pageContentList ) {
@@ -164,12 +116,20 @@ public class ClaymusMain extends HttpServlet {
 				if( page.getTitle() == null && page.getPrimaryContentId() != null && pageContent.getId().equals( page.getPrimaryContentId() ) )
 					page.setTitle( pageContentProcessor.getTitle( pageContent, request ) );
 			} catch( InsufficientAccessException e ) {
-				// TODO: add 405 messaage
+				// Do nothing
 			} catch( UnexpectedServerException e ) {
 				logger.log( Level.SEVERE, "Failed to generate page content html.", e );
 				response.setStatus( HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
 			}
 		}
+		
+		
+		if( pageContentHtmlList.size() == 0 ) {
+			response.setStatus( HttpServletResponse.SC_NOT_FOUND );
+			page.setTitle( "Page Not Found" );
+			pageContentHtmlList.add( "Page Not Found !" );
+		}
+
 		
 		Map<String, Object> input = new HashMap<String, Object>();
 		input.put( "page", page );
@@ -179,12 +139,16 @@ public class ClaymusMain extends HttpServlet {
 		input.put( "showBasicVersion", true );
 		
 		try {
-			Template template = FREEMARKER_CONFIGURATION
-					.getTemplate( getTemplateName( request ) );
-			template.process( input, out);
-		} catch ( IOException | TemplateException e ) {
-			e.printStackTrace();
+			FreeMarkerUtil.processTemplate( input, getTemplateName( request ), out );
+		} catch( UnexpectedServerException e ) {
+			response.sendError( HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
 		}
+		
+		out.close();
+	}
+	
+	protected String getTemplateName( HttpServletRequest reqest ) {
+		return this.getClass().getName().replaceAll( "[.]", "/" ).replace( "Main", "Template.ftl" );
 	}
 	
 	protected Page getPage( HttpServletRequest request ) {
@@ -221,8 +185,7 @@ public class ClaymusMain extends HttpServlet {
 		
 	}
 	
-	protected List<PageContent> getPageContentList(
-			HttpServletRequest request ) throws IOException {
+	protected List<PageContent> getPageContentList( HttpServletRequest request ) {
 
 		String requestUri = request.getRequestURI();
 		DataAccessor dataAccessor = DataAccessorFactory.getDataAccessor( request );
@@ -260,8 +223,7 @@ public class ClaymusMain extends HttpServlet {
 		return pageContentList;
 	}
 
-	protected List<WebsiteWidget> getWebsiteWidgetList(
-			HttpServletRequest request ) throws IOException {
+	protected List<WebsiteWidget> getWebsiteWidgetList( HttpServletRequest request ) {
 		
 		return new LinkedList<>();
 	}

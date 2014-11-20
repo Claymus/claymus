@@ -62,18 +62,22 @@ public abstract class PageContentEntity implements PageContent {
 		this.position = position;
 	}
 
+	@Override
 	public Date getCreationDate() {
 		return creationDate;
 	}
 
+	@Override
 	public void setCreationDate( Date creationDate ) {
 		this.creationDate = creationDate;
 	}
 
+	@Override
 	public Date getLastUpdated() {
 		return lastUpdated;
 	}
 
+	@Override
 	public void setLastUpdated( Date lastUpdated ) {
 		this.lastUpdated = lastUpdated;
 	}
