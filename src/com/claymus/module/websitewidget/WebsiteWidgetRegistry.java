@@ -2,11 +2,14 @@ package com.claymus.module.websitewidget;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.claymus.data.transfer.WebsiteWidget;
+import com.claymus.service.shared.data.WebsiteWidgetData;
 
 public final class WebsiteWidgetRegistry {
 
@@ -14,41 +17,71 @@ public final class WebsiteWidgetRegistry {
 			Logger.getLogger( WebsiteWidgetRegistry.class.getName() );
 
 	
-	private final Map<
+	@SuppressWarnings("rawtypes")
+	private static final List<WebsiteWidgetHelper> helperList = new LinkedList<>();
+	
+	@SuppressWarnings("rawtypes")
+	private static final Map<
+			Class<? extends WebsiteWidgetData>,
+			WebsiteWidgetHelper > mapWidgetDataToHelper = new HashMap<>();
+
+	private static final Map<
 			Class<? extends WebsiteWidget>,
-			WebsiteWidgetProcessor<? extends WebsiteWidget> > map = new HashMap<>();
+			WebsiteWidgetProcessor<? extends WebsiteWidget> > mapWidgetToProcessor = new HashMap<>();
 
 
-	@SuppressWarnings("unchecked")
-	public <
+	public static <
 			P extends WebsiteWidget,
-			Q extends WebsiteWidgetProcessor<P>,
-			R extends WebsiteWidgetFactory<P, Q> > void register( Class<R> websiteWidgetFactoryClass ) {
+			Q extends WebsiteWidgetData,
+			R extends WebsiteWidgetProcessor<P>,
+			S extends WebsiteWidgetHelper<P, Q, R> > void register( Class<S> websiteWidgetFactoryClass ) {
 		
 		ParameterizedType parameterizedType =
-				(ParameterizedType) websiteWidgetFactoryClass.getGenericInterfaces()[0];
+				(ParameterizedType) websiteWidgetFactoryClass.getGenericSuperclass();
 		
+		@SuppressWarnings("unchecked")
 		Class<P> websiteWidgetClass =
 				(Class<P>) parameterizedType.getActualTypeArguments()[0];
-		Class<Q> websiteWidgetProcessorClass = 
+		@SuppressWarnings("unchecked")
+		Class<Q> websiteWidgetDataClass =
 				(Class<Q>) parameterizedType.getActualTypeArguments()[1];
+		@SuppressWarnings("unchecked")
+		Class<R> websiteWidgetProcessorClass = 
+				(Class<R>) parameterizedType.getActualTypeArguments()[2];
 		
 		try {
-			Q websiteWidgetProcessor = websiteWidgetProcessorClass.newInstance();
-			map.put( websiteWidgetClass, websiteWidgetProcessor );
+			R websiteWidgetProcessor = websiteWidgetProcessorClass.newInstance();
+			S websiteWidgetHelper = websiteWidgetFactoryClass.newInstance();
+			helperList.add( websiteWidgetHelper );
+			mapWidgetDataToHelper.put( websiteWidgetDataClass, websiteWidgetHelper );
+			mapWidgetToProcessor.put( websiteWidgetClass, websiteWidgetProcessor );
 		} catch ( InstantiationException | IllegalAccessException e ) {
 			logger.log( Level.SEVERE, "Module registration failed.", e );
 		}
 	}
 	
+	
+	@SuppressWarnings("rawtypes")
+	public static List<WebsiteWidgetHelper> getWebsiteWidgetHelperList() {
+		return helperList;
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public static <
+			Q extends WebsiteWidgetData> WebsiteWidgetHelper getWebsiteWidgetHelper(
+					Class<Q> websiteWidgetDataClass ) {
+		
+		return mapWidgetDataToHelper.get( websiteWidgetDataClass );
+	}
+	
 	@SuppressWarnings("unchecked")
-	public <P extends WebsiteWidget> WebsiteWidgetProcessor<P> getWebsiteWidgetProcessor(
+	public static <P extends WebsiteWidget> WebsiteWidgetProcessor<P> getWebsiteWidgetProcessor(
 			Class<P> websiteWidgetClass ) {
 		
 		if( websiteWidgetClass.isInterface() )
-			return (WebsiteWidgetProcessor<P>) map.get( websiteWidgetClass );
+			return (WebsiteWidgetProcessor<P>) mapWidgetToProcessor.get( websiteWidgetClass );
 		else
-			return (WebsiteWidgetProcessor<P>) map.get( websiteWidgetClass.getInterfaces()[0] );
+			return (WebsiteWidgetProcessor<P>) mapWidgetToProcessor.get( websiteWidgetClass.getInterfaces()[0] );
 	}
 	
 }

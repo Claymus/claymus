@@ -34,10 +34,10 @@ public class PageContentRegistry {
 			P extends PageContent,
 			Q extends PageContentData,
 			R extends PageContentProcessor<P>,
-			S extends PageContentHelper<P, Q, R> > void register( Class<S> pageContentFactoryClass ) {
+			S extends PageContentHelper<P, Q, R> > void register( Class<S> pageContentHelperClass ) {
 		
 		ParameterizedType parameterizedType =
-				(ParameterizedType) pageContentFactoryClass.getGenericSuperclass();
+				(ParameterizedType) pageContentHelperClass.getGenericSuperclass();
 		
 		@SuppressWarnings("unchecked")
 		Class<P> pageContentClass =
@@ -51,7 +51,7 @@ public class PageContentRegistry {
 		
 		try {
 			R pageContentProcessor = pageContentProcessorClass.newInstance();
-			S pageContentHelper = pageContentFactoryClass.newInstance();
+			S pageContentHelper = pageContentHelperClass.newInstance();
 			helperList.add( pageContentHelper );
 			mapContentDataToHelper.put( pageContentDataClass, pageContentHelper );
 			mapContentToProcessor.put( pageContentClass, pageContentProcessor );

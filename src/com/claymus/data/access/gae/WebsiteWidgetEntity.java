@@ -1,5 +1,7 @@
 package com.claymus.data.access.gae;
 
+import java.util.Date;
+
 import javax.jdo.annotations.Discriminator;
 import javax.jdo.annotations.DiscriminatorStrategy;
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -21,6 +23,12 @@ public abstract class WebsiteWidgetEntity implements WebsiteWidget {
 	@Persistent( column = "POSITION" )
 	private String position;
 	
+	@Persistent( column = "CREATION_DATE" )
+	private Date creationDate;
+	
+	@Persistent( column = "LAST_UPDATED" )
+	private Date lastUpdated;
+
 	
 	@Override
 	public Long getId() {
@@ -35,6 +43,22 @@ public abstract class WebsiteWidgetEntity implements WebsiteWidget {
 	@Override
 	public void setPosition( String position ) {
 		this.position = position;
+	}
+
+	public Date getCreationDate() {
+		return creationDate;
+	}
+
+	public void setCreationDate( Date creationDate ) {
+		this.creationDate = creationDate;
+	}
+
+	public Date getLastUpdated() {
+		return lastUpdated;
+	}
+
+	public void setLastUpdated( Date lastUpdated ) {
+		this.lastUpdated = lastUpdated;
 	}
 
 }
