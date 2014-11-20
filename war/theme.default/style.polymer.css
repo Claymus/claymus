@@ -1,0 +1,21 @@
+core-toolbar core-icon-button {
+  margin: 0px !important;
+}
+
+core-toolbar a {
+  text-decoration: none;
+}
+
+core-toolbar.bg-green, core-toolbar.bg-green a {
+  color: white;
+}
+
+paper-slider.bg-green {
+  background-color: transparent;
+}
+
+paper-slider.bg-green::shadow #sliderKnobInner,
+paper-slider.bg-green::shadow #sliderKnobInner::before,
+paper-slider.bg-green::shadow #sliderBar::shadow #activeProgress {
+  background-color: #259b24;
+}

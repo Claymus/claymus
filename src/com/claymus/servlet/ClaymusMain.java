@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.claymus.commons.server.ClaymusHelper;
 import com.claymus.commons.server.FreeMarkerUtil;
 import com.claymus.commons.shared.exception.InsufficientAccessException;
 import com.claymus.commons.shared.exception.UnexpectedServerException;
@@ -136,7 +137,7 @@ public class ClaymusMain extends HttpServlet {
 		input.put( "websiteWidgetHtmlListMap", websiteWidgetHtmlListMap );
 		input.put( "pageContentHtmlList", pageContentHtmlList );
 		input.put( "request", request );
-		input.put( "showBasicVersion", true );
+		input.put( "basicMode", ClaymusHelper.get( request ).isModeBasic() );
 		
 		try {
 			FreeMarkerUtil.processTemplate( input, getTemplateName( request ), out );
