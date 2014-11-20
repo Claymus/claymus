@@ -11,7 +11,6 @@ import com.claymus.commons.shared.exception.UnexpectedServerException;
 
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
-import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateExceptionHandler;
 import freemarker.template.Version;
@@ -43,17 +42,6 @@ public class FreeMarkerUtil {
 		return cfg;
 	}
 	
-	public static Template getTemplate( String templateName )
-			throws UnexpectedServerException {
-		
-		try {
-			return getConfiguration().getTemplate( templateName );
-		} catch ( IOException e ) {
-			logger.log( Level.SEVERE, "Filed to get template.", e );
-			throw new UnexpectedServerException();
-		}
-	}
-	
 	public static String processTemplate( Object dataModel, String templateName )
 			throws UnexpectedServerException {
 		
@@ -65,9 +53,8 @@ public class FreeMarkerUtil {
 	public static void processTemplate( Object dataModel, String templateName, Writer writer )
 			throws UnexpectedServerException {
 		
-		Template template = getTemplate( templateName );
 		try {
-			template.process( dataModel, writer );
+			getConfiguration().getTemplate( templateName ).process( dataModel, writer );
 		} catch ( TemplateException | IOException e ) {
 			logger.log( Level.SEVERE, "Template processing failed.", e );
 			throw new UnexpectedServerException();

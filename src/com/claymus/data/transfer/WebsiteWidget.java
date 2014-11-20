@@ -7,6 +7,22 @@ public interface WebsiteWidget extends Serializable {
 
 	Long getId();
 
+	String[] getBasicModePageTypes();
+	
+	boolean isBasicModePageTypeListInclusive();
+	
+	void setBasicModePageTypes( String[] pageTypes );
+	
+	void setBasicModePageTypes( String[] pageTypes, boolean include );
+
+	String[] getStandardModePageTypes();
+	
+	boolean isStandardModePageTypeListInclusive();
+	
+	void setStandardModePageTypes( String[] pageTypes );
+	
+	void setStandardModePageTypes( String[] pageTypes, boolean include );
+
 	String getPosition();
 
 	void setPosition( String position );

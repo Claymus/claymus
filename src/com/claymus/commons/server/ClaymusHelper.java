@@ -206,6 +206,10 @@ public class ClaymusHelper implements Serializable {
 		return "Asia/Kolkata";
 	}
 	
+	public boolean isModeBasic() {
+		return true;
+	}
+	
 	public boolean hasUserAccess( Access access ) {
 		return hasUserAccess( access.getId(), access.getDefault() );
 	}
