@@ -23,6 +23,7 @@ import com.google.apphosting.api.ApiProxy;
 @SuppressWarnings("serial")
 public class ClaymusHelper implements Serializable {
 
+	public static final String REQUEST_ATTRIB_MODE_BASIC = "BasicMode";
 	public static final String SESSION_ATTRIB_CURRENT_USER_ID = "CurrentUserId";
 	public static final String SEARCH_INDEX_NAME = "GLOBAL_INDEX";
 	
@@ -60,7 +61,7 @@ public class ClaymusHelper implements Serializable {
 	}
 	
 	
-	public boolean isUserLoggedIn() {
+	public final boolean isUserLoggedIn() {
 		if( currentUserId == null ) {
 			currentUserId = (Long) session.getAttribute( SESSION_ATTRIB_CURRENT_USER_ID );
 			if( currentUserId == null )
@@ -69,7 +70,7 @@ public class ClaymusHelper implements Serializable {
 		return currentUserId != 0L;
 	}
 
-	public Long getCurrentUserId() {
+	public final Long getCurrentUserId() {
 		if( currentUserId == null ) {
 			currentUserId = (Long) session.getAttribute( SESSION_ATTRIB_CURRENT_USER_ID );
 			if( currentUserId == null )
@@ -78,7 +79,7 @@ public class ClaymusHelper implements Serializable {
 		return currentUserId;
 	}
 
-	public User getCurrentUser() {
+	public final User getCurrentUser() {
 		if( currentUser == null ) {
 
 			if( getCurrentUserId() == 0L ) {
@@ -184,7 +185,7 @@ public class ClaymusHelper implements Serializable {
 		return currentUser;
 	}
 	
-	public List<UserRole> getCurrentUserRoleList() {
+	public final List<UserRole> getCurrentUserRoleList() {
 		if( getCurrentUserId() == 0L ) {
 			DataAccessor dataAccessor = DataAccessorFactory.getDataAccessor( request );
 			UserRole userRole = dataAccessor.newUserRole();
@@ -202,19 +203,20 @@ public class ClaymusHelper implements Serializable {
 		return currentUserRoleList;
 	}
 	
-	public String getCurrentUserTimeZone() {
+	public final String getCurrentUserTimeZone() {
 		return "Asia/Kolkata";
 	}
 	
-	public boolean isModeBasic() {
-		return true;
+	public final boolean isModeBasic() {
+		return request.getAttribute( REQUEST_ATTRIB_MODE_BASIC ) != null
+				&& (boolean) request.getAttribute( REQUEST_ATTRIB_MODE_BASIC );
 	}
 	
-	public boolean hasUserAccess( Access access ) {
+	public final boolean hasUserAccess( Access access ) {
 		return hasUserAccess( access.getId(), access.getDefault() );
 	}
 
-	public boolean hasUserAccess( String accessId, boolean defaultAccess ) {
+	public final boolean hasUserAccess( String accessId, boolean defaultAccess ) {
 		Boolean access = null;
 
 		DataAccessor dataAccessor = DataAccessorFactory.getDataAccessor( request );
@@ -234,39 +236,39 @@ public class ClaymusHelper implements Serializable {
 		return access;
 	}
 	
-	public String createLoginURL() {
+	public final String createLoginURL() {
 		return URL_LOGIN_PAGE;
 	}
 
-	public static String createLoginURL( String destinationURL ) {
+	public final static String createLoginURL( String destinationURL ) {
 		return URL_LOGIN_PAGE + destinationURL;
 	}
 
-	public String createLogoutURL() {
+	public final String createLogoutURL() {
 		return URL_LOGOUT_PAGE + request.getRequestURI();
 	}
 
-	public static String createLogoutURL( String destinationURL ) {
+	public final String createLogoutURL( String destinationURL ) {
 		return URL_LOGOUT_PAGE + destinationURL;
 	}
 
-	public String createRegisterURL() {
+	public final String createRegisterURL() {
 		return URL_REGISTER_PAGE;
 	}
 	
-	public String createForgotPasswordURL() {
+	public final String createForgotPasswordURL() {
 		return URL_FORGOTPASSWORD_PAGE;
 	}
 
 	
-	public static String getSystemProperty( String propertyName ) {
+	public static final String getSystemProperty( String propertyName ) {
 		String appId = ApiProxy.getCurrentEnvironment().getAppId();
 		if( appId.startsWith("s~") )
 			appId = appId.substring( 2 );
 		return System.getProperty( appId + "." + propertyName );
 	}
 	
-	public UserData createUserData( User user ) {
+	public final UserData createUserData( User user ) {
 		UserData userData = new UserData();
 		
 		userData.setId( user.getId() );
@@ -278,7 +280,7 @@ public class ClaymusHelper implements Serializable {
 		return userData;
 	}
 	
-	public PageData createPageData( Page page ) {
+	public final PageData createPageData( Page page ) {
 		PageData pageData = new PageData();
 		
 		pageData.setId( page.getId() );
@@ -289,7 +291,7 @@ public class ClaymusHelper implements Serializable {
 		return pageData;
 	}
 	
-	public String generateUriAlias( String oldUriAlias, String uriPrefix, String... keywords ) {
+	public final String generateUriAlias( String oldUriAlias, String uriPrefix, String... keywords ) {
 		String uriAlias = uriPrefix;
 		for( String keyword : keywords )
 			if( keyword != null )
