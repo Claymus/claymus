@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -210,6 +211,15 @@ public class ClaymusHelper implements Serializable {
 	public final boolean isModeBasic() {
 		return request.getAttribute( REQUEST_ATTRIB_MODE_BASIC ) != null
 				&& (boolean) request.getAttribute( REQUEST_ATTRIB_MODE_BASIC );
+	}
+	
+	public final String getCookieValue( String cookieName ) {
+		Cookie[] cookies = request.getCookies();
+		for( Cookie cookie : cookies ) {
+			if( cookie.getName().equals( cookieName ) )
+				return cookie.getValue();
+		}
+		return null;
 	}
 	
 	public final boolean hasUserAccess( Access access ) {
