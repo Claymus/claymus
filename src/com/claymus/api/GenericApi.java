@@ -34,8 +34,6 @@ public abstract class GenericApi extends HttpServlet {
 			HttpServletRequest request,
 			HttpServletResponse response ) throws IOException {
 
-		String requestUri = request.getRequestURI();
-		
 		String requestPayload = IOUtils.toString( request.getInputStream() );
 		logger.log( Level.INFO, "Request Payload: " + requestPayload );
 
@@ -57,13 +55,9 @@ public abstract class GenericApi extends HttpServlet {
 		logger.log( Level.INFO, "Request Payload: " + requestPayload );
 
 		
-		String resourceName = requestUri.startsWith( "/_ah/api/" )
-				? requestUri.substring( 6 )
-				: requestUri;
-		
 		try {
 			
-			executeGet( resourceName, requestPayloadJson, request, response );
+			executeGet( requestPayloadJson, request, response );
 			
 		} catch( UnexpectedServerException e ) {
 			logger.log( Level.SEVERE, "Failed to execute API.", e );
@@ -96,7 +90,6 @@ public abstract class GenericApi extends HttpServlet {
 	
 	
 	protected abstract void executeGet(
-			String resourceName,
 			JsonObject requestPayloadJson,
 			HttpServletRequest request,
 			HttpServletResponse response ) throws IOException, UnexpectedServerException;
