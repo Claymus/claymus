@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.jdo.PersistenceManager;
 
+import com.claymus.data.transfer.AccessToken;
 import com.claymus.data.transfer.Comment;
 import com.claymus.data.transfer.EmailTemplate;
 import com.claymus.data.transfer.Page;
@@ -306,6 +307,12 @@ public class DataAccessorWithMemcache implements DataAccessor {
 	@Override
 	public void destroy() {
 		dataAccessor.destroy();
+	}
+
+
+	@Override
+	public AccessToken createAccessToken(AccessToken accessToken) {
+		return dataAccessor.createAccessToken( accessToken );
 	}
 	
 }

@@ -22,6 +22,7 @@ import com.claymus.data.access.gae.RoleAccessEntity;
 import com.claymus.data.access.gae.RoleEntity;
 import com.claymus.data.access.gae.UserEntity;
 import com.claymus.data.access.gae.UserRoleEntity;
+import com.claymus.data.transfer.AccessToken;
 import com.claymus.data.transfer.Comment;
 import com.claymus.data.transfer.EmailTemplate;
 import com.claymus.data.transfer.Page;
@@ -396,6 +397,12 @@ public class DataAccessorGaeImpl implements DataAccessor {
 	@Override
 	public void destroy() {
 		pm.close();
+	}
+
+
+	@Override
+	public AccessToken createAccessToken(AccessToken accessToken) {
+		return createOrUpdateEntity( accessToken );
 	}
 
 }

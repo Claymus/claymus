@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.jdo.PersistenceManager;
 
+import com.claymus.data.transfer.AccessToken;
 import com.claymus.data.transfer.Comment;
 import com.claymus.data.transfer.EmailTemplate;
 import com.claymus.data.transfer.Page;
@@ -92,6 +93,7 @@ public interface DataAccessor extends Serializable {
 	
 	Comment createOrUpdateComment( Comment comment );
 	
+	AccessToken createAccessToken( AccessToken accessToken );
 	
 	void destroy();
 	
