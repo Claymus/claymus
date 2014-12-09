@@ -5,16 +5,16 @@ import java.util.Date;
 
 public interface AccessToken extends Serializable {
 
-	String getUUID();
+	String getUuid();
 	
-	void setUUID( String uuid );
+	void setUuid( String uuid );
 	
-	Date getExpires();
+	Date getExpiry();
 	
-	void setExpires( Date expiresAfter);
+	void setExpiry( Date expiry);
 	
-	String getValue();
+	String getValues();
 	
-	void setValue( String value );
+	void setValues( String value );
 	
 }

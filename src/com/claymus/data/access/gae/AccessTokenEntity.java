@@ -9,46 +9,46 @@ import javax.jdo.annotations.PrimaryKey;
 import com.claymus.data.transfer.AccessToken;
 
 @SuppressWarnings("serial")
-@PersistenceCapable( table = "ACCESSTOKEN" )
+@PersistenceCapable( table = "ACCESS_TOKEN" )
 public class AccessTokenEntity implements AccessToken {
 
 	@PrimaryKey
 	@Persistent( column = "UUID" )
 	private String uuid;
 	
-	@Persistent( column = "EXPIRESAFTER" )
-	private Date expiresAfter;
+	@Persistent( column = "EXPIRY" )
+	private Date expiry;
 
-	@Persistent( column = "VALUE" )
-	private String value;
+	@Persistent( column = "VALUES" )
+	private String values;
 
 	@Override
-	public String getUUID() {
+	public String getUuid() {
 		return uuid;
 	}
 
 	@Override
-	public void setUUID( String uuid ) {
+	public void setUuid( String uuid ) {
 		this.uuid = uuid;
 	}
 
 	@Override
-	public Date getExpires() {
-		return this.expiresAfter;
+	public Date getExpiry() {
+		return this.expiry;
 	}
 
 	@Override
-	public void setExpires( Date expiresAfter) {
-		this.expiresAfter = expiresAfter;
+	public void setExpiry( Date expiry) {
+		this.expiry = expiry;
 	}
 
 	@Override
-	public String getValue() {
-		return this.value;
+	public String getValues() {
+		return this.values;
 	}
 
 	@Override
-	public void setValue( String value ) {
-		this.value = value;
+	public void setValues( String values ) {
+		this.values = values;
 	}
 }
