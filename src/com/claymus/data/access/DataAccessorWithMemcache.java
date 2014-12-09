@@ -28,6 +28,7 @@ public class DataAccessorWithMemcache implements DataAccessor {
 	private final static String PREFIX_PAGE = "Page-";
 	private final static String PREFIX_PAGE_CONTENT = "PageConent-";
 	private final static String PREFIX_PAGE_CONTENT_LIST = "PageConentList-";
+	private final static String PREFIX_ACCESS_TOKEN = "AccessToken-";
 	
 	private final DataAccessor dataAccessor;
 	private final Memcache memcache;
@@ -309,10 +310,28 @@ public class DataAccessorWithMemcache implements DataAccessor {
 		dataAccessor.destroy();
 	}
 
+	@Override
+	public AccessToken newAccessToken() {
+		return dataAccessor.newAccessToken();
+	}
 
 	@Override
 	public AccessToken createAccessToken(AccessToken accessToken) {
-		return dataAccessor.createAccessToken( accessToken );
+		accessToken = dataAccessor.createAccessToken( accessToken );
+		memcache.put( PREFIX_ACCESS_TOKEN + accessToken.getUuid(), accessToken );
+		return accessToken;
+	}
+
+
+	@Override
+	public AccessToken getAccessTokenById(String uuid) {
+		AccessToken accessToken = memcache.get( PREFIX_ACCESS_TOKEN + uuid );
+		if( accessToken == null ){
+			accessToken = dataAccessor.getAccessTokenById( uuid );
+			if( accessToken != null )
+				memcache.put( PREFIX_ACCESS_TOKEN + accessToken.getUuid(), accessToken );
+		}
+		return accessToken;
 	}
 	
 }

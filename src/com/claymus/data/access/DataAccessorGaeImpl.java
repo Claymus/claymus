@@ -13,6 +13,7 @@ import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.Query;
 
+import com.claymus.data.access.gae.AccessTokenEntity;
 import com.claymus.data.access.gae.CommentEntity;
 import com.claymus.data.access.gae.EmailTemplateEntity;
 import com.claymus.data.access.gae.PageContentEntityStub;
@@ -401,8 +402,20 @@ public class DataAccessorGaeImpl implements DataAccessor {
 
 
 	@Override
+	public AccessToken newAccessToken() {
+		return new AccessTokenEntity();
+	}
+
+	@Override
 	public AccessToken createAccessToken(AccessToken accessToken) {
 		return createOrUpdateEntity( accessToken );
 	}
+
+
+	@Override
+	public AccessToken getAccessTokenById(String uuid) {
+		return getEntity( AccessTokenEntity.class, uuid );
+	}
+
 
 }
