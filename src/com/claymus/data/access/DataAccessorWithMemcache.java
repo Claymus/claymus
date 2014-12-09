@@ -324,10 +324,10 @@ public class DataAccessorWithMemcache implements DataAccessor {
 
 
 	@Override
-	public AccessToken getAccessTokenById(String uuid) {
+	public AccessToken getAccessToken(String uuid) {
 		AccessToken accessToken = memcache.get( PREFIX_ACCESS_TOKEN + uuid );
 		if( accessToken == null ){
-			accessToken = dataAccessor.getAccessTokenById( uuid );
+			accessToken = dataAccessor.getAccessToken( uuid );
 			if( accessToken != null )
 				memcache.put( PREFIX_ACCESS_TOKEN + accessToken.getUuid(), accessToken );
 		}

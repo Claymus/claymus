@@ -413,7 +413,7 @@ public class DataAccessorGaeImpl implements DataAccessor {
 
 
 	@Override
-	public AccessToken getAccessTokenById(String uuid) {
+	public AccessToken getAccessToken(String uuid) {
 		return getEntity( AccessTokenEntity.class, uuid );
 	}
 

@@ -97,7 +97,7 @@ public interface DataAccessor extends Serializable {
 	
 	AccessToken createAccessToken( AccessToken accessToken );
 	
-	AccessToken getAccessTokenById( String uuid );
+	AccessToken getAccessToken( String uuid );
 	
 	void destroy();
 	
