@@ -388,16 +388,9 @@ public class DataAccessorGaeImpl implements DataAccessor {
 				cursor == null ? null : cursor.toWebSafeString() );
 	}
 
-
 	@Override
 	public Comment createOrUpdateComment( Comment comment ) {
 		return createOrUpdateEntity( comment );
-	}
-
-
-	@Override
-	public void destroy() {
-		pm.close();
 	}
 
 
@@ -407,15 +400,19 @@ public class DataAccessorGaeImpl implements DataAccessor {
 	}
 
 	@Override
-	public AccessToken createAccessToken(AccessToken accessToken) {
+	public AccessToken getAccessToken( String accessTokenId ) {
+		return getEntity( AccessTokenEntity.class, accessTokenId );
+	}
+	
+	@Override
+	public AccessToken createAccessToken( AccessToken accessToken ) {
 		return createOrUpdateEntity( accessToken );
 	}
 
 
 	@Override
-	public AccessToken getAccessToken(String uuid) {
-		return getEntity( AccessTokenEntity.class, uuid );
+	public void destroy() {
+		pm.close();
 	}
-
 
 }

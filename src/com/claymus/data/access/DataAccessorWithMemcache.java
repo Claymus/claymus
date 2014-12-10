@@ -306,11 +306,6 @@ public class DataAccessorWithMemcache implements DataAccessor {
 
 	
 	@Override
-	public void destroy() {
-		dataAccessor.destroy();
-	}
-
-	@Override
 	public AccessToken newAccessToken() {
 		return dataAccessor.newAccessToken();
 	}
@@ -318,20 +313,25 @@ public class DataAccessorWithMemcache implements DataAccessor {
 	@Override
 	public AccessToken createAccessToken(AccessToken accessToken) {
 		accessToken = dataAccessor.createAccessToken( accessToken );
-		memcache.put( PREFIX_ACCESS_TOKEN + accessToken.getUuid(), accessToken );
+		memcache.put( PREFIX_ACCESS_TOKEN + accessToken.getId(), accessToken );
 		return accessToken;
 	}
 
-
 	@Override
-	public AccessToken getAccessToken(String uuid) {
-		AccessToken accessToken = memcache.get( PREFIX_ACCESS_TOKEN + uuid );
-		if( accessToken == null ){
-			accessToken = dataAccessor.getAccessToken( uuid );
+	public AccessToken getAccessToken( String accessTokenId ) {
+		AccessToken accessToken = memcache.get( PREFIX_ACCESS_TOKEN + accessTokenId );
+		if( accessToken == null ) {
+			accessToken = dataAccessor.getAccessToken( accessTokenId );
 			if( accessToken != null )
-				memcache.put( PREFIX_ACCESS_TOKEN + accessToken.getUuid(), accessToken );
+				memcache.put( PREFIX_ACCESS_TOKEN + accessToken.getId(), accessToken );
 		}
 		return accessToken;
+	}
+
+	
+	@Override
+	public void destroy() {
+		dataAccessor.destroy();
 	}
 	
 }

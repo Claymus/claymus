@@ -93,11 +93,13 @@ public interface DataAccessor extends Serializable {
 	
 	Comment createOrUpdateComment( Comment comment );
 	
+	
 	AccessToken newAccessToken();
+
+	AccessToken getAccessToken( String uuid );
 	
 	AccessToken createAccessToken( AccessToken accessToken );
 	
-	AccessToken getAccessToken( String uuid );
 	
 	void destroy();
 	

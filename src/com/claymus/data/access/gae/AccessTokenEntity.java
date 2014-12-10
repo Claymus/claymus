@@ -13,8 +13,8 @@ import com.claymus.data.transfer.AccessToken;
 public class AccessTokenEntity implements AccessToken {
 
 	@PrimaryKey
-	@Persistent( column = "UUID" )
-	private String uuid;
+	@Persistent( column = "ACCESS_TOKEN_ID" )
+	private String accessTokenId;
 	
 	@Persistent( column = "EXPIRY" )
 	private Date expiry;
@@ -22,14 +22,15 @@ public class AccessTokenEntity implements AccessToken {
 	@Persistent( column = "VALUES" )
 	private String values;
 
+	
 	@Override
-	public String getUuid() {
-		return uuid;
+	public String getId() {
+		return accessTokenId;
 	}
 
 	@Override
-	public void setUuid( String uuid ) {
-		this.uuid = uuid;
+	public void setId( String accessTokenId ) {
+		this.accessTokenId = accessTokenId;
 	}
 
 	@Override

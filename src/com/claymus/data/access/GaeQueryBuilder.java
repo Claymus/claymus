@@ -85,6 +85,11 @@ public class GaeQueryBuilder {
 		return this;
 	}
 
+	public GaeQueryBuilder setResult( String result ) {
+		query.setResult( result );
+		return this;
+	}
+
 	public GaeQueryBuilder setRange( long start, long end ) {
 		query.setRange( start, end );
 		return this;

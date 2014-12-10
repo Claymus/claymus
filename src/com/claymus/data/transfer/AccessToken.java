@@ -5,9 +5,9 @@ import java.util.Date;
 
 public interface AccessToken extends Serializable {
 
-	String getUuid();
+	String getId();
 	
-	void setUuid( String uuid );
+	void setId( String uuid );
 	
 	Date getExpiry();
 	
