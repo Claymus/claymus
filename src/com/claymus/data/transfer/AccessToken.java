@@ -7,7 +7,7 @@ public interface AccessToken extends Serializable {
 
 	String getId();
 	
-	void setId( String uuid );
+	void setId( String accessTokenId );
 	
 	Date getExpiry();
 	

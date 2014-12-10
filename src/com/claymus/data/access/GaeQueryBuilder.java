@@ -11,6 +11,7 @@ import javax.jdo.Query;
 public class GaeQueryBuilder {
 
 	public enum Operator {
+		NOT_NULL,
 		EQUALS,
 		LESS_THAN,
 		LESST_THAN_OR_EQUAL,
@@ -35,11 +36,11 @@ public class GaeQueryBuilder {
 	}
 
 	
-	public GaeQueryBuilder addFilter( String param, Object value) {
+	public GaeQueryBuilder addFilter( String param, Object value ) {
 		return addFilter( param, value, Operator.EQUALS );
 	}
 	
-	public GaeQueryBuilder addFilter( String param, Collection<?> value) {
+	public GaeQueryBuilder addFilter( String param, Collection<?> value ) {
 		return addFilter( param, value, Operator.CONTAINS );
 	}
 	
@@ -52,6 +53,9 @@ public class GaeQueryBuilder {
 		}
 		
 		switch( operator ) {
+			case NOT_NULL:
+				filters.add( param + " != null" );
+				break;
 			case EQUALS:
 				filters.add( param + " == " + paramKey );
 				break;
@@ -74,8 +78,10 @@ public class GaeQueryBuilder {
 				throw new UnsupportedOperationException( "Operator '" + operator + "' is not yet supported." );
 		}
 		
-		parameteres.add( value.getClass().getName() + " " + paramKey );
-		paramNameValueMap.put( paramKey, value );
+		if( value != null ) {
+			parameteres.add( value.getClass().getName() + " " + paramKey );
+			paramNameValueMap.put( paramKey, value );
+		}
 		
 		return this;
 	}
