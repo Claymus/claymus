@@ -34,26 +34,8 @@ public abstract class GenericApi extends HttpServlet {
 			HttpServletRequest request,
 			HttpServletResponse response ) throws IOException {
 
-		String requestPayload = IOUtils.toString( request.getInputStream() );
-		logger.log( Level.INFO, "Request Payload: " + requestPayload );
-
-		
-		// Creating JsonObject from request body (JSON)
-		JsonObject requestPayloadJson = requestPayload == null || requestPayload.isEmpty()
-				? new JsonObject()
-				: gson.fromJson( requestPayload, JsonElement.class ).getAsJsonObject();
-
-		// Adding query string data in JsonObject		
-		Enumeration<String> queryParams = request.getParameterNames();
-		while( queryParams.hasMoreElements() ) {
-			String param = queryParams.nextElement();
-			requestPayloadJson.addProperty( param, request.getParameter( param ) );
-		}
-
-		// Updating requestPayload
-		requestPayload = requestPayloadJson.toString();
-		logger.log( Level.INFO, "Request Payload: " + requestPayload );
-
+		JsonObject requestPayloadJson = createRequestPayloadJson( request );
+		logger.log( Level.INFO, "Request Payload: " + requestPayloadJson.toString() );
 		
 		try {
 			
@@ -65,6 +47,47 @@ public abstract class GenericApi extends HttpServlet {
 			return;
 		}
 		
+	}
+	
+	@Override
+	public void doPut(
+			HttpServletRequest request,
+			HttpServletResponse response ) throws IOException {
+		
+		JsonObject requestPayloadJson = createRequestPayloadJson( request );
+		logger.log( Level.INFO, "Request Payload: " + requestPayloadJson.toString() );
+		
+		try {
+			
+			executeGet( requestPayloadJson, request, response );
+			
+		} catch( UnexpectedServerException e ) {
+			logger.log( Level.SEVERE, "Failed to execute API.", e );
+			response.sendError( HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
+			return;
+		}
+
+	}
+	
+	
+	private JsonObject createRequestPayloadJson(
+			HttpServletRequest request ) throws IOException {
+		
+		String requestPayload = IOUtils.toString( request.getInputStream() );
+
+		// Creating JsonObject from request body (JSON)
+		JsonObject requestPayloadJson = requestPayload == null || requestPayload.isEmpty()
+				? new JsonObject()
+				: gson.fromJson( requestPayload, JsonElement.class ).getAsJsonObject();
+
+		// Adding query string data in JsonObject		
+		Enumeration<String> queryParams = request.getParameterNames();
+		while( queryParams.hasMoreElements() ) {
+			String param = queryParams.nextElement();
+			requestPayloadJson.addProperty( param, request.getParameter( param ) );
+		}
+		
+		return requestPayloadJson;
 	}
 	
 	
@@ -89,9 +112,14 @@ public abstract class GenericApi extends HttpServlet {
 	}
 	
 	
-	protected abstract void executeGet(
+	protected void executeGet(
 			JsonObject requestPayloadJson,
 			HttpServletRequest request,
-			HttpServletResponse response ) throws IOException, UnexpectedServerException;
+			HttpServletResponse response ) throws IOException, UnexpectedServerException {}
+	
+	protected void executePut(
+			JsonObject requestPayloadJson,
+			HttpServletRequest request,
+			HttpServletResponse response ) throws IOException, UnexpectedServerException {}
 	
 }
