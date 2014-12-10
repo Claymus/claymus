@@ -115,11 +115,17 @@ public abstract class GenericApi extends HttpServlet {
 	protected void executeGet(
 			JsonObject requestPayloadJson,
 			HttpServletRequest request,
-			HttpServletResponse response ) throws IOException, UnexpectedServerException {}
+			HttpServletResponse response ) throws IOException, UnexpectedServerException {
+		
+		response.sendError( HttpServletResponse.SC_METHOD_NOT_ALLOWED );
+	}
 	
 	protected void executePut(
 			JsonObject requestPayloadJson,
 			HttpServletRequest request,
-			HttpServletResponse response ) throws IOException, UnexpectedServerException {}
+			HttpServletResponse response ) throws IOException, UnexpectedServerException {
+
+		response.sendError( HttpServletResponse.SC_METHOD_NOT_ALLOWED );
+	}
 	
 }

@@ -1,6 +1,7 @@
 package com.claymus.data.access;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.jdo.PersistenceManager;
@@ -324,6 +325,8 @@ public class DataAccessorWithMemcache implements DataAccessor {
 			accessToken = dataAccessor.getAccessToken( accessTokenId );
 			if( accessToken != null )
 				memcache.put( PREFIX_ACCESS_TOKEN + accessToken.getId(), accessToken );
+		} else {
+			accessToken = accessToken.getExpiry().before( new Date() ) ? null : accessToken;
 		}
 		return accessToken;
 	}

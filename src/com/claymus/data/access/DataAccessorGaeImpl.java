@@ -402,12 +402,10 @@ public class DataAccessorGaeImpl implements DataAccessor {
 
 	@Override
 	public AccessToken getAccessToken( String accessTokenId ) {
-		try{ 
+		try{
 			AccessToken accessToken = getEntity( AccessTokenEntity.class, accessTokenId );
-			if( accessToken.getExpiry().before( new Date() ))
-					return null;
-			return accessToken;
-		} catch( JDOObjectNotFoundException e){
+			return accessToken.getExpiry().before( new Date() ) ? null : accessToken;
+		} catch( JDOObjectNotFoundException e ) {
 			return null;
 		}
 	}
