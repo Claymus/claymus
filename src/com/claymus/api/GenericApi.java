@@ -59,7 +59,7 @@ public abstract class GenericApi extends HttpServlet {
 		
 		try {
 			
-			executeGet( requestPayloadJson, request, response );
+			executePut( requestPayloadJson, request, response );
 			
 		} catch( UnexpectedServerException e ) {
 			logger.log( Level.SEVERE, "Failed to execute API.", e );
