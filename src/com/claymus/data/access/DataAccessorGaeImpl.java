@@ -1,6 +1,7 @@
 package com.claymus.data.access;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -401,7 +402,14 @@ public class DataAccessorGaeImpl implements DataAccessor {
 
 	@Override
 	public AccessToken getAccessToken( String accessTokenId ) {
-		return getEntity( AccessTokenEntity.class, accessTokenId );
+		try{ 
+			AccessToken accessToken = getEntity( AccessTokenEntity.class, accessTokenId );
+			if( accessToken.getExpiry().before( new Date() ))
+					return null;
+			return accessToken;
+		} catch( JDOObjectNotFoundException e){
+			return null;
+		}
 	}
 	
 	@Override
