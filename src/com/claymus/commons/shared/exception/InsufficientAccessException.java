@@ -6,7 +6,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 public class InsufficientAccessException extends Exception implements IsSerializable {
 
 	public InsufficientAccessException() {
-		super( "User does not have enough access to perform this operation." );
+		super( "Insufficient privilege for this action." );
 	}
 
 	public InsufficientAccessException( String msg ) {

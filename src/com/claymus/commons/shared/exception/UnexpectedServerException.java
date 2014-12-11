@@ -6,7 +6,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 public class UnexpectedServerException extends Exception implements IsSerializable {
 
 	public UnexpectedServerException() {
-		super( "Some exception occured at server. Please try again later !" );
+		super( "Some exception occured at server. Please try again." );
 	}
 
 	public UnexpectedServerException( String msg ) {
