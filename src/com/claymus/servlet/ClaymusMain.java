@@ -71,7 +71,10 @@ public class ClaymusMain extends HttpServlet {
 
 		Page page = getPage( request );
 		List<PageContent> pageContentList = getPageContentList( request );
-		List<WebsiteWidget> websiteWidgetList = getWebsiteWidgetList( request );
+		List<WebsiteWidget> websiteWidgetList =
+				(boolean) request.getAttribute( ClaymusHelper.REQUEST_ATTRIB_EMBED_BASIC )
+				? new LinkedList<WebsiteWidget>()
+				: getWebsiteWidgetList( request );
 		PageLayout pageLayout = getPageLayout();
 		WebsiteLayout websiteLayout = getWebsiteLayout();
 		
