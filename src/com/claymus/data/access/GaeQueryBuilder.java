@@ -78,7 +78,7 @@ public class GaeQueryBuilder {
 				throw new UnsupportedOperationException( "Operator '" + operator + "' is not yet supported." );
 		}
 		
-		if( value != null ) {
+		if( operator != Operator.NOT_NULL ) {
 			parameteres.add( value.getClass().getName() + " " + paramKey );
 			paramNameValueMap.put( paramKey, value );
 		}
