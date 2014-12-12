@@ -19,7 +19,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.claymus.commons.shared.exception.IllegalArgumentException;
+import com.claymus.commons.shared.exception.InvalidArgumentException;
 
 public class PagesContent implements EntryPoint, ClickHandler {
 
@@ -106,7 +106,7 @@ public class PagesContent implements EntryPoint, ClickHandler {
 						
 						@Override
 						public void onFailure( Throwable caught ) {
-							if( caught.getClass() == IllegalArgumentException.class )
+							if( caught.getClass() == InvalidArgumentException.class )
 								Window.alert( caught.getMessage() );
 							pageDataInputView.setEnabled( true );
 						}

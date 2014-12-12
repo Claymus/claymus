@@ -91,7 +91,11 @@ public class DataAccessorGaeImpl implements DataAccessor {
 	
 	@Override
 	public User getUser( Long id ) {
-		return getEntity( UserEntity.class, id );
+		try {
+			return getEntity( UserEntity.class, id );
+		} catch( JDOObjectNotFoundException e ) {
+			return null;
+		}
 	}
 	
 	@Override

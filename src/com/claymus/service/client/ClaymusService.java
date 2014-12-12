@@ -1,6 +1,6 @@
 package com.claymus.service.client;
 
-import com.claymus.commons.shared.exception.IllegalArgumentException;
+import com.claymus.commons.shared.exception.InvalidArgumentException;
 import com.claymus.commons.shared.exception.InsufficientAccessException;
 import com.claymus.commons.shared.exception.UnexpectedServerException;
 import com.claymus.service.shared.FacebookLoginUserRequest;
@@ -34,24 +34,24 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 public interface ClaymusService extends RemoteService {
 	
 	InviteUserResponse inviteUser( InviteUserRequest request )
-			throws IllegalArgumentException;
+			throws InvalidArgumentException;
 	
 	RegisterUserResponse registerUser( RegisterUserRequest request )
-			throws IllegalArgumentException;
+			throws InvalidArgumentException;
 
 	LoginUserResponse loginUser( LoginUserRequest request )
-			throws IllegalArgumentException;
+			throws InvalidArgumentException;
 	
 	FacebookLoginUserResponse facebookLogin( FacebookLoginUserRequest request )
-			throws IllegalArgumentException;
+			throws InvalidArgumentException;
 	
 	void logoutUser();
 	
 	ResetUserPasswordResponse resetUserPassword( ResetUserPasswordRequest request )
-			throws IllegalArgumentException;
+			throws InvalidArgumentException;
 	
 	UpdateUserPasswordResponse updateUserPassword( UpdateUserPasswordRequest request )
-			throws IllegalArgumentException;
+			throws InvalidArgumentException;
 	
 	SendQueryResponse sendQuery( SendQueryRequest request )
 			throws UnexpectedServerException;
@@ -59,7 +59,7 @@ public interface ClaymusService extends RemoteService {
 	
 	// API Version: 4.0; Owner Module: PagesContent;
 	SavePageResponse savePage( SavePageRequest request )
-			throws IllegalArgumentException, InsufficientAccessException;
+			throws InvalidArgumentException, InsufficientAccessException;
 
 	// API Version: 4.0; Owner Module: PagesContent;
 	GetPageListResponse getPageList( GetPageListRequest request )

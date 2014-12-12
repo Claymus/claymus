@@ -21,6 +21,7 @@ import com.claymus.api.annotation.Put;
 import com.claymus.api.shared.GenericRequest;
 import com.claymus.api.shared.GenericResponse;
 import com.claymus.commons.shared.exception.InsufficientAccessException;
+import com.claymus.commons.shared.exception.InvalidArgumentException;
 import com.claymus.commons.shared.exception.UnexpectedServerException;
 import com.claymus.data.access.DataAccessorFactory;
 import com.claymus.data.transfer.BlobEntry;
@@ -28,6 +29,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
 
 
 @SuppressWarnings("serial")
@@ -40,7 +42,7 @@ public abstract class GenericApi extends HttpServlet {
 
 	protected transient ThreadLocal<HttpServletRequest> perThreadRequest;
 	protected transient ThreadLocal<HttpServletResponse> perThreadResponse;
-	  
+	
 	private Method getMethod;
 	private Method putMethod;
 	
@@ -66,7 +68,8 @@ public abstract class GenericApi extends HttpServlet {
 	}
 	
 
-	protected void service(
+	@Override
+	protected final void service(
 			HttpServletRequest request,
 			HttpServletResponse response ) throws ServletException, IOException {
 		
@@ -88,57 +91,67 @@ public abstract class GenericApi extends HttpServlet {
 		logger.log( Level.INFO, "Request Payload: " + requestPayloadJson );
 		
 		
-		// Request method
-		String method = request.getMethod();
-	
-		
-		// Parsing request payload to request object
-		GenericRequest apiRequest;
-		if( method.equals( "GET" ) && getMethod != null ) {
-			apiRequest = gson.fromJson( requestPayloadJson, getMethodParameterType );
-		} else if( method.equals( "PUT" ) && putMethod != null ) {
-			apiRequest = gson.fromJson( requestPayloadJson, putMethodParameterType );
-		} else {
-			super.service( request, response );
-			return;
-		}
-
-		
-		// TODO: Validate apiRequest. send SC_BAD_REQUEST if required parameters are missing.
-		
-		
 		perThreadRequest.set( request );
 		perThreadResponse.set( response );
-		Object apiResponse = null;
-
+		
 		
 		// Invoking get/put method for API response
+		Object apiResponse = null;
+		String method = request.getMethod();
+		if( method.equals( "GET" ) && getMethod != null )
+			apiResponse = executeApi( getMethod, requestPayloadJson, getMethodParameterType );
+		else if( method.equals( "PUT" ) && putMethod != null )
+			apiResponse = executeApi( putMethod, requestPayloadJson, putMethodParameterType );
+		else
+			apiResponse = new UnexpectedServerException( "Invalid resource or method." );
+
+		
+		// Dispatching API response
+		dispatchApiResponse( apiResponse, request, response );
+		
+		
+		perThreadRequest.set( null );
+		perThreadResponse.set( null );
+		DataAccessorFactory.getDataAccessor( request ).destroy();
+	}
+	
+	
+	private Object executeApi( Method apiMethod, JsonObject requestPayloadJson,
+			Class<? extends GenericRequest> apiMethodParameterType ) {
+		
 		try {
-			if( method.equals( "GET" ) ) {
-				apiResponse = (GenericResponse) getMethod.invoke( this, apiRequest );
-			} else if( method.equals( "PUT" ) ) {
-				apiResponse = (GenericResponse) putMethod.invoke( this, apiRequest );
-			}
-			
+			GenericRequest apiRequest = gson.fromJson( requestPayloadJson, apiMethodParameterType );
+			apiRequest.validate();
+			return apiMethod.invoke( this, apiRequest );
+
+		} catch( JsonSyntaxException e ) {
+			return new InvalidArgumentException( "Invalid JSON in request body." );
+		
+		} catch( InvalidArgumentException | UnexpectedServerException e) {
+			return e;
+		
 		} catch( InvocationTargetException e ) {
 			Throwable te = e.getTargetException();
-			if( te instanceof InsufficientAccessException
-					|| te instanceof com.claymus.commons.shared.exception.IllegalArgumentException
+			if( te instanceof InvalidArgumentException
+					|| te instanceof InsufficientAccessException
 					|| te instanceof UnexpectedServerException ) {
-				apiResponse = te;
+				return te;
 			
 			} else {
 				logger.log( Level.SEVERE, "Failed to execute API.", e );
-				apiResponse = new UnexpectedServerException();
+				return new UnexpectedServerException();
 			}
 			
 		} catch( IllegalAccessException | IllegalArgumentException e ) {
 			logger.log( Level.SEVERE, "Failed to execute API.", e );
-			apiResponse = new UnexpectedServerException();
+			return new UnexpectedServerException();
 		}
-
-
-		// Dispatching API response
+		
+	}
+	
+	private void dispatchApiResponse( Object apiResponse,
+			HttpServletRequest request, HttpServletResponse response ) throws IOException {
+		
 		if( apiResponse instanceof GenericResponse ) {
 			response.setCharacterEncoding( "UTF-8" );
 			PrintWriter writer = response.getWriter();
@@ -164,32 +177,25 @@ public abstract class GenericApi extends HttpServlet {
 				out.close();
 			}
 			
-		} else if( apiResponse instanceof InsufficientAccessException ) {
-			response.setStatus( HttpServletResponse.SC_UNAUTHORIZED );
+		} else if( apiResponse instanceof Throwable ) {
+
 			response.setCharacterEncoding( "UTF-8" );
 			PrintWriter writer = response.getWriter();
-			writer.println( ((Throwable) apiResponse ).getMessage() );
-			writer.close();
+
+			if( apiResponse instanceof InvalidArgumentException )
+				response.setStatus( HttpServletResponse.SC_BAD_REQUEST );
+			else if( apiResponse instanceof InsufficientAccessException )
+				response.setStatus( HttpServletResponse.SC_UNAUTHORIZED );
+			else if( apiResponse instanceof UnexpectedServerException )
+				response.setStatus( HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
+			else
+				response.setStatus( HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
 			
-		} else if( apiResponse instanceof com.claymus.commons.shared.exception.IllegalArgumentException ) {
-			response.setStatus( HttpServletResponse.SC_BAD_REQUEST );
-			response.setCharacterEncoding( "UTF-8" );
-			PrintWriter writer = response.getWriter();
 			writer.println( ((Throwable) apiResponse ).getMessage() );
 			writer.close();
-		
-		} else if( apiResponse instanceof UnexpectedServerException ) {
-			response.setStatus( HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
-			response.setCharacterEncoding( "UTF-8" );
-			PrintWriter writer = response.getWriter();
-			writer.println( ((Throwable) apiResponse ).getMessage() );
-			writer.close();
+
 		}
 		
-		
-		DataAccessorFactory.getDataAccessor( request ).destroy();
-		perThreadRequest.set( null );
-		perThreadResponse.set( null );
 	}
 	
 	protected HttpServletRequest getThreadLocalRequest() {

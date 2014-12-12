@@ -13,7 +13,7 @@ import com.claymus.commons.server.ClaymusHelper;
 import com.claymus.commons.server.EncryptPassword;
 import com.claymus.commons.server.ValidateFbAccessToken;
 import com.claymus.commons.shared.UserStatus;
-import com.claymus.commons.shared.exception.IllegalArgumentException;
+import com.claymus.commons.shared.exception.InvalidArgumentException;
 import com.claymus.commons.shared.exception.InsufficientAccessException;
 import com.claymus.commons.shared.exception.UnexpectedServerException;
 import com.claymus.data.access.DataAccessor;
@@ -79,7 +79,7 @@ public class ClaymusServiceImpl extends RemoteServiceServlet
 	
 	@Override
 	public InviteUserResponse inviteUser( InviteUserRequest request )
-			throws IllegalArgumentException {
+			throws InvalidArgumentException {
 		
 		UserData userData = request.getUser();
 
@@ -100,7 +100,7 @@ public class ClaymusServiceImpl extends RemoteServiceServlet
 			user.setSignUpDate( new Date() );
 			
 		} else if( userData.getStatus() == UserStatus.PRELAUNCH_SIGNUP ) {
-			throw new IllegalArgumentException( "User registered already !" );
+			throw new InvalidArgumentException( "User registered already !" );
 			
 		} else if( userData.getStatus() == UserStatus.POSTLAUNCH_REFERRAL ) {
 			user.setCampaign( userData.getCampaign() );
@@ -108,12 +108,12 @@ public class ClaymusServiceImpl extends RemoteServiceServlet
 			user.setSignUpDate( new Date() );
 			
 		} else if( userData.getStatus() == UserStatus.POSTLAUNCH_SIGNUP ) {
-			throw new IllegalArgumentException( "User registered alread !" );
+			throw new InvalidArgumentException( "User registered alread !" );
 	
 		} else {
 			logger.log( Level.SEVERE,
 					"User status " + user.getStatus() + " is not handeled !"  );
-			throw new IllegalArgumentException( "Invitation failed ! "
+			throw new InvalidArgumentException( "Invitation failed ! "
 					+ "Kindly contact the administrator." );
 		}
 			
@@ -134,7 +134,7 @@ public class ClaymusServiceImpl extends RemoteServiceServlet
 	
 	@Override
 	public RegisterUserResponse registerUser( RegisterUserRequest request )
-			throws IllegalArgumentException {
+			throws InvalidArgumentException {
 
 		UserData userData = request.getUser();
 
@@ -164,12 +164,12 @@ public class ClaymusServiceImpl extends RemoteServiceServlet
 			user.setSignUpDate( new Date() );
 
 		} else if( user.getStatus() == UserStatus.POSTLAUNCH_SIGNUP ) {
-			throw new IllegalArgumentException( "This email id is already registered !" );
+			throw new InvalidArgumentException( "This email id is already registered !" );
 
 		} else {
 			logger.log( Level.SEVERE,
 					"User status " + user.getStatus() + " is not handeled !"  );
-			throw new IllegalArgumentException( "User registration failed ! "
+			throw new InvalidArgumentException( "User registration failed ! "
 					+ "Kindly contact the administrator." );
 		}
 		
@@ -201,7 +201,7 @@ public class ClaymusServiceImpl extends RemoteServiceServlet
 
 	@Override
 	public LoginUserResponse loginUser( LoginUserRequest request )
-			throws IllegalArgumentException {
+			throws InvalidArgumentException {
 
 		ClaymusHelper claymusHelper =
 				ClaymusHelper.get( this.getThreadLocalRequest() );
@@ -210,7 +210,7 @@ public class ClaymusServiceImpl extends RemoteServiceServlet
 		User user = dataAccessor.getUserByEmail( request.getLoginId().toLowerCase() );
 		
 		if( user != null && user.getStatus() == UserStatus.POSTLAUNCH_SIGNUP_SOCIALLOGIN ) 
-			throw new IllegalArgumentException(
+			throw new InvalidArgumentException(
 					"You used social media account to login. Please click "
 					+ "<a href='" + claymusHelper.createForgotPasswordURL() + "' class='alert-link'>here</a>"
 					+ " to generate your password or kindly use social login to login again." );
@@ -219,7 +219,7 @@ public class ClaymusServiceImpl extends RemoteServiceServlet
 				|| user.getStatus() == UserStatus.PRELAUNCH_REFERRAL
 				|| user.getStatus() == UserStatus.PRELAUNCH_SIGNUP
 				|| user.getStatus() == UserStatus.POSTLAUNCH_REFERRAL ) {
-			throw new IllegalArgumentException(
+			throw new InvalidArgumentException(
 					"This email id is not yet registered. Kindly "
 					+ "<a href='" + claymusHelper.createRegisterURL() + "' class='alert-link'>register</a>"
 					+ " or try again with a different email id." );
@@ -229,12 +229,12 @@ public class ClaymusServiceImpl extends RemoteServiceServlet
 		} else {
 			logger.log( Level.SEVERE,
 					"User status " + user.getStatus() + " is not handeled !"  );
-			throw new IllegalArgumentException( "Login failed ! "
+			throw new InvalidArgumentException( "Login failed ! "
 					+ "Kindly contact the administrator." );
 		}
 
 		if( ! EncryptPassword.check( request.getPassword(), user.getPassword() ) )
-			throw new IllegalArgumentException( "Incorrect password !" );
+			throw new InvalidArgumentException( "Incorrect password !" );
 
 		this.getThreadLocalRequest().getSession().setAttribute(
 				ClaymusHelper.SESSION_ATTRIB_CURRENT_USER_ID, user.getId() );
@@ -249,7 +249,7 @@ public class ClaymusServiceImpl extends RemoteServiceServlet
 
 	@Override
 	public ResetUserPasswordResponse resetUserPassword(
-			ResetUserPasswordRequest request ) throws IllegalArgumentException {
+			ResetUserPasswordRequest request ) throws InvalidArgumentException {
 		
 		ClaymusHelper claymusHelper =
 				ClaymusHelper.get( this.getThreadLocalRequest() );
@@ -261,7 +261,7 @@ public class ClaymusServiceImpl extends RemoteServiceServlet
 				|| user.getStatus() == UserStatus.PRELAUNCH_REFERRAL
 				|| user.getStatus() == UserStatus.PRELAUNCH_SIGNUP
 				|| user.getStatus() == UserStatus.POSTLAUNCH_REFERRAL ) {
-			throw new IllegalArgumentException(
+			throw new InvalidArgumentException(
 					"This email id is not yet registered. Kindly "
 					+ "<a href='" + claymusHelper.createRegisterURL() + "' class='alert-link'>register</a>"
 					+ " or try again with a different email id." );
@@ -271,7 +271,7 @@ public class ClaymusServiceImpl extends RemoteServiceServlet
 		} else {
 			logger.log( Level.SEVERE,
 					"User status " + user.getStatus() + " is not handeled !"  );
-			throw new IllegalArgumentException( "Password reset failed ! "
+			throw new InvalidArgumentException( "Password reset failed ! "
 					+ "Kindly contact the administrator." );
 		}
 
@@ -289,7 +289,7 @@ public class ClaymusServiceImpl extends RemoteServiceServlet
 	
 	@Override
 	public UpdateUserPasswordResponse updateUserPassword(
-			UpdateUserPasswordRequest request ) throws IllegalArgumentException {
+			UpdateUserPasswordRequest request ) throws InvalidArgumentException {
 
 		ClaymusHelper claymusHelper =
 				ClaymusHelper.get( this.getThreadLocalRequest() );
@@ -303,7 +303,7 @@ public class ClaymusServiceImpl extends RemoteServiceServlet
 		if( userEmail == null ) {
 			
 			if( ! claymusHelper.isUserLoggedIn() )
-				throw new IllegalArgumentException(
+				throw new InvalidArgumentException(
 						"You are not logged in. Please "
 						+ "<a href='" + claymusHelper.createLoginURL() + "' class='alert-link'>login</a> and try again. "
 						+ "If you have forgotten your password, you can reset your password "
@@ -313,7 +313,7 @@ public class ClaymusServiceImpl extends RemoteServiceServlet
 
 			if( request.getCurrentPassword() == null
 					||  ! EncryptPassword.check( request.getCurrentPassword(),  user.getPassword() ) )
-				throw new IllegalArgumentException( "Current password is not correct. Please try again." );
+				throw new InvalidArgumentException( "Current password is not correct. Please try again." );
 
 
 		// Request via password reset link
@@ -323,7 +323,7 @@ public class ClaymusServiceImpl extends RemoteServiceServlet
 			
 			if( request.getToken() == null
 					|| ! user.getPassword().equals( request.getToken() ) )
-				throw new IllegalArgumentException(
+				throw new InvalidArgumentException(
 						"URL used is invalid or expired. "
 						+ "Please check the URL and try again." );
 			
@@ -420,7 +420,7 @@ public class ClaymusServiceImpl extends RemoteServiceServlet
 	@Override
 	public FacebookLoginUserResponse facebookLogin(
 			FacebookLoginUserRequest request)
-			throws IllegalArgumentException {
+			throws InvalidArgumentException {
 		
 		FacebookLoginData fbLoginUserData = request.getFacebookLoginData();
 		DataAccessor dataAccessor = DataAccessorFactory.getDataAccessor( this.getThreadLocalRequest() );
@@ -429,7 +429,7 @@ public class ClaymusServiceImpl extends RemoteServiceServlet
 		if( fbLoginUserData.getEmail() != null )
 			user = dataAccessor.getUserByEmail( fbLoginUserData.getEmail() );
 		else 
-			throw new IllegalArgumentException( "Your Email address is required to complete basic login activities. Please provide provide access to your facebook email address" );
+			throw new InvalidArgumentException( "Your Email address is required to complete basic login activities. Please provide provide access to your facebook email address" );
 		
 		ValidateFbAccessToken validateToken = new ValidateFbAccessToken( fbLoginUserData.getAccessToken() );
 		try {
@@ -453,7 +453,7 @@ public class ClaymusServiceImpl extends RemoteServiceServlet
 						ClaymusHelper.SESSION_ATTRIB_CURRENT_USER_ID, user.getId() );
 			}
 			else
-				throw new IllegalArgumentException( "Not a valid access token" );
+				throw new InvalidArgumentException( "Not a valid access token" );
 		} catch (Exception e) {
 			logger.log( Level.SEVERE, "" , e);
 		} 
@@ -464,7 +464,7 @@ public class ClaymusServiceImpl extends RemoteServiceServlet
 	
 	@Override
 	public SavePageResponse savePage( SavePageRequest request )
-			throws IllegalArgumentException, InsufficientAccessException {
+			throws InvalidArgumentException, InsufficientAccessException {
 
 		PageData pageData = request.getPageData();
 		String uri = pageData.getUriAlias().toLowerCase();
@@ -478,7 +478,7 @@ public class ClaymusServiceImpl extends RemoteServiceServlet
 				throw new InsufficientAccessException();
 
 			if( page != null )
-				throw new IllegalArgumentException( "Another page is already associated with this URL." );
+				throw new InvalidArgumentException( "Another page is already associated with this URL." );
 			
 			page = dataAccessor.newPage();
 			page.setUriAlias( uri );
@@ -492,7 +492,7 @@ public class ClaymusServiceImpl extends RemoteServiceServlet
 				throw new InsufficientAccessException();
 
 			if( page != null && ! page.getId().equals( pageData.getId() ) )
-				throw new IllegalArgumentException( "Another page is already associated with this URL." );
+				throw new InvalidArgumentException( "Another page is already associated with this URL." );
 
 			if( page == null ) {
 				page = dataAccessor.getPage( pageData.getId() );

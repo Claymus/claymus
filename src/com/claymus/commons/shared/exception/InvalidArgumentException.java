@@ -3,12 +3,12 @@ package com.claymus.commons.shared.exception;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 @SuppressWarnings("serial")
-public class IllegalArgumentException extends Exception implements IsSerializable {
+public class InvalidArgumentException extends Exception implements IsSerializable {
 
 	@SuppressWarnings("unused")
-	private IllegalArgumentException() {}
+	private InvalidArgumentException() {}
 	
-	public IllegalArgumentException( String msg ) {
+	public InvalidArgumentException( String msg ) {
 		super( msg );
 	}
 
