@@ -6,6 +6,7 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
+import com.claymus.commons.shared.AccessTokenType;
 import com.claymus.data.transfer.AccessToken;
 
 @SuppressWarnings("serial")
@@ -19,8 +20,14 @@ public class AccessTokenEntity implements AccessToken {
 	@Persistent( column = "EXPIRY" )
 	private Date expiry;
 
-	@Persistent( column = "VALUES" )
-	private String values;
+	@Persistent( column = "USER_ID" )
+	private Long userId;
+
+	@Persistent( column = "PUBLISHER_ID" )
+	private Long publisherId;
+
+	@Persistent( column = "ACCESS_TOKEN_TYPE" )
+	private AccessTokenType type;
 
 	
 	@Override
@@ -35,7 +42,7 @@ public class AccessTokenEntity implements AccessToken {
 
 	@Override
 	public Date getExpiry() {
-		return this.expiry;
+		return expiry;
 	}
 
 	@Override
@@ -44,12 +51,33 @@ public class AccessTokenEntity implements AccessToken {
 	}
 
 	@Override
-	public String getValues() {
-		return this.values;
+	public Long getUserId() {
+		return userId;
 	}
 
 	@Override
-	public void setValues( String values ) {
-		this.values = values;
+	public void setUserId( Long userId ) {
+		this.userId = userId;
 	}
+
+	@Override
+	public Long getPublisherId() {
+		return publisherId;
+	}
+
+	@Override
+	public void setPublisherId( Long publisherId ) {
+		this.publisherId = publisherId;
+	}
+
+	@Override
+	public AccessTokenType getType() {
+		return type;
+	}
+
+	@Override
+	public void setType( AccessTokenType accessTokenType ) {
+		this.type = accessTokenType;
+	}
+
 }

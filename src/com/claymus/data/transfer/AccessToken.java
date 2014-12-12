@@ -3,6 +3,8 @@ package com.claymus.data.transfer;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.claymus.commons.shared.AccessTokenType;
+
 public interface AccessToken extends Serializable {
 
 	String getId();
@@ -13,8 +15,16 @@ public interface AccessToken extends Serializable {
 	
 	void setExpiry( Date expiry);
 	
-	String getValues();
+	Long getUserId();
 	
-	void setValues( String value );
+	void setUserId( Long userId );
+	
+	Long getPublisherId();
+	
+	void setPublisherId( Long publisherId );
+	
+	AccessTokenType getType();
+	
+	void setType( AccessTokenType accessTokenType );
 	
 }
