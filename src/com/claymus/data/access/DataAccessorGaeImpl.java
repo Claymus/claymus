@@ -5,14 +5,17 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.jdo.JDODataStoreException;
 import javax.jdo.JDOHelper;
 import javax.jdo.JDOObjectNotFoundException;
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.Query;
+import javax.jdo.Transaction;
 
 import com.claymus.data.access.gae.AccessTokenEntity;
 import com.claymus.data.access.gae.CommentEntity;
@@ -406,6 +409,8 @@ public class DataAccessorGaeImpl implements DataAccessor {
 
 	@Override
 	public AccessToken getAccessToken( String accessTokenId ) {
+		if( accessTokenId == null )
+			return null;
 		try{
 			AccessToken accessToken = getEntity( AccessTokenEntity.class, accessTokenId );
 			return accessToken.getExpiry().before( new Date() ) ? null : accessToken;
@@ -416,7 +421,30 @@ public class DataAccessorGaeImpl implements DataAccessor {
 	
 	@Override
 	public AccessToken createAccessToken( AccessToken accessToken ) {
-		return createOrUpdateEntity( accessToken );
+		accessToken.setCreationDate( new Date() );
+		if( accessToken.getExpiry() == null )
+			accessToken.setExpiry( new Date( new Date().getTime() + 3600000) );
+
+		Transaction tx = null;
+		while( true ) {
+			accessToken.setId( UUID.randomUUID().toString() );
+			try {
+				tx = pm.currentTransaction();
+				tx.begin();
+				pm.getObjectById( AccessTokenEntity.class, accessToken.getId() );
+			} catch( JDOObjectNotFoundException e ) {
+				try{
+					AccessToken at = pm.makePersistent( accessToken );
+					tx.commit();
+					return pm.detachCopy( at );
+				} catch( JDODataStoreException ex ) {
+					logger.log( Level.INFO, "Transaction failed. Retrying ...", ex );
+				}
+			} finally {
+				if( tx.isActive() )
+					tx.rollback();
+			}
+		}
 	}
 
 

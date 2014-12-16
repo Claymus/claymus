@@ -17,6 +17,9 @@ public class AccessTokenEntity implements AccessToken {
 	@Persistent( column = "ACCESS_TOKEN_ID" )
 	private String accessTokenId;
 	
+	@Persistent( column = "CREATION_DATE" )
+	private Date creationDate;
+
 	@Persistent( column = "EXPIRY" )
 	private Date expiry;
 
@@ -41,12 +44,22 @@ public class AccessTokenEntity implements AccessToken {
 	}
 
 	@Override
+	public Date getCreationDate() {
+		return creationDate;
+	}
+
+	@Override
+	public void setCreationDate( Date creationDate ) {
+		this.creationDate = creationDate;
+	}
+
+	@Override
 	public Date getExpiry() {
 		return expiry;
 	}
 
 	@Override
-	public void setExpiry( Date expiry) {
+	public void setExpiry( Date expiry ) {
 		this.expiry = expiry;
 	}
 

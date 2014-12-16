@@ -11,6 +11,10 @@ public interface AccessToken extends Serializable {
 	
 	void setId( String accessTokenId );
 	
+	Date getCreationDate();
+	
+	void setCreationDate( Date creationDate );
+	
 	Date getExpiry();
 	
 	void setExpiry( Date expiry);

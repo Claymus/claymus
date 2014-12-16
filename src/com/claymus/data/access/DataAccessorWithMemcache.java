@@ -312,7 +312,7 @@ public class DataAccessorWithMemcache implements DataAccessor {
 	}
 
 	@Override
-	public AccessToken createAccessToken(AccessToken accessToken) {
+	public AccessToken createAccessToken( AccessToken accessToken ) {
 		accessToken = dataAccessor.createAccessToken( accessToken );
 		memcache.put( PREFIX_ACCESS_TOKEN + accessToken.getId(), accessToken );
 		return accessToken;
@@ -320,6 +320,8 @@ public class DataAccessorWithMemcache implements DataAccessor {
 
 	@Override
 	public AccessToken getAccessToken( String accessTokenId ) {
+		if( accessTokenId == null )
+			return null;
 		AccessToken accessToken = memcache.get( PREFIX_ACCESS_TOKEN + accessTokenId );
 		if( accessToken == null ) {
 			accessToken = dataAccessor.getAccessToken( accessTokenId );

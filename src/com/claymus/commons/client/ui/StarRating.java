@@ -13,12 +13,12 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.Image;
 
-public class StarRating extends Composite implements HasValue<Long> {
+public class StarRating extends Composite implements HasValue<Integer> {
 
     private FlowPanel mainPanel = new FlowPanel();
     private Image[] stars;
     
-    private Long rating = 0L;
+    private Integer rating = 0;
     private int rating_max = 5;
     private int hover_index = 0;
     private boolean read_only = false;     
@@ -28,15 +28,15 @@ public class StarRating extends Composite implements HasValue<Long> {
     
     //Default Constructor
     public StarRating() {
-        this(0L, 5, false);
+        this(0, 5, false);
     }
     
-    public StarRating(Long rating, boolean read_only){
+    public StarRating(Integer rating, boolean read_only){
         this( rating, 5, read_only );
         
     }
     
-    public StarRating(Long rating, int rating_max, boolean read_only){
+    public StarRating(Integer rating, int rating_max, boolean read_only){
     	stars = new Image[ rating_max ];
     	for( int i=0; i< rating_max; i++)
         	stars[i] = new Image();
@@ -108,12 +108,12 @@ public class StarRating extends Composite implements HasValue<Long> {
     }
 
     //Sets rating
-    public void setRating(Long rating) {
+    public void setRating(Integer rating) {
         this.rating = rating;
     }
 
     //returns rating
-    public Long getRating() {
+    public Integer getRating() {
         return rating;
     }
 
@@ -203,23 +203,23 @@ public class StarRating extends Composite implements HasValue<Long> {
     /**
      * Adds a ValueChangehandler
      */
-    public HandlerRegistration addValueChangeHandler(ValueChangeHandler<Long> handler) {
+    public HandlerRegistration addValueChangeHandler(ValueChangeHandler<Integer> handler) {
         return addHandler(handler, ValueChangeEvent.getType());
     }
 
     //returns rating value
-    public Long getValue() {
+    public Integer getValue() {
         return this.getRating();
     }
 
     //sets rating value
-    public void setValue(Long value) {
+    public void setValue(Integer value) {
         this.setRating(value);
         this.setStarImages();
     }
 
     //sets rating and fire value change event.
-    public void setValue(Long value, boolean fireEvents) {
+    public void setValue(Integer value, boolean fireEvents) {
         this.setValue(value);
         if (fireEvents)
             ValueChangeEvent.fire(this, value);
