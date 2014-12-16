@@ -26,6 +26,7 @@ public class ClaymusHelper implements Serializable {
 
 	public static final String REQUEST_ATTRIB_MODE_BASIC = "BasicMode";
 	public static final String REQUEST_ATTRIB_EMBED_BASIC = "EmbedMode";
+	public static final String REQUEST_ATTRIB_ACCESS_TOKEN = "AccessToken";
 	public static final String SESSION_ATTRIB_CURRENT_USER_ID = "CurrentUserId";
 	public static final String SEARCH_INDEX_NAME = "GLOBAL_INDEX";
 	
