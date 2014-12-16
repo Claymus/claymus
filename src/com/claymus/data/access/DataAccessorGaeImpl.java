@@ -411,6 +411,7 @@ public class DataAccessorGaeImpl implements DataAccessor {
 	public AccessToken getAccessToken( String accessTokenId ) {
 		if( accessTokenId == null )
 			return null;
+		
 		try{
 			AccessToken accessToken = getEntity( AccessTokenEntity.class, accessTokenId );
 			return accessToken.getExpiry().before( new Date() ) ? null : accessToken;
@@ -423,7 +424,7 @@ public class DataAccessorGaeImpl implements DataAccessor {
 	public AccessToken createAccessToken( AccessToken accessToken ) {
 		accessToken.setCreationDate( new Date() );
 		if( accessToken.getExpiry() == null )
-			accessToken.setExpiry( new Date( new Date().getTime() + 3600000) );
+			accessToken.setExpiry( new Date( new Date().getTime() + 3600000 ) ); // 1Hr
 
 		Transaction tx = null;
 		while( true ) {
@@ -445,6 +446,11 @@ public class DataAccessorGaeImpl implements DataAccessor {
 					tx.rollback();
 			}
 		}
+	}
+	
+	@Override
+	public AccessToken updateAccessToken( AccessToken accessToken ) {
+		return createOrUpdateEntity( accessToken );
 	}
 
 

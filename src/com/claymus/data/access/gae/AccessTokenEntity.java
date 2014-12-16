@@ -32,6 +32,12 @@ public class AccessTokenEntity implements AccessToken {
 	@Persistent( column = "ACCESS_TOKEN_TYPE" )
 	private AccessTokenType type;
 
+	@Persistent( column = "LOGIN_DATE" )
+	private Date logInDate;
+	
+	@Persistent( column = "LOGOUT_DATE" )
+	private Date logOutDate;
+
 	
 	@Override
 	public String getId() {
@@ -93,4 +99,24 @@ public class AccessTokenEntity implements AccessToken {
 		this.type = accessTokenType;
 	}
 
+	@Override
+	public Date getLogInDate() {
+		return logInDate;
+	}
+	
+	@Override
+	public void setLogInDate( Date logInDate ) {
+		this.logInDate = logInDate;
+	}
+	
+	@Override
+	public Date getLogOutDate() {
+		return logOutDate;
+	}
+	
+	@Override
+	public void setLogOutDate( Date logOutDate ) {
+		this.logOutDate = logOutDate;
+	}
+	
 }

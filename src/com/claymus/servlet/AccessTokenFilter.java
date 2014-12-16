@@ -44,7 +44,7 @@ public class AccessTokenFilter implements Filter {
 			accessToken = dataAccessor.newAccessToken();
 			accessToken.setType( AccessTokenType.USER );
 			accessToken.setUserId( 0L );
-			accessToken.setExpiry( new Date( new Date().getTime() + 604800000 ) ); // 1 week
+			accessToken.setExpiry( new Date( new Date().getTime() + 604800000 ) ); // 1Wk
 			accessToken = dataAccessor.createAccessToken( accessToken );
 			
 			accessTokenId = accessToken.getId();

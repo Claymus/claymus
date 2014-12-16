@@ -31,4 +31,12 @@ public interface AccessToken extends Serializable {
 	
 	void setType( AccessTokenType accessTokenType );
 	
+	Date getLogInDate();
+	
+	void setLogInDate( Date logInDate );
+	
+	Date getLogOutDate();
+	
+	void setLogOutDate( Date logOutDate );
+	
 }

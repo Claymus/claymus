@@ -20,9 +20,11 @@ import com.claymus.api.annotation.Get;
 import com.claymus.api.annotation.Put;
 import com.claymus.api.shared.GenericRequest;
 import com.claymus.api.shared.GenericResponse;
+import com.claymus.commons.server.ClaymusHelper;
 import com.claymus.commons.shared.exception.InsufficientAccessException;
 import com.claymus.commons.shared.exception.InvalidArgumentException;
 import com.claymus.commons.shared.exception.UnexpectedServerException;
+import com.claymus.data.access.DataAccessor;
 import com.claymus.data.access.DataAccessorFactory;
 import com.claymus.data.transfer.BlobEntry;
 import com.google.gson.Gson;
@@ -122,6 +124,14 @@ public abstract class GenericApi extends HttpServlet {
 		try {
 			GenericRequest apiRequest = gson.fromJson( requestPayloadJson, apiMethodParameterType );
 			apiRequest.validate();
+			String accessTokenId = apiRequest.getAccessToken();
+			if( accessTokenId != null ) {
+				HttpServletRequest httpRequest = this.getThreadLocalRequest();
+				DataAccessor dataAccessor = DataAccessorFactory.getDataAccessor( httpRequest );
+				if( dataAccessor.getAccessToken( accessTokenId ) == null )
+					throw new InvalidArgumentException( "AccessToken is invalid or expired." );
+				httpRequest.setAttribute( ClaymusHelper.REQUEST_ATTRIB_ACCESS_TOKEN, apiRequest.getAccessToken() );
+			}
 			return apiMethod.invoke( this, apiRequest );
 
 		} catch( JsonSyntaxException e ) {
