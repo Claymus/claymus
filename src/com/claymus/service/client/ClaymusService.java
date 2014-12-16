@@ -70,7 +70,7 @@ public interface ClaymusService extends RemoteService {
 
 	// API Version: 4.0; Owner Module: BlogContent;
 	GetBlogListResponse getBlogPostList( GetBlogListRequest request )
-			throws UnexpectedServerException, InsufficientAccessException;
+			throws InvalidArgumentException, InsufficientAccessException, UnexpectedServerException;
 
 	SaveRoleAccessResponse saveRoleAccess( SaveRoleAccessRequest request )
 			throws InsufficientAccessException;

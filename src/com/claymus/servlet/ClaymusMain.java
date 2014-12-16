@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.claymus.commons.server.ClaymusHelper;
 import com.claymus.commons.server.FreeMarkerUtil;
 import com.claymus.commons.shared.exception.InsufficientAccessException;
+import com.claymus.commons.shared.exception.InvalidArgumentException;
 import com.claymus.commons.shared.exception.UnexpectedServerException;
 import com.claymus.data.access.DataAccessor;
 import com.claymus.data.access.DataAccessorFactory;
@@ -119,7 +120,7 @@ public class ClaymusMain extends HttpServlet {
 				pageContentHtmlList.add( pageContentHtml );
 				if( page.getTitle() == null && page.getPrimaryContentId() != null && pageContent.getId().equals( page.getPrimaryContentId() ) )
 					page.setTitle( pageContentProcessor.getTitle( pageContent, request ) );
-			} catch( InsufficientAccessException e ) {
+			} catch( InvalidArgumentException | InsufficientAccessException e ) {
 				// Do nothing
 			} catch( UnexpectedServerException e ) {
 				logger.log( Level.SEVERE, "Failed to generate page content html.", e );

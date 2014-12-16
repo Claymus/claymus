@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.claymus.commons.server.FreeMarkerUtil;
 import com.claymus.commons.shared.exception.InsufficientAccessException;
+import com.claymus.commons.shared.exception.InvalidArgumentException;
 import com.claymus.commons.shared.exception.UnexpectedServerException;
 import com.claymus.data.access.DataAccessor;
 import com.claymus.data.access.DataAccessorFactory;
@@ -33,7 +34,7 @@ public class BlogContentProcessor extends PageContentProcessor<BlogContent> {
 	@Override
 	public String generateHtml(
 			BlogContent blogContent, HttpServletRequest request )
-			throws InsufficientAccessException, UnexpectedServerException {
+			throws InvalidArgumentException, InsufficientAccessException, UnexpectedServerException {
 		
 		DataAccessor dataAccessor = DataAccessorFactory.getDataAccessor( request );
 		DataListCursorTuple<BlogPostContent> dataListCursorTuple =

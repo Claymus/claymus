@@ -13,8 +13,8 @@ import com.claymus.commons.server.ClaymusHelper;
 import com.claymus.commons.server.EncryptPassword;
 import com.claymus.commons.server.ValidateFbAccessToken;
 import com.claymus.commons.shared.UserStatus;
-import com.claymus.commons.shared.exception.InvalidArgumentException;
 import com.claymus.commons.shared.exception.InsufficientAccessException;
+import com.claymus.commons.shared.exception.InvalidArgumentException;
 import com.claymus.commons.shared.exception.UnexpectedServerException;
 import com.claymus.data.access.DataAccessor;
 import com.claymus.data.access.DataAccessorFactory;
@@ -569,7 +569,7 @@ public class ClaymusServiceImpl extends RemoteServiceServlet
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public GetBlogListResponse getBlogPostList( GetBlogListRequest request )
-			throws InsufficientAccessException, UnexpectedServerException {
+			throws InvalidArgumentException, InsufficientAccessException, UnexpectedServerException {
 		
 		DataAccessor dataAccessor = DataAccessorFactory.getDataAccessor( this.getThreadLocalRequest() );
 		DataListCursorTuple<BlogPostContent> dataListCursorTuple =

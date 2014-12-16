@@ -38,7 +38,7 @@ public class AccessTokenFilter implements Filter {
 		ClaymusHelper claymusHelper = ClaymusHelper.get( request );
 		DataAccessor dataAccessor = DataAccessorFactory.getDataAccessor( request );
 
-		String accessTokenId = claymusHelper.getCookieValue( "AccessToken" );
+		String accessTokenId = claymusHelper.getCookieValue( "access_token" );
 		AccessToken accessToken = dataAccessor.getAccessToken( accessTokenId );
 		if( accessToken == null ) {
 			accessToken = dataAccessor.newAccessToken();
@@ -48,7 +48,7 @@ public class AccessTokenFilter implements Filter {
 			accessToken = dataAccessor.createAccessToken( accessToken );
 			
 			accessTokenId = accessToken.getId();
-			response.addCookie( new Cookie( "AccessToken", accessToken.getId() ) );
+			response.addCookie( new Cookie( "access_token", accessToken.getId() ) );
 		}
 		request.setAttribute( ClaymusHelper.REQUEST_ATTRIB_ACCESS_TOKEN, accessTokenId );
 		

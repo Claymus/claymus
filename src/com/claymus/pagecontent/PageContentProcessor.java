@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import com.claymus.commons.server.ClaymusHelper;
 import com.claymus.commons.server.FreeMarkerUtil;
 import com.claymus.commons.shared.exception.InsufficientAccessException;
+import com.claymus.commons.shared.exception.InvalidArgumentException;
 import com.claymus.commons.shared.exception.UnexpectedServerException;
 import com.claymus.data.access.DataAccessorFactory;
 import com.claymus.data.access.Memcache;
@@ -26,7 +27,7 @@ public abstract class PageContentProcessor<T extends PageContent> {
 	}
 	
 	public final String getHtml( T pageContent, HttpServletRequest request )
-			throws InsufficientAccessException, UnexpectedServerException {
+			throws InvalidArgumentException, InsufficientAccessException, UnexpectedServerException {
 
 		Memcache memcache = DataAccessorFactory.getL2CacheAccessor();
 		CacheLevel cacheLevel = getCacheLevel();
@@ -77,7 +78,7 @@ public abstract class PageContentProcessor<T extends PageContent> {
 	}
 	
 	public String generateHtml( T pageContent, HttpServletRequest request )
-			throws InsufficientAccessException, UnexpectedServerException {
+			throws InvalidArgumentException, InsufficientAccessException, UnexpectedServerException {
 		
 		return FreeMarkerUtil.processTemplate( pageContent, getTemplateName() );
 	}
