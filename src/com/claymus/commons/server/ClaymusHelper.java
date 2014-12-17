@@ -13,6 +13,7 @@ import com.claymus.commons.shared.UserStatus;
 import com.claymus.data.access.DataAccessor;
 import com.claymus.data.access.DataAccessorFactory;
 import com.claymus.data.access.Memcache;
+import com.claymus.data.transfer.AccessToken;
 import com.claymus.data.transfer.Page;
 import com.claymus.data.transfer.RoleAccess;
 import com.claymus.data.transfer.User;
@@ -336,6 +337,31 @@ public class ClaymusHelper implements Serializable {
 				return aUriAlias;
 		}
 
+	}
+	
+	//Update access token entity on user login/logout/register
+	public final void updateAccessToken( String accessTokenId, 
+											Long userId, Date loginDate, 
+											Date logoutDate, Date expiry ){
+		
+		DataAccessor dataAccessor = DataAccessorFactory.getDataAccessor( request );
+		
+		AccessToken accessToken = dataAccessor.getAccessToken( accessTokenId );
+		
+		if( userId != null )
+			accessToken.setUserId( userId );
+		
+		if( loginDate != null )
+			accessToken.setLogInDate( loginDate );
+		
+		if( logoutDate != null )
+			accessToken.setLogOutDate( logoutDate );
+		
+		if( expiry != null )
+			accessToken.setExpiry( expiry );
+		
+		dataAccessor.updateAccessToken( accessToken );
+		
 	}
 	
 }
