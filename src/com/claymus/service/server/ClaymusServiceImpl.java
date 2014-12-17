@@ -193,7 +193,7 @@ public class ClaymusServiceImpl extends RemoteServiceServlet
 		
 		//Update Access Token Entity
 		ClaymusHelper claymusHelper = ClaymusHelper.get( this.getThreadLocalRequest() );
-		String accessTokenId = ( String ) this.getThreadLocalRequest().getAttribute( ClaymusHelper.REQUEST_ATTRIB_ACCESS_TOKEN );
+		String accessTokenId = ( String ) this.getThreadLocalRequest().getAttribute( ClaymusHelper.REQUEST_ATTRIB_ACCESS_TOKEN_ID );
 		claymusHelper.updateAccessToken( accessTokenId, user.getId(), new Date(), null, null );
 		
 		this.getThreadLocalRequest().getSession().setAttribute(
@@ -242,7 +242,7 @@ public class ClaymusServiceImpl extends RemoteServiceServlet
 			throw new InvalidArgumentException( "Incorrect password !" );
 
 		//Update Access Token Entity
-		String accessTokenId = ( String ) this.getThreadLocalRequest().getAttribute( ClaymusHelper.REQUEST_ATTRIB_ACCESS_TOKEN );
+		String accessTokenId = ( String ) this.getThreadLocalRequest().getAttribute( ClaymusHelper.REQUEST_ATTRIB_ACCESS_TOKEN_ID );
 		claymusHelper.updateAccessToken( accessTokenId, user.getId(), new Date(), null, null );
 		
 		this.getThreadLocalRequest().getSession().setAttribute( ClaymusHelper.SESSION_ATTRIB_CURRENT_USER_ID, user.getId() );
@@ -254,7 +254,7 @@ public class ClaymusServiceImpl extends RemoteServiceServlet
 	public void logoutUser() {
 		//Update Access Token Entity
 		String accessTokenId = ( String ) this.getThreadLocalRequest()
-												.getAttribute( ClaymusHelper.REQUEST_ATTRIB_ACCESS_TOKEN );
+												.getAttribute( ClaymusHelper.REQUEST_ATTRIB_ACCESS_TOKEN_ID );
 		ClaymusHelper claymusHelper = ClaymusHelper.get( this.getThreadLocalRequest() );
 		claymusHelper.updateAccessToken( accessTokenId, null, null, new Date(), new Date() );
 		
@@ -465,7 +465,7 @@ public class ClaymusServiceImpl extends RemoteServiceServlet
 				
 				//Update Access Token
 				ClaymusHelper claymusHelper = ClaymusHelper.get( this.getThreadLocalRequest() );
-				String accessTokenId = ( String ) this.getThreadLocalRequest().getAttribute( ClaymusHelper.REQUEST_ATTRIB_ACCESS_TOKEN );
+				String accessTokenId = ( String ) this.getThreadLocalRequest().getAttribute( ClaymusHelper.REQUEST_ATTRIB_ACCESS_TOKEN_ID );
 				claymusHelper.updateAccessToken( accessTokenId, user.getId(), new Date(), null, null );
 				
 				this.getThreadLocalRequest().getSession().setAttribute( ClaymusHelper.SESSION_ATTRIB_CURRENT_USER_ID, user.getId() );
