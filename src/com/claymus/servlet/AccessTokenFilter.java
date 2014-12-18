@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.claymus.commons.server.ClaymusHelper;
-import com.claymus.commons.shared.AccessTokenType;
+import com.claymus.commons.shared.ClaymusAccessTokenType;
 import com.claymus.data.access.DataAccessor;
 import com.claymus.data.access.DataAccessorFactory;
 import com.claymus.data.transfer.AccessToken;
@@ -50,7 +50,7 @@ public class AccessTokenFilter implements Filter {
 		AccessToken accessToken = dataAccessor.getAccessToken( accessTokenId );
 		if( accessToken == null ) {
 			accessToken = dataAccessor.newAccessToken();
-			accessToken.setType( AccessTokenType.USER );
+			accessToken.setType( ClaymusAccessTokenType.USER.toString() );
 			accessToken.setUserId( 0L );
 			accessToken.setExpiry( new Date( new Date().getTime() + 604800000 ) ); // 1Wk
 			accessToken = dataAccessor.createAccessToken( accessToken );

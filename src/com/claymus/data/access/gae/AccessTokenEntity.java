@@ -6,7 +6,6 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
-import com.claymus.commons.shared.AccessTokenType;
 import com.claymus.data.transfer.AccessToken;
 
 @SuppressWarnings("serial")
@@ -30,7 +29,7 @@ public class AccessTokenEntity implements AccessToken {
 	private Long publisherId;
 
 	@Persistent( column = "ACCESS_TOKEN_TYPE" )
-	private AccessTokenType type;
+	private String type;
 
 	@Persistent( column = "LOGIN_DATE" )
 	private Date logInDate;
@@ -90,12 +89,12 @@ public class AccessTokenEntity implements AccessToken {
 	}
 
 	@Override
-	public AccessTokenType getType() {
+	public String getType() {
 		return type;
 	}
 
 	@Override
-	public void setType( AccessTokenType accessTokenType ) {
+	public void setType( String accessTokenType ) {
 		this.type = accessTokenType;
 	}
 
