@@ -1,6 +1,7 @@
 package com.claymus.data.access;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,6 +22,7 @@ public class MemcacheGaeImpl implements Memcache {
 
 	
 	@SuppressWarnings("unchecked")
+	@Override
 	public <K, T extends Serializable> T get( K key ) {
 		try {
 			Cache cache = CacheManager.getInstance().getCacheFactory()
@@ -31,6 +33,22 @@ public class MemcacheGaeImpl implements Memcache {
 			else
 				logger.log( Level.INFO, "Cache Hit: " + key );
 			return value;
+		} catch( InvalidValueException e ) {
+			logger.log( Level.SEVERE, "Failed to typecaste cached value to required type.", e );
+			return null;
+		} catch( CacheException e ) {
+			logger.log( Level.SEVERE, "Failed to create cache instance.", e );
+			return null;
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public <K, T extends Serializable> Map<K, T> getAll( Collection<K> keys ) {
+		try {
+			Cache cache = CacheManager.getInstance().getCacheFactory()
+					.createCache( Collections.emptyMap() );
+			return cache.getAll( keys );
 		} catch( InvalidValueException e ) {
 			logger.log( Level.SEVERE, "Failed to typecaste cached value to required type.", e );
 			return null;
@@ -67,7 +85,20 @@ public class MemcacheGaeImpl implements Memcache {
 		try {
 			Cache cache = CacheManager.getInstance().getCacheFactory()
 					.createCache( props );
-			cache.put(key, value);
+			cache.put( key, value );
+		} catch (CacheException ex) {
+			logger.log( Level.SEVERE, "Failed to create cache instance.", ex);
+		}
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public <K, T extends Serializable> void putAll( Map<K, T> keyValueMap ) {
+		Map props = Collections.emptyMap();
+
+		try {
+			Cache cache = CacheManager.getInstance().getCacheFactory()
+					.createCache( props );
+			cache.putAll( keyValueMap );
 		} catch (CacheException ex) {
 			logger.log( Level.SEVERE, "Failed to create cache instance.", ex);
 		}

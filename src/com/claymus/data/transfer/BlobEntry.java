@@ -12,8 +12,8 @@ public interface BlobEntry extends Serializable {
 	
 	void setData( byte[] byteArray );
 	
-	void appendData( byte[] appendData );
-
+	long getDataLength();
+	
 	String getMimeType();
 
 	String getETag();
@@ -23,7 +23,5 @@ public interface BlobEntry extends Serializable {
 	Map<String, String> getMetaData();
 
 	String getMetaData( String key );
-	
-	Long getSize();
 	
 }

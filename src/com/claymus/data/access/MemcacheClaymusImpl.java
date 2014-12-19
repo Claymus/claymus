@@ -1,8 +1,11 @@
 package com.claymus.data.access;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,7 +26,6 @@ public class MemcacheClaymusImpl implements Memcache {
 	
 	};
 
-	
 	@SuppressWarnings("unchecked")
 	public <K, T extends Serializable> T get( K key ) {
 		T value = (T) cache.get(key);
@@ -34,6 +36,15 @@ public class MemcacheClaymusImpl implements Memcache {
 		return value;
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public <K, T extends Serializable> Map<K, T> getAll( Collection<K> keys ) {
+		Map<K, T> keyValueMap = new HashMap<K, T>();
+		for( K key : keys )
+			keyValueMap.put( key, (T) cache.get(key) );
+		return keyValueMap;
+	}
+	
 	public <K, T extends Serializable> void put(
 			K key, T value, long expirationDeltaMillis ) {
 
@@ -44,6 +55,11 @@ public class MemcacheClaymusImpl implements Memcache {
 		cache.put( key, value );
 	}
 
+	public <K, T extends Serializable> void putAll( Map<K, T> keyValueMap ) {
+		for( Entry<K, T> entry : keyValueMap.entrySet() )
+			cache.put( entry.getKey(), entry.getValue() );
+	}
+
 	public <K> void remove( K key ) {
 		cache.remove( key );
 	}
@@ -51,5 +67,5 @@ public class MemcacheClaymusImpl implements Memcache {
 	public void flush() {
 		cache.clear();
 	}
-	
+
 }

@@ -1,7 +1,12 @@
 package com.claymus.data.access;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.Serializable;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -10,20 +15,20 @@ import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.claymus.commons.server.ResizeBlob;
-import com.claymus.data.access.gcs.BlobEntryGcsImpl;
 import com.claymus.data.transfer.BlobEntry;
+
 
 public class BlobAccessorWithMemcache implements BlobAccessor {
 
+	private static final Logger logger = 
+			Logger.getLogger( BlobAccessorWithMemcache.class.getName() );
+
+	
 	private final static String PREFIX = "BlobEntry-";
-	private final static String SUFFIX = "-Segment-";
+	private final static int SEGMENT_SIZE = 1000 * 1024; // bytes
 
 	private final BlobAccessor blobAccessor;
 	private final Memcache memcache;
-	
-	private static final Logger logger = 
-			Logger.getLogger( BlobAccessorWithMemcache.class.getName() );
 
 
 	public BlobAccessorWithMemcache( BlobAccessor blobAccessor, Memcache memcache ) {
@@ -86,48 +91,61 @@ public class BlobAccessorWithMemcache implements BlobAccessor {
 	}
 
 	@Override
-	public BlobEntry getBlob( String fileName )
-			throws IOException {
+	public BlobEntry getBlob( String fileName ) throws IOException {
 		
 		BlobEntry blobEntry = memcache.get( PREFIX + fileName );
-		Long totalNoOfSegments = 0L;
-		int segmentNo = 1;
+		
+		
+		if( blobEntry == null ) {
+			blobEntry = blobAccessor.getBlob( fileName );
 
-		if( blobEntry != null && blobEntry.getSize() >= 1000 * 1024 ){
-			ResizeBlob resizeBlob = new ResizeBlob( blobEntry );
-			totalNoOfSegments = resizeBlob.getSegmentCount();
-			while( (long) segmentNo < totalNoOfSegments ){
-				byte[] temp = memcache.get( PREFIX + fileName + SUFFIX + segmentNo );
-				if( temp == null )
-					break;
-				resizeBlob.appendSegment( temp );
-				segmentNo++;
+			if( blobEntry != null && blobEntry.getDataLength() <= 1000 * 1024 ) {
+				memcache.put( PREFIX + fileName, blobEntry );
+			
+			} else if( blobEntry != null ) { // && blobEntry.getData().length > 1000 * 1024
+				byte[] blobData = blobEntry.getData();
+				int dataLength = (int) blobEntry.getDataLength();
+				blobEntry.setData( Arrays.copyOfRange( blobData, 0, SEGMENT_SIZE ) );
+				Map<String, Serializable> keySegmentMap = new HashMap<>();
+				keySegmentMap.put( PREFIX + fileName, blobEntry );
+				for( int i = 1; i < (int) Math.ceil( (double) dataLength / SEGMENT_SIZE ); i++ ) {
+					int fromIndex = i * SEGMENT_SIZE;
+					int toIndex = (i + 1) * SEGMENT_SIZE;
+					toIndex = toIndex > dataLength ? dataLength : toIndex;
+					keySegmentMap.put( PREFIX + fileName + "?" + i, Arrays.copyOfRange( blobData, fromIndex, toIndex ) );
+				}
+				memcache.putAll( keySegmentMap );
+				blobEntry.setData( blobData );
 			}
-			blobEntry = resizeBlob.getBlobEntry();
-			logger.log( Level.INFO, "Cache Hit : Blob Length - " + blobEntry.getData().length );
+		
+			
+		} else if( blobEntry.getData().length < blobEntry.getDataLength() ) {
+			int dataLength = (int) blobEntry.getDataLength();
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			baos.write( blobEntry.getData() );
+
+			List<String> keyList = new ArrayList<String>( (int) Math.ceil( (double) dataLength / SEGMENT_SIZE ) );
+			for( int i = 1; i < (int) Math.ceil( (double) dataLength / SEGMENT_SIZE ); i++ )
+				keyList.add( PREFIX + fileName + "?" + i );
+
+			Map<String, Serializable> keySegmentMap = memcache.getAll( keyList );
+			for( String key : keyList ) {
+				byte[] dataSegment = (byte[]) keySegmentMap.get( key );
+				if( dataSegment == null )
+					break;
+				baos.write( dataSegment );
+			}
+			
+			byte[] blobData = baos.toByteArray();
+			if( blobData.length < dataLength ) {
+				logger.log( Level.INFO, "Blob size (" + blobData.length + ") did not match expected size (" + dataLength + ")" );
+				blobEntry = blobAccessor.getBlob( fileName );
+			} else {
+				blobEntry.setData( blobData );
+			}
 		}
 		
-		if( blobEntry == null || segmentNo < totalNoOfSegments ) {
-			blobEntry = blobAccessor.getBlob( fileName );
-			logger.log( Level.INFO, "Cache Miss : Blob length - " + blobEntry.getData().length );
-			if( blobEntry != null && blobEntry.getData().length <= 1000 * 1024 )
-				memcache.put( PREFIX + fileName, blobEntry );
-			else if( blobEntry != null && blobEntry.getData().length > 1000 * 1024 ) {
-				BlobEntry temp = new BlobEntryGcsImpl( (BlobEntryGcsImpl) blobEntry );
-				ResizeBlob resizeBlob = new ResizeBlob( temp );
-				totalNoOfSegments = resizeBlob.getSegmentCount();
-											
-				memcache.put( PREFIX + fileName, resizeBlob.getMemcacheOptimizedBlob() );
-				
-				List<byte[]> segmentList = resizeBlob.getSegmentList();
-				segmentNo = 1;
-				for( byte[] segment : segmentList ){
-					memcache.put( PREFIX + fileName + SUFFIX + segmentNo, segment );
-					segmentNo++;
-				}
-			}
-		}
-		logger.log( Level.INFO, "Final Blob Length : " + blobEntry.getData().length );
+		
 		return blobEntry;
 	}
 	
