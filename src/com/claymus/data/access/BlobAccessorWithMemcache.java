@@ -137,7 +137,7 @@ public class BlobAccessorWithMemcache implements BlobAccessor {
 			}
 			
 			byte[] blobData = baos.toByteArray();
-			if( blobData.length < dataLength ) {
+			if( blobData.length != dataLength ) {
 				logger.log( Level.INFO, "Blob size (" + blobData.length + ") did not match expected size (" + dataLength + ")" );
 				blobEntry = blobAccessor.getBlob( fileName );
 			} else {
