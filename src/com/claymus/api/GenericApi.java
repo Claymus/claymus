@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
 
+import com.claymus.api.annotation.Delete;
 import com.claymus.api.annotation.Get;
 import com.claymus.api.annotation.Put;
 import com.claymus.api.shared.GenericRequest;
@@ -48,9 +49,11 @@ public abstract class GenericApi extends HttpServlet {
 	
 	private Method getMethod;
 	private Method putMethod;
+	private Method deleteMethod;
 	
 	private Class<? extends GenericRequest> getMethodParameterType;
 	private Class<? extends GenericRequest> putMethodParameterType;
+	private Class<? extends GenericRequest> deleteMethodParameterType;
 
 	
 	@SuppressWarnings("unchecked")
@@ -66,6 +69,9 @@ public abstract class GenericApi extends HttpServlet {
 			} else if( method.getAnnotation( Put.class ) != null ) {
 				putMethod = method;
 				putMethodParameterType = (Class<? extends GenericRequest>) method.getParameterTypes()[0];
+			} else if( method.getAnnotation( Delete.class ) != null ) {
+				deleteMethod = method;
+				deleteMethodParameterType = (Class<? extends GenericRequest>) method.getParameterTypes()[0];
 			}
 		}
 	}
@@ -105,6 +111,8 @@ public abstract class GenericApi extends HttpServlet {
 			apiResponse = executeApi( getMethod, requestPayloadJson, getMethodParameterType );
 		else if( method.equals( "PUT" ) && putMethod != null )
 			apiResponse = executeApi( putMethod, requestPayloadJson, putMethodParameterType );
+		else if( method.equals( "DELETE" ) && deleteMethod != null )
+			apiResponse = executeApi( deleteMethod, requestPayloadJson, deleteMethodParameterType );
 		else
 			apiResponse = new UnexpectedServerException( "Invalid resource or method." );
 
