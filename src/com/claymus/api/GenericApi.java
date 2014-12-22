@@ -82,7 +82,7 @@ public abstract class GenericApi extends HttpServlet {
 			HttpServletRequest request,
 			HttpServletResponse response ) throws ServletException, IOException {
 		
-		String requestPayload = IOUtils.toString( request.getInputStream() );
+		String requestPayload = IOUtils.toString( request.getInputStream(), "UTF-8" );
 
 		// Creating JsonObject from request body (JSON)
 		JsonObject requestPayloadJson = requestPayload == null || requestPayload.isEmpty()
