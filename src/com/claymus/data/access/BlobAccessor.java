@@ -29,12 +29,9 @@ public interface BlobAccessor {
 	void createBlob( String fileName, String mimeType, String content, Charset charset )
 			throws IOException;
 
-	void updateBlob( BlobEntry blobEntry, byte[] bytes )
+	void updateBlob( BlobEntry blobEntry )
 			throws IOException;
 	
-	void updateBlob( BlobEntry blobEntry, String content, Charset charset )
-			throws IOException;
-
 	BlobEntry getBlob( String fileName )
 			throws IOException;
 

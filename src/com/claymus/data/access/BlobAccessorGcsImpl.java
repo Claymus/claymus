@@ -185,7 +185,7 @@ public class BlobAccessorGcsImpl implements BlobAccessor {
 	}
 
 	@Override
-	public void updateBlob( BlobEntry blobEntry, byte[] bytes )
+	public void updateBlob( BlobEntry blobEntry )
 			throws IOException {
 		
 		GcsFilename gcsFileName
@@ -199,16 +199,8 @@ public class BlobAccessorGcsImpl implements BlobAccessor {
 		GcsOutputChannel gcsOutputChannel = gcsService
 				.createOrReplace( gcsFileName , gcsFileOptions );
 		
-		gcsOutputChannel.write( ByteBuffer.wrap( bytes ) );
+		gcsOutputChannel.write( ByteBuffer.wrap( blobEntry.getData() ) );
 		gcsOutputChannel.close();
-	}
-
-	@Override
-	public void updateBlob(
-			BlobEntry blobEntry, String content, Charset charset )
-					throws IOException {
-		
-		updateBlob( blobEntry, content.getBytes( charset ) );
 	}
 
 	@Override

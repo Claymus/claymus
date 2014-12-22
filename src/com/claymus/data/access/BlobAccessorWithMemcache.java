@@ -75,18 +75,10 @@ public class BlobAccessorWithMemcache implements BlobAccessor {
 	}
 
 	@Override
-	public void updateBlob( BlobEntry blobEntry, byte[] bytes )
+	public void updateBlob( BlobEntry blobEntry )
 			throws IOException {
 
-		blobAccessor.updateBlob( blobEntry, bytes );
-		memcache.remove( PREFIX + blobEntry.getName() );
-	}
-
-	@Override
-	public void updateBlob( BlobEntry blobEntry, String content, Charset charset )
-			throws IOException {
-
-		blobAccessor.updateBlob( blobEntry, content, charset );
+		blobAccessor.updateBlob( blobEntry );
 		memcache.remove( PREFIX + blobEntry.getName() );
 	}
 
