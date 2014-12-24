@@ -53,6 +53,11 @@ public class BlobAccessorGcsImpl implements BlobAccessor {
 	
 	
 	@Override
+	public BlobEntry newBlob( String fileName, byte[] data, String mimeType ) {
+		return new BlobEntryGcsImpl( fileName, data, mimeType );
+	}
+
+	@Override
 	public String createUploadUrl( String fileName ) {
 		return "/service.upload/" + fileName;
 	}
@@ -185,7 +190,7 @@ public class BlobAccessorGcsImpl implements BlobAccessor {
 	}
 
 	@Override
-	public void updateBlob( BlobEntry blobEntry )
+	public void createOrUpdateBlob( BlobEntry blobEntry )
 			throws IOException {
 		
 		GcsFilename gcsFileName

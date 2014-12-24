@@ -13,11 +13,17 @@ public class BlobEntryGcsImpl implements BlobEntry {
 	private final String fileName;
 	private byte[] data;
 	private long length;
-	private final String mimeType;
-	private final String eTag;
-	private final Date lastModified;
-	private final Map<String, String> metaData;
+	private String mimeType;
+	private String eTag;
+	private Date lastModified;
+	private Map<String, String> metaData;
 	
+	
+	public BlobEntryGcsImpl( String fileName, byte[] data, String mimeType ) {
+		this.fileName = fileName;
+		this.data = data;
+		this.mimeType = mimeType;
+	}
 	
 	public BlobEntryGcsImpl( ByteBuffer byteBuffer, GcsFileMetadata gcsFileMetadata ) {
 		this.fileName = gcsFileMetadata.getFilename().getObjectName();

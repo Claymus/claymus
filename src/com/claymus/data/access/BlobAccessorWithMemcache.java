@@ -38,6 +38,11 @@ public class BlobAccessorWithMemcache implements BlobAccessor {
 	
 	
 	@Override
+	public BlobEntry newBlob( String fileName, byte[] data, String mimeType ) {
+		return blobAccessor.newBlob( fileName, data, mimeType );
+	}
+
+	@Override
 	public String createUploadUrl( String fileName ) {
 		return blobAccessor.createUploadUrl( fileName );
 	}
@@ -75,10 +80,10 @@ public class BlobAccessorWithMemcache implements BlobAccessor {
 	}
 
 	@Override
-	public void updateBlob( BlobEntry blobEntry )
+	public void createOrUpdateBlob( BlobEntry blobEntry )
 			throws IOException {
 
-		blobAccessor.updateBlob( blobEntry );
+		blobAccessor.createOrUpdateBlob( blobEntry );
 		memcache.remove( PREFIX + blobEntry.getName() );
 	}
 

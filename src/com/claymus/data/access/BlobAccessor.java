@@ -12,6 +12,8 @@ import com.claymus.data.transfer.BlobEntry;
 
 public interface BlobAccessor {
 	
+	BlobEntry newBlob( String fileName, byte[] data, String mimeType );
+
 	@Deprecated
 	String createUploadUrl( String fileName );
 
@@ -29,7 +31,7 @@ public interface BlobAccessor {
 	void createBlob( String fileName, String mimeType, String content, Charset charset )
 			throws IOException;
 
-	void updateBlob( BlobEntry blobEntry )
+	void createOrUpdateBlob( BlobEntry blobEntry )
 			throws IOException;
 	
 	BlobEntry getBlob( String fileName )
