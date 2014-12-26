@@ -10,6 +10,10 @@ body {
   background: #259b24;
 }
 
+.bg-red {
+  background: #F00000;
+}
+
 .bg-yellow {
   background: #ffeb3b;
 }
