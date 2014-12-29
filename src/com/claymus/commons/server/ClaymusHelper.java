@@ -26,7 +26,7 @@ import com.google.apphosting.api.ApiProxy;
 public class ClaymusHelper implements Serializable {
 
 	public static final String REQUEST_ATTRIB_MODE_BASIC = "BasicMode";
-	public static final String REQUEST_ATTRIB_EMBED_BASIC = "EmbedMode";
+	public static final String REQUEST_ATTRIB_MODE_EMBED = "EmbedMode";
 	public static final String REQUEST_ATTRIB_ACCESS_TOKEN = "AccessToken";
 	@Deprecated
 	public static final String REQUEST_ATTRIB_ACCESS_TOKEN_ID = "AccessTokenId";
@@ -216,6 +216,11 @@ public class ClaymusHelper implements Serializable {
 	public final boolean isModeBasic() {
 		return request.getAttribute( REQUEST_ATTRIB_MODE_BASIC ) != null
 				&& (boolean) request.getAttribute( REQUEST_ATTRIB_MODE_BASIC );
+	}
+	
+	public final boolean isModeEmbed() {
+		return request.getAttribute( REQUEST_ATTRIB_MODE_EMBED ) != null
+				&& (boolean) request.getAttribute( REQUEST_ATTRIB_MODE_EMBED );
 	}
 	
 	public final String getCookieValue( String cookieName ) {

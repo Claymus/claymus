@@ -70,10 +70,11 @@ public class ClaymusMain extends HttpServlet {
 			HttpServletRequest request,
 			HttpServletResponse response ) throws IOException {
 
+		ClaymusHelper claymusHelper = ClaymusHelper.get( request );
+		
 		Page page = getPage( request );
 		List<PageContent> pageContentList = getPageContentList( request );
-		List<WebsiteWidget> websiteWidgetList =
-				(boolean) request.getAttribute( ClaymusHelper.REQUEST_ATTRIB_EMBED_BASIC )
+		List<WebsiteWidget> websiteWidgetList = claymusHelper.isModeEmbed()
 				? new LinkedList<WebsiteWidget>()
 				: getWebsiteWidgetList( request );
 		PageLayout pageLayout = getPageLayout();
