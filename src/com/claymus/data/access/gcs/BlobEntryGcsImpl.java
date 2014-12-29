@@ -19,6 +19,10 @@ public class BlobEntryGcsImpl implements BlobEntry {
 	private Map<String, String> metaData;
 	
 	
+	public BlobEntryGcsImpl( String fileName ) {
+		this.fileName = fileName;
+	}
+	
 	public BlobEntryGcsImpl( String fileName, byte[] data, String mimeType ) {
 		this.fileName = fileName;
 		this.data = data;
@@ -59,6 +63,11 @@ public class BlobEntryGcsImpl implements BlobEntry {
 	@Override
 	public String getMimeType() {
 		return mimeType;
+	}
+	
+	@Override
+	public void setMimeType( String mimeType ) {
+		this.mimeType = mimeType;
 	}
 	
 	@Override

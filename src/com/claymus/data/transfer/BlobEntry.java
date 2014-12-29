@@ -16,6 +16,8 @@ public interface BlobEntry extends Serializable {
 	
 	String getMimeType();
 
+	void setMimeType( String mimeType );
+
 	String getETag();
 	
 	Date getLastModified();

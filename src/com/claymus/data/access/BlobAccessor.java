@@ -6,40 +6,37 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import com.claymus.data.transfer.BlobEntry;
 
 public interface BlobAccessor {
 	
+	BlobEntry newBlob( String fileName );
+
+	@Deprecated
 	BlobEntry newBlob( String fileName, byte[] data, String mimeType );
 
-	@Deprecated
-	String createUploadUrl( String fileName );
-
-	@Deprecated
-	boolean createBlob( HttpServletRequest request, String fileName );
-
-	void createBlob( String fileName, String mimeType, byte[] bytes )
-			throws IOException;
-
-	void createBlob( String fileName, String mimeType, byte[] bytes, String acl, Map<String, String> metaDataMap )
+	BlobEntry getBlob( String fileName )
 			throws IOException;
 
 	List<String> getFilenameList( String prefix ) throws IOException;
 	
+	@Deprecated
+	void createBlob( String fileName, String mimeType, byte[] bytes )
+			throws IOException;
+
+	@Deprecated
+	void createBlob( String fileName, String mimeType, byte[] bytes, String acl, Map<String, String> metaDataMap )
+			throws IOException;
+
+	@Deprecated
 	void createBlob( String fileName, String mimeType, String content, Charset charset )
 			throws IOException;
+
+	@Deprecated
+	boolean createBlob( HttpServletRequest request, String fileName );
 
 	void createOrUpdateBlob( BlobEntry blobEntry )
 			throws IOException;
 	
-	BlobEntry getBlob( String fileName )
-			throws IOException;
-
-	@Deprecated
-	void serveBlob(
-			String fileName,
-			HttpServletResponse response ) throws IOException;
-
 }

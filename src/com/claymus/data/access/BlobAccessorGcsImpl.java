@@ -12,7 +12,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
@@ -32,6 +31,7 @@ import com.google.appengine.tools.cloudstorage.GcsServiceFactory;
 import com.google.appengine.tools.cloudstorage.ListItem;
 import com.google.appengine.tools.cloudstorage.ListOptions;
 import com.google.appengine.tools.cloudstorage.ListResult;
+import com.google.appengine.tools.cloudstorage.RawGcsService;
 import com.google.appengine.tools.cloudstorage.RetryParams;
 
 public class BlobAccessorGcsImpl implements BlobAccessor {
@@ -53,13 +53,95 @@ public class BlobAccessorGcsImpl implements BlobAccessor {
 	
 	
 	@Override
+	public BlobEntry newBlob( String fileName ) {
+		return new BlobEntryGcsImpl( fileName );
+	}
+
+	@Override
 	public BlobEntry newBlob( String fileName, byte[] data, String mimeType ) {
 		return new BlobEntryGcsImpl( fileName, data, mimeType );
 	}
 
 	@Override
-	public String createUploadUrl( String fileName ) {
-		return "/service.upload/" + fileName;
+	public BlobEntry getBlob( String fileName ) throws IOException {
+
+		GcsFilename gcsFileName
+				= new GcsFilename( bucketName, fileName );
+		GcsFileMetadata gcsFileMetadata
+				= gcsService.getMetadata( gcsFileName );
+		
+		if( gcsFileMetadata == null )
+			return null;
+		
+		GcsInputChannel gcsInputChannel
+				= gcsService.openReadChannel( gcsFileName, 0 );
+		
+		ByteBuffer byteBuffer
+				= ByteBuffer.allocate( (int) gcsFileMetadata.getLength() );
+		gcsInputChannel.read( byteBuffer );
+	
+		return new BlobEntryGcsImpl( byteBuffer, gcsFileMetadata );
+	}
+
+	@Override
+	public List<String> getFilenameList( String prefix ) {
+
+		List<String> imageNameList = new ArrayList<>();
+		try {
+			ListOptions.Builder folder = new ListOptions.Builder();
+			folder.setPrefix( prefix );
+			
+			ListResult filenameList = gcsService.list( bucketName, folder.build() );
+			
+			while( filenameList.hasNext() ) {
+				ListItem filename = filenameList.next();
+				imageNameList.add( filename.getName() );
+			}
+			
+		}
+		catch( IOException e ) {
+			logger.log( Level.SEVERE, "Failed to ceate blob !", e );
+		}
+		
+		return imageNameList;
+	}
+
+	@Override
+	public void createBlob( String fileName, String mimeType, byte[] bytes )
+			throws IOException {
+		
+		createBlob( fileName, mimeType, bytes, null, null );
+	}
+	
+	@Override
+	public void createBlob( String fileName, String mimeType, byte[] bytes, String acl, Map<String, String> metaDataMap )
+			throws IOException {
+
+		GcsFilename gcsFileName
+				= new GcsFilename( bucketName, fileName );
+		
+		Builder builder = new GcsFileOptions.Builder();
+		if( mimeType != null )
+			builder.mimeType( mimeType );
+		if( acl != null )
+			builder.acl( acl );
+		if( metaDataMap != null )
+			for( Entry<String, String> metaData : metaDataMap.entrySet() )
+				builder.addUserMetadata( metaData.getKey(), metaData.getValue() );
+		GcsFileOptions gcsFileOptions = builder.build();
+		
+		GcsOutputChannel gcsOutputChannel = gcsService
+				.createOrReplace( gcsFileName , gcsFileOptions );
+		
+		gcsOutputChannel.write( ByteBuffer.wrap( bytes ) );
+		gcsOutputChannel.close();
+	}
+
+	@Override
+	public void createBlob( String fileName, String mimeType, String content, Charset charset )
+				throws IOException {
+		
+		createBlob( fileName, mimeType, content.getBytes( charset ) );
 	}
 
 	@Override
@@ -129,67 +211,6 @@ public class BlobAccessorGcsImpl implements BlobAccessor {
 	}
 	
 	@Override
-	public List<String> getFilenameList( String prefix ) {
-
-		List<String> imageNameList = new ArrayList<>();
-		try {
-			ListOptions.Builder folder = new ListOptions.Builder();
-			folder.setPrefix( prefix );
-			
-			ListResult filenameList = gcsService.list( bucketName, folder.build() );
-			
-			while( filenameList.hasNext() ) {
-				ListItem filename = filenameList.next();
-				imageNameList.add( filename.getName() );
-			}
-			
-		}
-		catch( IOException e ) {
-			logger.log( Level.SEVERE, "Failed to ceate blob !", e );
-		}
-		
-		return imageNameList;
-	}
-
-	@Override
-	public void createBlob( String fileName, String mimeType, byte[] bytes )
-			throws IOException {
-		
-		createBlob( fileName, mimeType, bytes, null, null );
-	}
-	
-	@Override
-	public void createBlob( String fileName, String mimeType, byte[] bytes, String acl, Map<String, String> metaDataMap )
-			throws IOException {
-
-		GcsFilename gcsFileName
-				= new GcsFilename( bucketName, fileName );
-		
-		Builder builder = new GcsFileOptions.Builder();
-		if( mimeType != null )
-			builder.mimeType( mimeType );
-		if( acl != null )
-			builder.acl( acl );
-		if( metaDataMap != null )
-			for( Entry<String, String> metaData : metaDataMap.entrySet() )
-				builder.addUserMetadata( metaData.getKey(), metaData.getValue() );
-		GcsFileOptions gcsFileOptions = builder.build();
-		
-		GcsOutputChannel gcsOutputChannel = gcsService
-				.createOrReplace( gcsFileName , gcsFileOptions );
-		
-		gcsOutputChannel.write( ByteBuffer.wrap( bytes ) );
-		gcsOutputChannel.close();
-	}
-
-	@Override
-	public void createBlob( String fileName, String mimeType, String content, Charset charset )
-				throws IOException {
-		
-		createBlob( fileName, mimeType, content.getBytes( charset ) );
-	}
-
-	@Override
 	public void createOrUpdateBlob( BlobEntry blobEntry )
 			throws IOException {
 		
@@ -208,45 +229,4 @@ public class BlobAccessorGcsImpl implements BlobAccessor {
 		gcsOutputChannel.close();
 	}
 
-	@Override
-	public BlobEntry getBlob( String fileName ) throws IOException {
-
-		GcsFilename gcsFileName
-				= new GcsFilename( bucketName, fileName );
-		GcsFileMetadata gcsFileMetadata
-				= gcsService.getMetadata( gcsFileName );
-		
-		if( gcsFileMetadata == null )
-			return null;
-		
-		GcsInputChannel gcsInputChannel
-				= gcsService.openReadChannel( gcsFileName, 0 );
-		
-		ByteBuffer byteBuffer
-				= ByteBuffer.allocate( (int) gcsFileMetadata.getLength() );
-		gcsInputChannel.read( byteBuffer );
-	
-		return new BlobEntryGcsImpl( byteBuffer, gcsFileMetadata );
-	}
-
-	@Override
-	public void serveBlob( String fileName, HttpServletResponse response )
-			throws IOException {
-
-		GcsFilename gcsFileName
-				= new GcsFilename( bucketName, fileName );
-		GcsFileMetadata gcsFileMetadata
-				= gcsService.getMetadata( gcsFileName );
-		GcsInputChannel gcsInputChannel
-				= gcsService.openReadChannel( gcsFileName, 0 );
-		
-		ByteBuffer byteBuffer
-				= ByteBuffer.allocate( (int) gcsFileMetadata.getLength() );
-		gcsInputChannel.read( byteBuffer );
-	
-		response.setContentType( gcsFileMetadata.getOptions().getMimeType() );
-		response.getOutputStream().write( byteBuffer.array() );
-		response.getOutputStream().close();
-	}
-	
 }
