@@ -30,7 +30,7 @@ public class FileBrowserProcessor extends PageContentProcessor<FileBrowser> {
 		String prefix = "pratilipi-cover/300";
 		List<String> imageNameList = null;
 		try {
-			imageNameList = blobAccessor.getFilenameList( prefix );
+			imageNameList = blobAccessor.getFileNameList( prefix );
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

@@ -24,6 +24,8 @@ public class BlobAccessorWithMemcache implements BlobAccessor {
 
 	
 	private final static String PREFIX = "BlobEntry-";
+	private final static String PREFIX_LIST = "BlobEntryNameList-";
+
 	private final static int SEGMENT_SIZE = 1000 * 1024; // bytes
 
 	private final BlobAccessor blobAccessor;
@@ -106,9 +108,14 @@ public class BlobAccessorWithMemcache implements BlobAccessor {
 	}
 	
 	@Override
-	public List<String> getFilenameList(String prefix) throws IOException {
-		// TODO : ADD MEMECACHE LOGIC
-		return null;
+	public List<String> getFileNameList( String prefix ) throws IOException {
+		List<String> fileNameList = memcache.get( PREFIX_LIST + prefix );
+		if( fileNameList == null ) {
+			fileNameList = blobAccessor.getFileNameList( prefix );
+			if( fileNameList != null )
+				memcache.put( PREFIX_LIST + prefix, new ArrayList<>( fileNameList  ) );
+		}
+		return fileNameList;
 	}
 
 	@Override
@@ -148,7 +155,10 @@ public class BlobAccessorWithMemcache implements BlobAccessor {
 			throws IOException {
 
 		blobAccessor.createOrUpdateBlob( blobEntry );
-		memcache.remove( PREFIX + blobEntry.getName() );
+		
+		String fileName = blobEntry.getName();
+		memcache.remove( PREFIX + fileName );
+		memcache.remove( PREFIX_LIST + fileName.substring( 0, fileName.lastIndexOf( '/' ) + 1 ) );
 	}
 
 }

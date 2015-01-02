@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -31,7 +31,6 @@ import com.google.appengine.tools.cloudstorage.GcsServiceFactory;
 import com.google.appengine.tools.cloudstorage.ListItem;
 import com.google.appengine.tools.cloudstorage.ListOptions;
 import com.google.appengine.tools.cloudstorage.ListResult;
-import com.google.appengine.tools.cloudstorage.RawGcsService;
 import com.google.appengine.tools.cloudstorage.RetryParams;
 
 public class BlobAccessorGcsImpl implements BlobAccessor {
@@ -84,26 +83,16 @@ public class BlobAccessorGcsImpl implements BlobAccessor {
 	}
 
 	@Override
-	public List<String> getFilenameList( String prefix ) {
-
-		List<String> imageNameList = new ArrayList<>();
-		try {
-			ListOptions.Builder folder = new ListOptions.Builder();
-			folder.setPrefix( prefix );
-			
-			ListResult filenameList = gcsService.list( bucketName, folder.build() );
-			
-			while( filenameList.hasNext() ) {
-				ListItem filename = filenameList.next();
-				imageNameList.add( filename.getName() );
-			}
-			
-		}
-		catch( IOException e ) {
-			logger.log( Level.SEVERE, "Failed to ceate blob !", e );
-		}
+	public List<String> getFileNameList( String prefix ) throws IOException {
+		ListOptions.Builder options = new ListOptions.Builder();
+		options.setPrefix( prefix );
 		
-		return imageNameList;
+		ListResult result = gcsService.list( bucketName, options.build() );
+		
+		List<String> fileNameList = new LinkedList<>();
+		while( result.hasNext() )
+			fileNameList.add( result.next().getName() );
+		return fileNameList;
 	}
 
 	@Override

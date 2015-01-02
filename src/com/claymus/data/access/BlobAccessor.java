@@ -19,7 +19,8 @@ public interface BlobAccessor {
 	BlobEntry getBlob( String fileName )
 			throws IOException;
 
-	List<String> getFilenameList( String prefix ) throws IOException;
+	List<String> getFileNameList( String prefix )
+			throws IOException;
 	
 	@Deprecated
 	void createBlob( String fileName, String mimeType, byte[] bytes )
