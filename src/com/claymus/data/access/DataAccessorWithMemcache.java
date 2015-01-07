@@ -7,6 +7,7 @@ import java.util.List;
 import javax.jdo.PersistenceManager;
 
 import com.claymus.data.transfer.AccessToken;
+import com.claymus.data.transfer.AuditLog;
 import com.claymus.data.transfer.Comment;
 import com.claymus.data.transfer.EmailTemplate;
 import com.claymus.data.transfer.Page;
@@ -341,6 +342,17 @@ public class DataAccessorWithMemcache implements DataAccessor {
 		return accessToken;
 	}
 
+	
+	@Override
+	public AuditLog newAuditLog() {
+		return dataAccessor.newAuditLog();
+	}
+
+	@Override
+	public AuditLog createAuditLog( AuditLog auditLog ) {
+		return dataAccessor.createAuditLog( auditLog );
+	}
+	
 	
 	@Override
 	public void destroy() {

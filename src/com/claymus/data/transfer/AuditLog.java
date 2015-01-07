@@ -7,26 +7,22 @@ public interface AuditLog extends Serializable {
 	
 	Long getId();
 
-	String getEventName();
-
-	void setEventName( String eventName );
+	String getEventId();
 	
-	String getEntityId();
+	void setEventId( String eventId );
+
+	String getEventDataOld();
 	
-	void setEntityId( String entityId );
+	void setEventDataOld( String eventDataOld );
 
-	String getEntityDataOld();
+	String getEventDataNew();
+
+	void setEventDataNew(  String eventDataNew );
+
+	String getAccessId();
+
+	void setAccessId( String accessId );
 	
-	void setEntityDataOld( String entityDataOld );
-
-	String getEntityDataNew();
-
-	void setEntityDataNew(  String entityDataNew );
-
-	String getUserId();
-
-	void setUserId( String userId );
-	
-	Date getDate();
+	Date getCreationDate();
 
 }

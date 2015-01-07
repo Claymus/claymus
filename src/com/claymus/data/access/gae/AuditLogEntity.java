@@ -17,23 +17,20 @@ public class AuditLogEntity implements AuditLog {
 	@Persistent( column = "AUDIT_LOG_ID", valueStrategy = IdGeneratorStrategy.IDENTITY )
 	private Long id;
 	
-	@Persistent( column = "EVENT_NAME" )
-	private String eventName;
-	
 	@Persistent( column = "EVENT_ID" )
-	private String entityId;
+	private String eventId;
 	
 	@Persistent( column = "EVENT_DATA_OLD" )
-	private String entityDataOld;
+	private String eventDataOld;
 	
 	@Persistent( column = "EVENT_DATA_NEW" )
-	private String entityDataNew;
+	private String eventDataNew;
 	
-	@Persistent( column = "USER_ID" )
-	private String userId;
+	@Persistent( column = "ACCESS_ID" )
+	private String accessId;
 	
-	@Persistent( column = "DATE" )
-	private Date date;
+	@Persistent( column = "CREATION_DATE" )
+	private Date creationDate;
 
 	
 	@Override
@@ -42,62 +39,52 @@ public class AuditLogEntity implements AuditLog {
 	}
 
 	@Override
-	public String getEventName() {
-		return eventName;
+	public String getEventId() {
+		return eventId;
 	}
 
 	@Override
-	public void setEventName( String eventName ) {
-		this.eventName = eventName;
+	public void setEventId( String eventId ) {
+		this.eventId = eventId;
 	}
 
 	@Override
-	public String getEntityId() {
-		return entityId;
+	public String getEventDataOld() {
+		return eventDataOld;
 	}
 
 	@Override
-	public void setEntityId( String entityId ) {
-		this.entityId = entityId;
+	public void setEventDataOld( String eventDataOld ) {
+		this.eventDataOld = eventDataOld;
 	}
 
 	@Override
-	public String getEntityDataOld() {
-		return entityDataOld;
+	public String getEventDataNew() {
+		return eventDataNew;
 	}
 
 	@Override
-	public void setEntityDataOld( String entityDataOld ) {
-		this.entityDataOld = entityDataOld;
+	public void setEventDataNew( String eventDataNew ) {
+		this.eventDataNew = eventDataNew;
 	}
 
 	@Override
-	public String getEntityDataNew() {
-		return entityDataNew;
+	public String getAccessId() {
+		return accessId;
 	}
 
 	@Override
-	public void setEntityDataNew( String entityDataNew ) {
-		this.entityDataNew = entityDataNew;
+	public void setAccessId( String accessId ) {
+		this.accessId = accessId;
 	}
 
 	@Override
-	public String getUserId() {
-		return userId;
+	public Date getCreationDate() {
+		return creationDate;
 	}
 
-	@Override
-	public void setUserId( String userId ) {
-		this.userId = userId;
-	}
-
-	@Override
-	public Date getDate() {
-		return date;
-	}
-
-	public void setDate( Date date ) {
-		this.date = date;
+	public void setCreationDate( Date creationDate ) {
+		this.creationDate = creationDate;
 	}
 
 }

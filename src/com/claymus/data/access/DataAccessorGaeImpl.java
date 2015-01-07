@@ -18,6 +18,7 @@ import javax.jdo.Query;
 import javax.jdo.Transaction;
 
 import com.claymus.data.access.gae.AccessTokenEntity;
+import com.claymus.data.access.gae.AuditLogEntity;
 import com.claymus.data.access.gae.CommentEntity;
 import com.claymus.data.access.gae.EmailTemplateEntity;
 import com.claymus.data.access.gae.PageContentEntityStub;
@@ -28,6 +29,7 @@ import com.claymus.data.access.gae.RoleEntity;
 import com.claymus.data.access.gae.UserEntity;
 import com.claymus.data.access.gae.UserRoleEntity;
 import com.claymus.data.transfer.AccessToken;
+import com.claymus.data.transfer.AuditLog;
 import com.claymus.data.transfer.Comment;
 import com.claymus.data.transfer.EmailTemplate;
 import com.claymus.data.transfer.Page;
@@ -450,9 +452,21 @@ public class DataAccessorGaeImpl implements DataAccessor {
 	
 	@Override
 	public AccessToken updateAccessToken( AccessToken accessToken ) {
-		return createOrUpdateEntity( accessToken );
+		return accessToken.getId() == null ? accessToken : createOrUpdateEntity( accessToken );
 	}
 
+	
+	@Override
+	public AuditLog newAuditLog() {
+		return new AuditLogEntity();
+	}
+
+	@Override
+	public AuditLog createAuditLog( AuditLog auditLog ) {
+		( (AuditLogEntity) auditLog ).setCreationDate( new Date() );
+		return createOrUpdateEntity( auditLog );
+	}
+	
 
 	@Override
 	public void destroy() {

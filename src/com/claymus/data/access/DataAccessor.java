@@ -6,6 +6,7 @@ import java.util.List;
 import javax.jdo.PersistenceManager;
 
 import com.claymus.data.transfer.AccessToken;
+import com.claymus.data.transfer.AuditLog;
 import com.claymus.data.transfer.Comment;
 import com.claymus.data.transfer.EmailTemplate;
 import com.claymus.data.transfer.Page;
@@ -102,7 +103,12 @@ public interface DataAccessor extends Serializable {
 
 	AccessToken updateAccessToken( AccessToken accessToken );
 
+
+	AuditLog newAuditLog();
 	
+	AuditLog createAuditLog( AuditLog auditLog );
+	
+
 	void destroy();
 	
 }
