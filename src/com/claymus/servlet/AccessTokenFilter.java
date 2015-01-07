@@ -42,10 +42,13 @@ public class AccessTokenFilter implements Filter {
 		DataAccessor dataAccessor = DataAccessorFactory.getDataAccessor( request );
 
 		String accessTokenId = request.getParameter( "accessToken" );
-		if( accessTokenId == null || accessTokenId.isEmpty() )
+		if( accessTokenId == null || accessTokenId.isEmpty() ) {
 			accessTokenId = claymusHelper.getCookieValue( COOKIE_ACCESS_TOKEN );
-		else
-			response.addCookie( new Cookie( COOKIE_ACCESS_TOKEN, accessTokenId ) );
+		} else {
+			Cookie cookie = new Cookie( COOKIE_ACCESS_TOKEN, accessTokenId );
+			cookie.setPath( "/" );
+			response.addCookie( cookie );
+		}
 		
 		AccessToken accessToken = dataAccessor.getAccessToken( accessTokenId );
 		if( accessToken == null ) {
@@ -56,7 +59,9 @@ public class AccessTokenFilter implements Filter {
 			accessToken = dataAccessor.createAccessToken( accessToken );
 			
 			accessTokenId = accessToken.getId();
-			response.addCookie( new Cookie( COOKIE_ACCESS_TOKEN, accessToken.getId() ) );
+			Cookie cookie = new Cookie( COOKIE_ACCESS_TOKEN, accessToken.getId() );
+			cookie.setPath( "/" );
+			response.addCookie(cookie );
 		}
 		
 		request.setAttribute( ClaymusHelper.REQUEST_ATTRIB_ACCESS_TOKEN, accessToken );
@@ -64,5 +69,5 @@ public class AccessTokenFilter implements Filter {
 		
 		chain.doFilter( request, response );
 	}
-
+	
 }

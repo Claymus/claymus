@@ -76,6 +76,7 @@ public class ClaymusHelper implements Serializable {
 		return currentUserId != 0L;
 	}
 
+	@Deprecated
 	public final Long getCurrentUserId() {
 		if( currentUserId == null ) {
 			currentUserId = (Long) session.getAttribute( SESSION_ATTRIB_CURRENT_USER_ID );
@@ -233,10 +234,12 @@ public class ClaymusHelper implements Serializable {
 		return null;
 	}
 	
+	@Deprecated
 	public final boolean hasUserAccess( Access access ) {
 		return hasUserAccess( access.getId(), access.getDefault() );
 	}
 
+	@Deprecated
 	public final boolean hasUserAccess( String accessId, boolean defaultAccess ) {
 		Boolean access = null;
 
