@@ -8,6 +8,7 @@ import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
 import com.claymus.data.transfer.AuditLog;
+import com.google.appengine.api.datastore.Text;
 
 @SuppressWarnings("serial")
 @PersistenceCapable( table = "AUDIT_LOG" )
@@ -21,10 +22,10 @@ public class AuditLogEntity implements AuditLog {
 	private String eventId;
 	
 	@Persistent( column = "EVENT_DATA_OLD" )
-	private String eventDataOld;
+	private Text eventDataOld;
 	
 	@Persistent( column = "EVENT_DATA_NEW" )
-	private String eventDataNew;
+	private Text eventDataNew;
 	
 	@Persistent( column = "ACCESS_ID" )
 	private String accessId;
@@ -50,22 +51,22 @@ public class AuditLogEntity implements AuditLog {
 
 	@Override
 	public String getEventDataOld() {
-		return eventDataOld;
+		return eventDataOld == null ? null : eventDataOld.getValue();
 	}
 
 	@Override
 	public void setEventDataOld( String eventDataOld ) {
-		this.eventDataOld = eventDataOld;
+		this.eventDataOld = eventDataOld == null ? null : new Text( eventDataOld );
 	}
 
 	@Override
 	public String getEventDataNew() {
-		return eventDataNew;
+		return eventDataNew == null ? null : eventDataNew.getValue();
 	}
 
 	@Override
 	public void setEventDataNew( String eventDataNew ) {
-		this.eventDataNew = eventDataNew;
+		this.eventDataNew = eventDataNew == null ? null : new Text( eventDataNew );
 	}
 
 	@Override
