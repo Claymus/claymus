@@ -20,6 +20,7 @@ public class GenericRequest implements Serializable {
 
 	
 	protected static final String REGEX_NUMBER = "^[0-9]+$";
+	protected static final String REGEX_URI = "^(/[A-Za-z0-9-]+)+$";
 	protected static final String REGEX_EMAIL = "^[A-Za-z0-9]+([._+-][A-Za-z0-9]+)*@[A-Za-z0-9]+([.-][A-Za-z0-9]+)*\\.[A-Za-z]{2,4}$";
 
 	

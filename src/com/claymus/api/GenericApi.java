@@ -5,7 +5,9 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -98,6 +100,14 @@ public abstract class GenericApi extends HttpServlet {
 		
 		
 		logger.log( Level.INFO, "Request Payload: " + requestPayloadJson );
+
+
+		// Adding hasParam flags in JsonObject
+		ArrayList<String> paramList = new ArrayList<>( requestPayloadJson.entrySet().size() );
+		for( Entry<String, JsonElement> entry : requestPayloadJson.entrySet() )
+			paramList.add( entry.getKey() );
+		for( String param : paramList )
+			requestPayloadJson.addProperty( "has" + Character.toUpperCase( param.charAt( 0 ) ) + param.substring( 1 ), true );
 		
 		
 		perThreadRequest.set( request );
