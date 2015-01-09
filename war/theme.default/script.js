@@ -1,4 +1,5 @@
 /* Loading ... */
+
 var isLoading = true;
 
 function loading( bool ) {
@@ -29,15 +30,36 @@ jQuery( window ).load( function() {
 });
 
 
-/* For Facebook like/share button */
-(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) return;
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=293990794105516&version=v2.2";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));
+/* Cookie Manipulation */
 
+function getCookie( cname ) {
+	var name = cname + "=";
+	var ca = document.cookie.split( ';' );
+	for( var i = 0; i < ca.length; i++ ) {
+		var c = ca[i];
+		while( c.charAt(0)==' ' ) c = c.substring(1);
+		if( c.indexOf(name) != -1 ) {
+			return c.substring( name.length );
+		}
+	}
+	return "";
+}
 
-/* For Twitter tweet button */
-!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
+function setCookie( cname, cvalue, exdays, path ) {
+	if( exdays ) {
+		var d = new Date();
+		d.setTime( d.getTime() + (exdays*24*60*60*1000) );
+		var expires = "; expires=" + d.toUTCString();
+	} else {
+		var expires = "";
+	}
+	
+	if( path ) {
+		if( path.indexOf( "?" ) != -1 )
+			path = path.substring( 0, path.indexOf( "?" ) );
+		path = "; path=" + path;
+	} else {
+		path = "; path=" + window.location.pathname;
+	}
+	document.cookie = cname + "=" + cvalue + expires + path;
+}
