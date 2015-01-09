@@ -1,16 +1,19 @@
-package com.claymus.service.shared.data;
+package com.claymus.pagecontent.pages.api.shared;
 
-import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class PageData implements IsSerializable {
+public class PageData {
 
 	private Long id;
+	private boolean hasId;
 	
 	private String uri;
+	private boolean hasUri;
 	
 	private String uriAlias;
-	
+	private boolean hasUriAlias;
+
 	private String title;
+	private boolean hasTitle;
 	
 	
 	public Long getId() {
@@ -19,6 +22,11 @@ public class PageData implements IsSerializable {
 	
 	public void setId( Long id ) {
 		this.id = id;
+		this.hasId = true;
+	}
+	
+	public boolean hasId() {
+		return hasId;
 	}
 	
 	public String getUri() {
@@ -27,22 +35,37 @@ public class PageData implements IsSerializable {
 
 	public void setUri( String uri ) {
 		this.uri = uri;
+		this.hasUri = true;
 	}
 
+	public boolean hasUri() {
+		return hasUri;
+	}
+	
 	public String getUriAlias() {
 		return uriAlias;
 	}
 
 	public void setUriAlias( String uriAlias ) {
 		this.uriAlias = uriAlias;
+		this.hasUriAlias = true;
 	}
 
+	public boolean hasUriAlias() {
+		return hasUriAlias;
+	}
+	
 	public String getTitle() {
 		return title;
 	}
 
 	public void setTitle( String title ) {
 		this.title = title;
+		this.hasTitle = true;
+	}
+
+	public boolean hasTitle() {
+		return hasTitle;
 	}
 
 }

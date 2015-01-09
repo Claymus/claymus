@@ -11,7 +11,7 @@ body {
 }
 
 .bg-red {
-  background: #F00000;
+  background: #ff0000;
 }
 
 .bg-yellow {
@@ -24,6 +24,10 @@ body {
 
 .green {
   color: #259b24;
+}
+
+.gray {
+  color: #999999;
 }
 
 .paper {

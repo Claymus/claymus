@@ -249,12 +249,14 @@ public class DataAccessorGaeImpl implements DataAccessor {
 	}
 	
 	@Override
-	public DataListCursorTuple<Page> getPageList( String cursorStr, int resultCount ) {
-		Query query =
-				new GaeQueryBuilder( pm.newQuery( PageEntity.class ) )
-						.addOrdering( "creationDate", false )
-						.setRange( 0, resultCount )
-						.build();
+	public DataListCursorTuple<Page> getPageList( String cursorStr, Integer resultCount ) {
+		GaeQueryBuilder gaeQueryBuilder = new GaeQueryBuilder( pm.newQuery( PageEntity.class ) )
+						.addOrdering( "creationDate", false );
+		
+		if( resultCount != null )
+			gaeQueryBuilder.setRange( 0, resultCount );
+			
+		Query query = gaeQueryBuilder.build();
 		
 		if( cursorStr != null ) {
 			Cursor cursor = Cursor.fromWebSafeString( cursorStr );
@@ -452,7 +454,7 @@ public class DataAccessorGaeImpl implements DataAccessor {
 	
 	@Override
 	public AccessToken updateAccessToken( AccessToken accessToken ) {
-		return accessToken.getId() == null ? accessToken : createOrUpdateEntity( accessToken );
+		return createOrUpdateEntity( accessToken );
 	}
 
 	

@@ -64,7 +64,7 @@ public interface DataAccessor extends Serializable {
 
 	Page getPage( String pageType, Long primaryContentId );
 
-	DataListCursorTuple<Page> getPageList( String cursor, int resultCount );
+	DataListCursorTuple<Page> getPageList( String cursor, Integer resultCount );
 
 	Page createOrUpdatePage( Page page );
 	

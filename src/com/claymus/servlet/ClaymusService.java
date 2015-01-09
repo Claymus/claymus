@@ -10,12 +10,17 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.claymus.api.ApiRegistry;
 import com.claymus.api.GenericApi;
+import com.claymus.pagecontent.pages.api.PageApi;
+import com.claymus.pagecontent.pages.api.PageListApi;
 
 
 @SuppressWarnings("serial")
 public class ClaymusService extends HttpServlet {
 	
-	static {}
+	static {
+		ApiRegistry.register( PageApi.class );
+		ApiRegistry.register( PageListApi.class );
+	}
 	
 	@Override
 	protected final void service(

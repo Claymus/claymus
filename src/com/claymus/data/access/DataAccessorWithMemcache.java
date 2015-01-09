@@ -210,7 +210,7 @@ public class DataAccessorWithMemcache implements DataAccessor {
 	}
 	
 	@Override
-	public DataListCursorTuple<Page> getPageList( String cursorStr, int resultCount ) {
+	public DataListCursorTuple<Page> getPageList( String cursorStr, Integer resultCount ) {
 		return dataAccessor.getPageList( cursorStr, resultCount );
 	}
 

@@ -14,6 +14,10 @@ paper-slider.bg-green {
   background-color: transparent;
 }
 
+paper-spinner.red::shadow .circle {
+  border-color: #ff0000;
+}
+
 paper-slider.bg-green::shadow #sliderKnobInner,
 paper-slider.bg-green::shadow #sliderKnobInner::before,
 paper-slider.bg-green::shadow #sliderBar::shadow #activeProgress {

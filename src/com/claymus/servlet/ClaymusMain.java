@@ -54,7 +54,7 @@ public class ClaymusMain extends HttpServlet {
 		PageContentRegistry.register( BlogContentHelper.class );
 		PageContentRegistry.register( BlogPostContentHelper.class );
 		PageContentRegistry.register( UserContentHelper.class );
-		PageContentRegistry.register( PagesContentHelper.class );
+		PageContentRegistry.register( PagesContentHelper.class );		// 5.0
 		PageContentRegistry.register( RoleAccessContentHelper.class );
 		
 		WebsiteWidgetRegistry.register( HtmlWidgetHelper.class );

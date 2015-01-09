@@ -10,8 +10,12 @@ import com.claymus.pagecontent.PageContentProcessor;
 public class PagesContentProcessor extends PageContentProcessor<PagesContent> {
 
 	@Override
-	public String generateHtml(
-			PagesContent pagesContent, HttpServletRequest request )
+	public String generateTitle( PagesContent pagesContent, HttpServletRequest request ) {
+		return "Pages";
+	}
+
+	@Override
+	public String generateHtml( PagesContent pagesContent, HttpServletRequest request )
 			throws InsufficientAccessException, UnexpectedServerException { 
 		
 		if( ! PagesContentHelper.hasRequestAccessToListPageData( request ) )

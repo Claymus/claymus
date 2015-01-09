@@ -20,7 +20,6 @@ import com.claymus.data.access.DataAccessor;
 import com.claymus.data.access.DataAccessorFactory;
 import com.claymus.data.access.DataListCursorTuple;
 import com.claymus.data.transfer.EmailTemplate;
-import com.claymus.data.transfer.Page;
 import com.claymus.data.transfer.PageContent;
 import com.claymus.data.transfer.RoleAccess;
 import com.claymus.data.transfer.User;
@@ -31,15 +30,12 @@ import com.claymus.pagecontent.PageContentProcessor;
 import com.claymus.pagecontent.PageContentRegistry;
 import com.claymus.pagecontent.blogpost.BlogPostContent;
 import com.claymus.pagecontent.blogpost.BlogPostContentHelper;
-import com.claymus.pagecontent.pages.PagesContentHelper;
 import com.claymus.pagecontent.roleaccess.RoleAccessContentHelper;
 import com.claymus.service.client.ClaymusService;
 import com.claymus.service.shared.FacebookLoginUserRequest;
 import com.claymus.service.shared.FacebookLoginUserResponse;
 import com.claymus.service.shared.GetBlogListRequest;
 import com.claymus.service.shared.GetBlogListResponse;
-import com.claymus.service.shared.GetPageListRequest;
-import com.claymus.service.shared.GetPageListResponse;
 import com.claymus.service.shared.InviteUserRequest;
 import com.claymus.service.shared.InviteUserResponse;
 import com.claymus.service.shared.LoginUserRequest;
@@ -50,8 +46,6 @@ import com.claymus.service.shared.ResetUserPasswordRequest;
 import com.claymus.service.shared.ResetUserPasswordResponse;
 import com.claymus.service.shared.SavePageContentRequest;
 import com.claymus.service.shared.SavePageContentResponse;
-import com.claymus.service.shared.SavePageRequest;
-import com.claymus.service.shared.SavePageResponse;
 import com.claymus.service.shared.SaveRoleAccessRequest;
 import com.claymus.service.shared.SaveRoleAccessResponse;
 import com.claymus.service.shared.SendQueryRequest;
@@ -60,7 +54,6 @@ import com.claymus.service.shared.UpdateUserPasswordRequest;
 import com.claymus.service.shared.UpdateUserPasswordResponse;
 import com.claymus.service.shared.data.FacebookLoginData;
 import com.claymus.service.shared.data.PageContentData;
-import com.claymus.service.shared.data.PageData;
 import com.claymus.service.shared.data.UserData;
 import com.claymus.taskqueue.Task;
 import com.claymus.taskqueue.TaskQueue;
@@ -481,70 +474,6 @@ public class ClaymusServiceImpl extends RemoteServiceServlet
 	}
 
 	
-	@Override
-	public SavePageResponse savePage( SavePageRequest request )
-			throws InvalidArgumentException, InsufficientAccessException {
-
-		PageData pageData = request.getPageData();
-		String uri = pageData.getUriAlias().toLowerCase();
-		
-		DataAccessor dataAccessor = DataAccessorFactory.getDataAccessor( this.getThreadLocalRequest() );
-		Page page = dataAccessor.getPage( uri );
-		
-		if( pageData.getId() == null ) { // Add page usecasee
-			
-			if( ! PagesContentHelper.hasRequestAccessToAddPageData( this.getThreadLocalRequest() ) )
-				throw new InsufficientAccessException();
-
-			if( page != null )
-				throw new InvalidArgumentException( "Another page is already associated with this URL." );
-			
-			page = dataAccessor.newPage();
-			page.setUriAlias( uri );
-			page.setTitle( pageData.getTitle() );
-			page.setCreationDate( new Date() );
-
-			
-		} else { // Update page usecase
-
-			if( ! PagesContentHelper.hasRequestAccessToUpdatePageData( this.getThreadLocalRequest() ) )
-				throw new InsufficientAccessException();
-
-			if( page != null && ! page.getId().equals( pageData.getId() ) )
-				throw new InvalidArgumentException( "Another page is already associated with this URL." );
-
-			if( page == null ) {
-				page = dataAccessor.getPage( pageData.getId() );
-				page.setUri( uri );
-			}
-			
-			page.setTitle( pageData.getTitle() );
-		}
-
-		page = dataAccessor.createOrUpdatePage( page );
-		
-		return new SavePageResponse();
-	}
-	
-	public GetPageListResponse getPageList( GetPageListRequest request )
-			throws InsufficientAccessException {
-		
-		if( ! PagesContentHelper.hasRequestAccessToListPageData( this.getThreadLocalRequest() ) )
-			throw new InsufficientAccessException();
-
-		DataListCursorTuple<Page> pageListCursorTuple = DataAccessorFactory
-				.getDataAccessor( this.getThreadLocalRequest() )
-				.getPageList( request.getCursor(), request.getResultCount() );
-		
-		ClaymusHelper claymusHelper = ClaymusHelper.get( this.getThreadLocalRequest() );
-		
-		List<PageData> pageDataList = new ArrayList<PageData>( pageListCursorTuple.getDataList().size() );
-		for( Page page : pageListCursorTuple.getDataList() )
-			pageDataList.add( claymusHelper.createPageData( page ) );
-		
-		return new GetPageListResponse( pageDataList, pageListCursorTuple.getCursor() );
-	}
-
 	/*
 	 * Owner Module: PageContent
 	 * API Version: 3.0
