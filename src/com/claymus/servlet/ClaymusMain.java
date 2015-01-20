@@ -143,6 +143,7 @@ public class ClaymusMain extends HttpServlet {
 		input.put( "pageContentHtmlList", pageContentHtmlList );
 		input.put( "request", request );
 		input.put( "basicMode", claymusHelper.isModeBasic() );
+		input.put( "userId", claymusHelper.getCurrentUser().getId() );
 		
 		try {
 			FreeMarkerUtil.processTemplate( input, getTemplateName( request ), out );
