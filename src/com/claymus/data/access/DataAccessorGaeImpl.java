@@ -430,8 +430,7 @@ public class DataAccessorGaeImpl implements DataAccessor {
 			return null;
 		
 		try{
-			AccessToken accessToken = getEntity( AccessTokenEntity.class, accessTokenId );
-			return accessToken;
+			return getEntity( AccessTokenEntity.class, accessTokenId );
 		} catch( JDOObjectNotFoundException e ) {
 			return null;
 		}
@@ -488,8 +487,8 @@ public class DataAccessorGaeImpl implements DataAccessor {
 		
 		GaeQueryBuilder gaeQueryBuilder =
 				new GaeQueryBuilder( pm.newQuery( AuditLogEntity.class ) )
-		.addOrdering( "creationDate", false )
-		.setRange( 0, resultCount );
+						.addOrdering( "creationDate", false )
+						.setRange( 0, resultCount );
 		
 		Query query = gaeQueryBuilder.build();
 		if( cursorStr != null ) {
@@ -500,11 +499,11 @@ public class DataAccessorGaeImpl implements DataAccessor {
 		}
 		
 		@SuppressWarnings("unchecked")
-		List<AuditLog> audtiLogEntityList = (List<AuditLog>) query.execute();
-		Cursor cursor = JDOCursorHelper.getCursor( audtiLogEntityList );
+		List<AuditLog> audtiLogList = (List<AuditLog>) query.execute();
+		Cursor cursor = JDOCursorHelper.getCursor( audtiLogList );
 		
 		return new DataListCursorTuple<>( 
-				(List<AuditLog>) pm.detachCopyAll( audtiLogEntityList ),
+				(List<AuditLog>) pm.detachCopyAll( audtiLogList ),
 				cursor == null ? null : cursor.toWebSafeString() );
 	}
 	
