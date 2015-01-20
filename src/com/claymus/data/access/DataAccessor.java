@@ -99,6 +99,8 @@ public interface DataAccessor extends Serializable {
 
 	AccessToken getAccessToken( String accessTokenId );
 	
+	AccessToken getAccessTokenById( String accessTokenId );
+	
 	AccessToken createAccessToken( AccessToken accessToken );
 
 	AccessToken updateAccessToken( AccessToken accessToken );
@@ -108,6 +110,7 @@ public interface DataAccessor extends Serializable {
 	
 	AuditLog createAuditLog( AuditLog auditLog );
 	
+	public DataListCursorTuple<AuditLog> getAuditLogList( String cursorStr, int resultCount );
 
 	void destroy();
 	

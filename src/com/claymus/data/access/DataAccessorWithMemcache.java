@@ -329,6 +329,21 @@ public class DataAccessorWithMemcache implements DataAccessor {
 	}
 	
 	@Override
+	public AccessToken getAccessTokenById(String accessTokenId) {
+		if( accessTokenId == null )
+			return null;
+		
+		AccessToken accessToken = memcache.get( PREFIX_ACCESS_TOKEN + accessTokenId );
+		if( accessToken == null ) {
+			accessToken = dataAccessor.getAccessTokenById( accessTokenId );
+			if( accessToken != null )
+				memcache.put( PREFIX_ACCESS_TOKEN + accessToken.getId(), accessToken );
+		}
+		
+		return accessToken;
+	}
+	
+	@Override
 	public AccessToken createAccessToken( AccessToken accessToken ) {
 		accessToken = dataAccessor.createAccessToken( accessToken );
 		memcache.put( PREFIX_ACCESS_TOKEN + accessToken.getId(), accessToken );
@@ -358,5 +373,13 @@ public class DataAccessorWithMemcache implements DataAccessor {
 	public void destroy() {
 		dataAccessor.destroy();
 	}
-	
+
+
+	@Override
+	public DataListCursorTuple<AuditLog> getAuditLogList(String cursorStr,
+			int resultCount) {
+		//TODO : IMPLEMENT CACHING
+		return dataAccessor.getAuditLogList( cursorStr, resultCount );
+	}
+
 }

@@ -425,6 +425,19 @@ public class DataAccessorGaeImpl implements DataAccessor {
 	}
 	
 	@Override
+	public AccessToken getAccessTokenById(String accessTokenId) {
+		if( accessTokenId == null )
+			return null;
+		
+		try{
+			AccessToken accessToken = getEntity( AccessTokenEntity.class, accessTokenId );
+			return accessToken;
+		} catch( JDOObjectNotFoundException e ) {
+			return null;
+		}
+	}
+	
+	@Override
 	public AccessToken createAccessToken( AccessToken accessToken ) {
 		accessToken.setCreationDate( new Date() );
 		if( accessToken.getExpiry() == null )
@@ -468,11 +481,38 @@ public class DataAccessorGaeImpl implements DataAccessor {
 		( (AuditLogEntity) auditLog ).setCreationDate( new Date() );
 		return createOrUpdateEntity( auditLog );
 	}
-	
 
+	@Override
+	public DataListCursorTuple<AuditLog> getAuditLogList(String cursorStr,
+			int resultCount) {
+		
+		GaeQueryBuilder gaeQueryBuilder =
+				new GaeQueryBuilder( pm.newQuery( AuditLogEntity.class ) )
+		.addOrdering( "creationDate", false )
+		.setRange( 0, resultCount );
+		
+		Query query = gaeQueryBuilder.build();
+		if( cursorStr != null ) {
+			Cursor cursor = Cursor.fromWebSafeString( cursorStr );
+			Map<String, Object> extensionMap = new HashMap<String, Object>();
+			extensionMap.put( JDOCursorHelper.CURSOR_EXTENSION, cursor );
+			query.setExtensions( extensionMap );
+		}
+		
+		@SuppressWarnings("unchecked")
+		List<AuditLog> audtiLogEntityList = (List<AuditLog>) query.execute();
+		Cursor cursor = JDOCursorHelper.getCursor( audtiLogEntityList );
+		
+		return new DataListCursorTuple<>( 
+				(List<AuditLog>) pm.detachCopyAll( audtiLogEntityList ),
+				cursor == null ? null : cursor.toWebSafeString() );
+	}
+	
+	
 	@Override
 	public void destroy() {
 		pm.close();
 	}
+
 
 }
