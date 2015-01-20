@@ -1,0 +1,79 @@
+<polymer-element name="pagecontent-pages" attributes="apiUrl cursor pageSize">
+
+	<template>
+
+		<style>
+		
+			div {
+				padding: 10px;
+				margin: 10px;
+				border-radius: 10px;
+			}
+		
+		</style>
+	
+	
+		<template repeat="{{ page in pageList }}">
+			<div>
+				<a href="{{ page['uriAlias'] }}">{{ page['title'] == null ? '(No Title)' : page['title'] }}</a>
+				<br/>
+				<span class="gray">{{ page['uriAlias'] }}</span>
+			</div>
+		</template>
+		<div hidden?="{{ !isLoading }}">
+			<paper-spinner active class="red"></paper-spinner>
+			<span style="margin-left:10px;">Please wait...</span>
+		</div>
+		<div hidden?="{{ !isFinished }}">No more items !</div>
+	
+	
+		<core-ajax
+				id="AjaxGet"
+				url="{{ apiUrl }}"
+				contentType="application/json"
+				method="GET"
+				handleAs="json"
+				on-core-response="{{ handleAjaxGetResponse }}"
+				on-core-error="{{ handleAjaxGetError }}" ></core-ajax>
+
+	</template>
+
+
+	<script>
+
+		Polymer( 'pagecontent-pages', {
+			loadPageList: function() {
+				if( this.isLoading || this.isFinished )
+					return;
+
+				this.isLoading = true;
+
+				var ajaxGet = this.$.AjaxGet;
+				ajaxGet.params = JSON.stringify( { cursor:this.cursor, resultCount:this.pageSize } );
+				ajaxGet.go();
+			},
+
+			handleAjaxGetResponse: function( event, response ) {
+				this.cursor = response.response['cursor'];
+				var pageList = response.response['pageList'];
+				for( var i = 0; i < pageList.length; i++ )
+					this.pageList.push( pageList[i] );
+		
+				this.isFinished = pageList.length < this.pageSize;
+				this.isLoading = false;
+				this.fire( 'load-success' );
+			},
+
+			handleAjaxGetError: function( event, response ) {
+				this.isLoading = false;
+				this.fire( 'load-error' );
+			},
+
+			ready: function() {
+				this.pageList = [];
+			},
+		});
+		
+	</script>
+	
+</polymer-element>

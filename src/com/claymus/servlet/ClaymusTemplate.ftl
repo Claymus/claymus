@@ -63,7 +63,7 @@
 	</head>
 	<body>
 		
-		<span id="Claymus-Loading">Loading ...</span>
+		<span id="Claymus-Loading">Loading...</span>
 
 		<#if websiteWidgetHtmlListMap["HEADER"] ??>
 			<#list websiteWidgetHtmlListMap["HEADER"] as websiteWidgetHtml>
