@@ -2,11 +2,14 @@ package com.claymus.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -16,6 +19,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.claymus.commons.server.ClaymusHelper;
 import com.claymus.commons.server.FreeMarkerUtil;
+import com.claymus.commons.shared.ClaymusResource;
+import com.claymus.commons.shared.Resource;
 import com.claymus.commons.shared.exception.InsufficientAccessException;
 import com.claymus.commons.shared.exception.InvalidArgumentException;
 import com.claymus.commons.shared.exception.UnexpectedServerException;
@@ -79,6 +84,9 @@ public class ClaymusMain extends HttpServlet {
 				: getWebsiteWidgetList( request );
 		PageLayout pageLayout = getPageLayout();
 		WebsiteLayout websiteLayout = getWebsiteLayout();
+		Set<Resource> resourceSet = new LinkedHashSet<>();
+		
+		resourceSet.add( ClaymusResource.POLYMER_CORE_SCROLL_HEADER_PANEL );
 		
 		response.setCharacterEncoding( "UTF-8" );
 		PrintWriter out = response.getWriter();
@@ -121,6 +129,8 @@ public class ClaymusMain extends HttpServlet {
 				pageContentHtmlList.add( pageContentHtml );
 				if( page.getTitle() == null && page.getPrimaryContentId() != null && pageContent.getId().equals( page.getPrimaryContentId() ) )
 					page.setTitle( pageContentProcessor.getTitle( pageContent, request ) );
+				for( Resource resource : pageContentProcessor.getDependencies( pageContent, request ) )
+					resourceSet.add( resource  );
 			} catch( InvalidArgumentException | InsufficientAccessException e ) {
 				// Do nothing
 			} catch( UnexpectedServerException e ) {
@@ -137,10 +147,15 @@ public class ClaymusMain extends HttpServlet {
 		}
 
 		
+		List<String> resourceTagList = new ArrayList<String>( resourceSet.size() );
+		for( Resource resource : resourceSet )
+			resourceTagList.add( resource.getTag() );
+		
 		Map<String, Object> input = new HashMap<String, Object>();
 		input.put( "page", page );
 		input.put( "websiteWidgetHtmlListMap", websiteWidgetHtmlListMap );
 		input.put( "pageContentHtmlList", pageContentHtmlList );
+		input.put( "resourceTagList", resourceTagList );
 		input.put( "request", request );
 		input.put( "basicMode", claymusHelper.isModeBasic() );
 		input.put( "userId", claymusHelper.getCurrentUser().getId() );

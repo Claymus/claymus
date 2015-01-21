@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.claymus.commons.server.ClaymusHelper;
 import com.claymus.commons.server.FreeMarkerUtil;
+import com.claymus.commons.shared.Resource;
 import com.claymus.commons.shared.exception.InsufficientAccessException;
 import com.claymus.commons.shared.exception.InvalidArgumentException;
 import com.claymus.commons.shared.exception.UnexpectedServerException;
@@ -22,6 +23,10 @@ public abstract class PageContentProcessor<T extends PageContent> {
 	}
 	
 	
+	public Resource[] getDependencies( T pageContent, HttpServletRequest request ) {
+		return new Resource[]{};
+	}
+
 	public final String getTitle( T pageContent, HttpServletRequest request ) {
 		return generateTitle( pageContent, request );
 	}
