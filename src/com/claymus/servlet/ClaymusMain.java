@@ -86,8 +86,6 @@ public class ClaymusMain extends HttpServlet {
 		WebsiteLayout websiteLayout = getWebsiteLayout();
 		Set<Resource> resourceSet = new LinkedHashSet<>();
 		
-		resourceSet.add( ClaymusResource.POLYMER_CORE_SCROLL_HEADER_PANEL );
-		
 		response.setCharacterEncoding( "UTF-8" );
 		PrintWriter out = response.getWriter();
 
@@ -146,6 +144,9 @@ public class ClaymusMain extends HttpServlet {
 			pageContentHtmlList.add( "Page Not Found !" );
 		}
 
+		
+		resourceSet.add( ClaymusResource.POLYMER_CORE_SCROLL_HEADER_PANEL );
+		resourceSet.add( ClaymusResource.POLYMER_CORE_TOOLBAR );
 		
 		List<String> resourceTagList = new ArrayList<String>( resourceSet.size() );
 		for( Resource resource : resourceSet )

@@ -17,11 +17,6 @@ public class PagesContentProcessor extends PageContentProcessor<PagesContent> {
 				ClaymusResource.JQUERY_2,
 				ClaymusResource.POLYMER,
 				ClaymusResource.POLYMER_CORE_AJAX,
-				ClaymusResource.POLYMER_CORE_TOOLBAR,
-				ClaymusResource.POLYMER_PAPER_DIALOG,
-				ClaymusResource.POLYMER_PAPER_ACTION_DIALOG,
-				ClaymusResource.POLYMER_PAPER_FAB,
-				ClaymusResource.POLYMER_PAPER_SLIDER,
 				ClaymusResource.POLYMER_PAPER_SPINNER,
 				new Resource() {
 					
