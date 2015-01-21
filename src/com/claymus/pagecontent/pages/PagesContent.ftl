@@ -26,7 +26,11 @@
 		pageContentPages.loadPageList();
 	}
 
-	jQuery( window ).bind( 'template-bound scroll', function( e ) {
+	jQuery( '#Polymer' ).bind( 'template-bound', function( e ) {
+			pageContentPagesLoad();
+	});
+		
+	jQuery( '#Polymer-Window' ).bind( 'scroll', function( e ) {
 			pageContentPagesLoad();
 	});
 		
