@@ -22,6 +22,11 @@ public class PageContentRegistry {
 	
 	@SuppressWarnings("rawtypes")
 	private static final Map<
+			Class<? extends PageContent>,
+			PageContentHelper > mapContentToHelper = new HashMap<>();
+
+	@SuppressWarnings("rawtypes")
+	private static final Map<
 			Class<? extends PageContentData>,
 			PageContentHelper > mapContentDataToHelper = new HashMap<>();
 
@@ -53,6 +58,7 @@ public class PageContentRegistry {
 			R pageContentProcessor = pageContentProcessorClass.newInstance();
 			S pageContentHelper = pageContentHelperClass.newInstance();
 			helperList.add( pageContentHelper );
+			mapContentToHelper.put( pageContentClass, pageContentHelper );
 			mapContentDataToHelper.put( pageContentDataClass, pageContentHelper );
 			mapContentToProcessor.put( pageContentClass, pageContentProcessor );
 		} catch ( InstantiationException | IllegalAccessException e ) {
@@ -67,17 +73,17 @@ public class PageContentRegistry {
 	}
 	
 	@SuppressWarnings("rawtypes")
-	public static <
-			Q extends PageContentData> PageContentHelper getPageContentHelper(
-					Class<Q> pageContentDataClass ) {
-		
-		return mapContentDataToHelper.get( pageContentDataClass );
+	public static PageContentHelper getPageContentHelper( Class clazz ) {
+		if( clazz.isInterface() )
+			return mapContentToHelper.get( clazz );
+		else if( clazz.getSuperclass().equals( PageContentData.class ) )
+			return mapContentDataToHelper.get( clazz );
+		else
+			return mapContentToHelper.get( clazz.getInterfaces()[0] );
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static <P extends PageContent> PageContentProcessor<P> getPageContentProcessor(
-			Class<P> pageContentClass ) {
-		
+	public static <P extends PageContent> PageContentProcessor<P> getPageContentProcessor( Class<P> pageContentClass ) {
 		if( pageContentClass.isInterface() )
 			return (PageContentProcessor<P>) mapContentToProcessor.get( pageContentClass );
 		else

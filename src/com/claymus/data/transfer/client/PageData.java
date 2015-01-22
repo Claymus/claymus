@@ -1,4 +1,4 @@
-package com.claymus.pagecontent.pages.api.shared;
+package com.claymus.data.transfer.client;
 
 
 public class PageData {

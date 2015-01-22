@@ -18,7 +18,7 @@ import com.claymus.data.transfer.Page;
 import com.claymus.data.transfer.RoleAccess;
 import com.claymus.data.transfer.User;
 import com.claymus.data.transfer.UserRole;
-import com.claymus.pagecontent.pages.api.shared.PageData;
+import com.claymus.data.transfer.client.PageData;
 import com.claymus.service.shared.data.UserData;
 import com.google.apphosting.api.ApiProxy;
 
