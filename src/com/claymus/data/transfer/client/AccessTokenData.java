@@ -3,6 +3,8 @@ package com.claymus.data.transfer.client;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.claymus.service.shared.data.UserData;
+
 @SuppressWarnings("serial")
 public class AccessTokenData implements Serializable {
 
@@ -14,6 +16,8 @@ public class AccessTokenData implements Serializable {
 
 	private Long userId;
 
+	private UserData user;
+	
 	private String type;
 
 	private Date logInDate;
@@ -51,6 +55,14 @@ public class AccessTokenData implements Serializable {
 
 	public void setUserId( Long userId ) {
 		this.userId = userId;
+	}
+
+	public UserData getUser() {
+		return user;
+	}
+
+	public void setUser( UserData user ) {
+		this.user = user;
 	}
 
 	public String getType() {

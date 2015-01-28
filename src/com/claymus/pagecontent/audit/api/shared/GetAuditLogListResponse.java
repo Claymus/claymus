@@ -1,13 +1,14 @@
-package com.claymus.pagecontent.audit.shared;
+package com.claymus.pagecontent.audit.api.shared;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.claymus.api.shared.GenericResponse;
+import com.claymus.data.transfer.client.AuditLogData;
 
 @SuppressWarnings("serial")
-public class GetAuditLogContentResponse extends GenericResponse {
+public class GetAuditLogListResponse extends GenericResponse {
 
 	@SuppressWarnings("unused")
 	private List<AuditLogData> auditLogDataList;
@@ -18,9 +19,10 @@ public class GetAuditLogContentResponse extends GenericResponse {
 	@SuppressWarnings("unused")
 	private String cursor;
 	
-	public GetAuditLogContentResponse() {}
 	
-	public GetAuditLogContentResponse( List<AuditLogData> auditLogDataList,
+	public GetAuditLogListResponse() {}
+	
+	public GetAuditLogListResponse( List<AuditLogData> auditLogDataList,
 				Map<String, String> userEmailList,
 				String cursor ){
 		this.auditLogDataList = auditLogDataList;

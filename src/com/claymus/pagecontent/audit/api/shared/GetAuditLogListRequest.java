@@ -1,16 +1,16 @@
-package com.claymus.pagecontent.audit.shared;
+package com.claymus.pagecontent.audit.api.shared;
 
 import com.claymus.api.shared.GenericRequest;
 
 @SuppressWarnings("serial")
-public class GetAuditLogContentRequest extends GenericRequest {
+public class GetAuditLogListRequest extends GenericRequest {
 
 	private String cursor;
 	
-	private int resultCount;
+	private Integer resultCount;
 	
 	
-	public GetAuditLogContentRequest() {
+	public GetAuditLogListRequest() {
 		super( null );
 	}
 	
@@ -23,13 +23,11 @@ public class GetAuditLogContentRequest extends GenericRequest {
 		this.cursor = cursor;
 	}
 
-
-	public int getResultCount() {
+	public Integer getResultCount() {
 		return resultCount;
 	}
 
-
-	public void setResultCount(int resultCount) {
+	public void setResultCount( Integer resultCount ) {
 		this.resultCount = resultCount;
 	}
 

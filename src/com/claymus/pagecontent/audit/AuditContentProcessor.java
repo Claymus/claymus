@@ -5,17 +5,18 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.claymus.commons.server.ClaymusHelper;
 import com.claymus.commons.server.FreeMarkerUtil;
 import com.claymus.commons.shared.ClaymusResource;
 import com.claymus.commons.shared.Resource;
+import com.claymus.commons.shared.exception.InsufficientAccessException;
 import com.claymus.commons.shared.exception.UnexpectedServerException;
 import com.claymus.pagecontent.PageContentProcessor;
-import com.pratilipi.commons.server.PratilipiHelper;
 
-public class AuditLogContentProcessor extends PageContentProcessor<AuditLogContent> {
+public class AuditContentProcessor extends PageContentProcessor<AuditContent> {
 
 	@Override
-	public Resource[] getDependencies( AuditLogContent auditLogContent, HttpServletRequest request ) {
+	public Resource[] getDependencies( AuditContent auditLogContent, HttpServletRequest request ) {
 		return new Resource[] {
 				ClaymusResource.JQUERY_2,
 				ClaymusResource.POLYMER,
@@ -34,20 +35,24 @@ public class AuditLogContentProcessor extends PageContentProcessor<AuditLogConte
 	}
 	
 	@Override
-	public String generateTitle( AuditLogContent auditLogContent, HttpServletRequest request ) {
-		return "Audit Log";
+	public String generateTitle( AuditContent auditLogContent, HttpServletRequest request ) {
+		return "Audit";
 	}
 	
 	@Override
 	public String generateHtml(
-			AuditLogContent auditLogContent,
-			HttpServletRequest request ) throws UnexpectedServerException {
+			AuditContent auditLogContent,
+			HttpServletRequest request ) throws InsufficientAccessException, UnexpectedServerException {
 		
-		PratilipiHelper pratilipiHelper = PratilipiHelper.get( request );
+		if( ! AuditContentHelper.hasRequestAccessToListAuditData( request ) )
+			throw new InsufficientAccessException();
+
+		ClaymusHelper claymusHelper = ClaymusHelper.get( request );
 		
 		// Creating data model required for template processing
 		Map<String, Object> dataModel = new HashMap<>();
-		dataModel.put( "timeZone", pratilipiHelper.getCurrentUserTimeZone() );
+		dataModel.put( "timeZone", claymusHelper.getCurrentUserTimeZone() );
+
 		// Processing template
 		return FreeMarkerUtil.processTemplate( dataModel, getTemplateName() );
 	}

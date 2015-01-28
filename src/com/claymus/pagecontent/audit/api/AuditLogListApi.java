@@ -1,4 +1,4 @@
-package com.claymus.pagecontent.audit;
+package com.claymus.pagecontent.audit.api;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 import com.claymus.api.GenericApi;
 import com.claymus.api.annotation.Bind;
 import com.claymus.api.annotation.Get;
+import com.claymus.commons.shared.exception.InsufficientAccessException;
 import com.claymus.commons.shared.exception.InvalidArgumentException;
 import com.claymus.commons.shared.exception.UnexpectedServerException;
 import com.claymus.data.access.DataAccessor;
@@ -15,19 +16,21 @@ import com.claymus.data.access.DataAccessorFactory;
 import com.claymus.data.access.DataListCursorTuple;
 import com.claymus.data.transfer.AccessToken;
 import com.claymus.data.transfer.User;
-import com.claymus.pagecontent.audit.shared.AuditLogData;
-import com.claymus.pagecontent.audit.shared.GetAuditLogContentRequest;
-import com.claymus.pagecontent.audit.shared.GetAuditLogContentResponse;
+import com.claymus.data.transfer.client.AuditLogData;
+import com.claymus.pagecontent.audit.AuditContentHelper;
+import com.claymus.pagecontent.audit.api.shared.GetAuditLogListRequest;
+import com.claymus.pagecontent.audit.api.shared.GetAuditLogListResponse;
 
 @SuppressWarnings("serial")
-@Bind( uri = "/auditlog" )
-public class AuditLogContentApi extends GenericApi {
+@Bind( uri = "/audit/log/list" )
+public class AuditLogListApi extends GenericApi {
 	
-	private Logger logger = Logger.getLogger( AuditLogContentApi.class.getName() );
+	private Logger logger = Logger.getLogger( AuditLogListApi.class.getName() );
 
+	
 	@Get
-	public GetAuditLogContentResponse getAuditLogContent( GetAuditLogContentRequest request )
-			throws InvalidArgumentException, UnexpectedServerException {
+	public GetAuditLogListResponse getAuditLogContent( GetAuditLogListRequest request )
+			throws InvalidArgumentException, InsufficientAccessException, UnexpectedServerException {
 		
 		DataAccessor dataAccessor = DataAccessorFactory.getDataAccessor( this.getThreadLocalRequest() );
 		
@@ -37,13 +40,13 @@ public class AuditLogContentApi extends GenericApi {
 		logger.log( Level.SEVERE, "CURSOR / PAGESIZE : " + cursor + "/" + pageSize );
 		
 		DataListCursorTuple<AuditLogData> auditLogListCursorTuple = 
-				AuditLogContentHelper.getAuditLog( cursor, pageSize, this.getThreadLocalRequest() );
+				AuditContentHelper.getAuditLogList( cursor, pageSize, this.getThreadLocalRequest() );
 		
 		logger.log( Level.SEVERE, "AUDIT LOG LIST : " + auditLogListCursorTuple.getDataList().size() );
 		
 		Map<String, String> userEmailList = new HashMap<>();
 		for( AuditLogData auditLogData : auditLogListCursorTuple.getDataList() ){
-			AccessToken accessToken = dataAccessor.getAccessTokenById( auditLogData.getAccessId() );
+			AccessToken accessToken = dataAccessor.getAccessTokenById( auditLogData.getAccessToken().getId() );
 			User user = dataAccessor.getUser( accessToken.getUserId() );
 			if( user != null )
 				userEmailList.put( auditLogData.getId().toString(), user.getEmail() );
@@ -53,7 +56,7 @@ public class AuditLogContentApi extends GenericApi {
 		
 		cursor = auditLogListCursorTuple.getCursor();
 		
-		return new GetAuditLogContentResponse( auditLogListCursorTuple.getDataList(), userEmailList, cursor );
+		return new GetAuditLogListResponse( auditLogListCursorTuple.getDataList(), userEmailList, cursor );
 
 	}
 }
