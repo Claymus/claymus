@@ -1,7 +1,9 @@
 package com.claymus.data.transfer.client;
 
+import java.io.Serializable;
 
-public class PageData {
+@SuppressWarnings("serial")
+public class PageData implements Serializable {
 
 	private Long id;
 	private boolean hasId;
