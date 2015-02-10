@@ -3,7 +3,8 @@ package com.claymus.commons.shared;
 public enum ClaymusPageType implements PageType {
 
 	GENERIC( "/page/" ),
-	BLOG( "/blog/" );
+	BLOG( "/blog/" ),
+	FILEBROWSER( "/filebrowser/" );
 	
 
 	private String urlPrefix;
