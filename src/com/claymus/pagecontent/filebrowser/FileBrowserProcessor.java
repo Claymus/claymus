@@ -27,7 +27,11 @@ public class FileBrowserProcessor extends PageContentProcessor<FileBrowser> {
 			throws InsufficientAccessException, UnexpectedServerException {
 		
 		BlobAccessor blobAccessor = new BlobAccessorGcsImpl( GOOGLE_CLOUD_STORAGE_BUCKET );
-		String prefix = "pratilipi-cover/300";
+		String pratilipiId = request.getParameter( "id" );
+		String prefix = ClaymusHelper.URL_UPLOAD_IMAGE + "/" + pratilipiId;
+		if( pratilipiId == null )
+			throw new IllegalArgumentException();
+		
 		List<String> imageNameList = null;
 		try {
 			imageNameList = blobAccessor.getFileNameList( prefix );
@@ -38,8 +42,7 @@ public class FileBrowserProcessor extends PageContentProcessor<FileBrowser> {
 		List<String> imageUrlList = new ArrayList<>();
 		
 		for( String imageName : imageNameList ) {
-			//TODO : THIS IS FOR EXPERIMENT PURPOSE AND SHOULD BE REPLACED BY ACTUAL CODE ONCE TESTING IS SUCCESSFULL
-			imageUrlList.add( "/resource.pratilipi-cover/300/"  + imageName.substring( imageName.lastIndexOf( "/" )+1 ) );
+			imageUrlList.add( "/resource." + prefix + "/"  + imageName.substring( imageName.lastIndexOf( "/" )+1 ) );
 		}
 			
 		// Creating data model required for template processing
