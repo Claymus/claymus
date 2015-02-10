@@ -146,6 +146,9 @@ public class BlobAccessorGcsImpl implements BlobAccessor {
 				FileItemStream fileItemStream = iterator.next();
 				InputStream inputStream = fileItemStream.openStream();
 	
+				if( fileName.contains( "upload" ))
+					fileName = fileName + "/" + fileItemStream.getName();
+				
 				if( fileItemStream.isFormField() ) {
 					logger.log(
 							Level.WARNING,
