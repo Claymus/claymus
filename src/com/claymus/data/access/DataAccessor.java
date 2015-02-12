@@ -110,7 +110,7 @@ public interface DataAccessor extends Serializable {
 	
 	AuditLog createAuditLog( AuditLog auditLog );
 	
-	DataListCursorTuple<AuditLog> getAuditLogList( String cursor, int resultCount );
+	DataListCursorTuple<AuditLog> getAuditLogList( String cursor, Integer resultCount );
 
 	void destroy();
 	

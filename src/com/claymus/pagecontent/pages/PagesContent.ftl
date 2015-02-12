@@ -1,8 +1,8 @@
 <!-- PageContent :: Pages :: Start -->
 
 
-<div id="PageContent-Pages">
-	<pagecontent-pages apiUrl="/api.pratilipi/page/list" pageSize=20></pagecontent-pages>
+<div id="PageContent-Pages" class="container">
+	<pagecontent-pages apiUrl="/api.pratilipi/page/list" pageSize=10></pagecontent-pages>
 </div>
 
 

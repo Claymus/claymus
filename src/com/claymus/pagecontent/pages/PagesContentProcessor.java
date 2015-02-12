@@ -17,7 +17,16 @@ public class PagesContentProcessor extends PageContentProcessor<PagesContent> {
 				ClaymusResource.JQUERY_2,
 				ClaymusResource.POLYMER,
 				ClaymusResource.POLYMER_CORE_AJAX,
+				ClaymusResource.POLYMER_CORE_ICON_BUTTON,
 				ClaymusResource.POLYMER_PAPER_SPINNER,
+				new Resource() {
+					
+					@Override
+					public String getTag() {
+						return "<link rel='import' href='/polymer/pagecontent-page-form.html'>";
+					}
+					
+				},
 				new Resource() {
 					
 					@Override

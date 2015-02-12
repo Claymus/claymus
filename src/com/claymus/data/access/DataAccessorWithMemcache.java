@@ -368,18 +368,16 @@ public class DataAccessorWithMemcache implements DataAccessor {
 		return dataAccessor.createAuditLog( auditLog );
 	}
 	
+
+	@Override
+	public DataListCursorTuple<AuditLog> getAuditLogList( String cursorStr, Integer resultCount) {
+		return dataAccessor.getAuditLogList( cursorStr, resultCount );
+	}
+
 	
 	@Override
 	public void destroy() {
 		dataAccessor.destroy();
-	}
-
-
-	@Override
-	public DataListCursorTuple<AuditLog> getAuditLogList(String cursorStr,
-			int resultCount) {
-		//TODO : IMPLEMENT CACHING
-		return dataAccessor.getAuditLogList( cursorStr, resultCount );
 	}
 
 }

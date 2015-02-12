@@ -96,11 +96,7 @@ public class DataAccessorGaeImpl implements DataAccessor {
 	
 	@Override
 	public User getUser( Long id ) {
-		try {
-			return getEntity( UserEntity.class, id );
-		} catch( JDOObjectNotFoundException e ) {
-			return null;
-		}
+		return id == null ? null : getEntity( UserEntity.class, id );
 	}
 	
 	@Override
@@ -482,15 +478,17 @@ public class DataAccessorGaeImpl implements DataAccessor {
 	}
 
 	@Override
-	public DataListCursorTuple<AuditLog> getAuditLogList(String cursorStr,
-			int resultCount) {
+	public DataListCursorTuple<AuditLog> getAuditLogList( String cursorStr, Integer resultCount ) {
 		
 		GaeQueryBuilder gaeQueryBuilder =
 				new GaeQueryBuilder( pm.newQuery( AuditLogEntity.class ) )
-						.addOrdering( "creationDate", false )
-						.setRange( 0, resultCount );
+						.addOrdering( "creationDate", false );
+		
+		if( resultCount != null )
+			gaeQueryBuilder.setRange( 0, resultCount );
 		
 		Query query = gaeQueryBuilder.build();
+
 		if( cursorStr != null ) {
 			Cursor cursor = Cursor.fromWebSafeString( cursorStr );
 			Map<String, Object> extensionMap = new HashMap<String, Object>();

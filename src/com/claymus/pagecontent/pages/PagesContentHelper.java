@@ -99,14 +99,14 @@ public class PagesContentHelper extends PageContentHelper<
 	}
 	
 	
-	public static DataListCursorTuple<PageData> getPageList( String cursor, int resultCount, HttpServletRequest httpRequest )
+	public static DataListCursorTuple<PageData> getPageList( String cursor, int resultCount, HttpServletRequest request )
 			throws InsufficientAccessException {
 		
-		if( ! hasRequestAccessToListPageData( httpRequest ) )
+		if( ! hasRequestAccessToListPageData( request ) )
 			throw new InsufficientAccessException();
 
 		DataListCursorTuple<Page> pageListCursorTuple = DataAccessorFactory
-				.getDataAccessor( httpRequest )
+				.getDataAccessor( request )
 				.getPageList( cursor, resultCount );
 		
 		List<PageData> pageDataList = new ArrayList<PageData>( pageListCursorTuple.getDataList().size() );

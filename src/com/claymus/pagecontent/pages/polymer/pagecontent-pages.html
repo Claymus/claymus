@@ -4,26 +4,36 @@
 
 		<style>
 		
-			div {
+			.page {
 				padding: 10px;
-				margin: 10px;
-				border-radius: 10px;
+				border-bottom: 1px solid #DDD;
+			}
+			
+			.page:hover {
+				background-color: #EEE;
 			}
 		
 		</style>
 	
 	
+		<h1>Pages</h1>
+
 		<template repeat="{{ page in pageList }}">
-			<div>
-				<a href="{{ page['uriAlias'] }}">{{ page['title'] == null ? '(No Title)' : page['title'] }}</a>
-				<br/>
-				<span class="gray">{{ page['uriAlias'] }}</span>
+			<div center horizontal layout class="page">
+				<div flex>
+					<b><a href="{{ page['uriAlias'] }}">{{ page['title'] == null ? '(No Title)' : page['title'] }}</a></b>
+					<br/>
+					<small>{{ page['uriAlias'] }}</small>
+				</div>
+				<core-icon-button icon="create" title="Edit" on-tap="{{ editPage }}"></core-icon-button>
 			</div>
 		</template>
+	
 		<div hidden?="{{ !isLoading }}">
-			<paper-spinner active class="red"></paper-spinner>
+			<paper-spinner active></paper-spinner>
 			<span style="margin-left:10px;">Please wait...</span>
 		</div>
+	
 		<div hidden?="{{ !isFinished }}">No more items !</div>
 	
 	
@@ -42,6 +52,11 @@
 	<script>
 
 		Polymer( 'pagecontent-pages', {
+		
+			editPage: function( event ) {
+				alert( 'Not yet implemented !' );
+			},
+			
 			loadPageList: function() {
 				if( this.isLoading || this.isFinished )
 					return;
@@ -72,6 +87,7 @@
 			ready: function() {
 				this.pageList = [];
 			},
+			
 		});
 		
 	</script>

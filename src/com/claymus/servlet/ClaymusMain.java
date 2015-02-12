@@ -33,6 +33,7 @@ import com.claymus.data.transfer.WebsiteLayout;
 import com.claymus.data.transfer.WebsiteWidget;
 import com.claymus.pagecontent.PageContentProcessor;
 import com.claymus.pagecontent.PageContentRegistry;
+import com.claymus.pagecontent.audit.AuditContentHelper;
 import com.claymus.pagecontent.blog.BlogContentHelper;
 import com.claymus.pagecontent.blogpost.BlogPostContent;
 import com.claymus.pagecontent.blogpost.BlogPostContentHelper;
@@ -58,9 +59,10 @@ public class ClaymusMain extends HttpServlet {
 		PageContentRegistry.register( HtmlContentHelper.class );
 		PageContentRegistry.register( BlogContentHelper.class );
 		PageContentRegistry.register( BlogPostContentHelper.class );
-		PageContentRegistry.register( UserContentHelper.class );
 		PageContentRegistry.register( PagesContentHelper.class );		// 5.0
+		PageContentRegistry.register( UserContentHelper.class );
 		PageContentRegistry.register( RoleAccessContentHelper.class );
+		PageContentRegistry.register( AuditContentHelper.class );		// 5.0
 		
 		WebsiteWidgetRegistry.register( HtmlWidgetHelper.class );
 		WebsiteWidgetRegistry.register( HeaderWidgetHelper.class );
@@ -147,6 +149,14 @@ public class ClaymusMain extends HttpServlet {
 		
 		resourceSet.add( ClaymusResource.POLYMER_CORE_SCROLL_HEADER_PANEL );
 		resourceSet.add( ClaymusResource.POLYMER_CORE_TOOLBAR );
+		resourceSet.add( new Resource() {
+			
+			@Override
+			public String getTag() {
+				return "<link rel='import' href='/polymer/pagecontent.html'>";
+			}
+			
+		} );
 		
 		List<String> resourceTagList = new ArrayList<String>( resourceSet.size() );
 		for( Resource resource : resourceSet )
@@ -201,9 +211,6 @@ public class ClaymusMain extends HttpServlet {
 		} else if( requestUri.equals( "/roleaccess" ) )
 			page.setTitle( "Access" );
 		
-		else if( requestUri.equals( "/pages" ) )
-			page.setTitle( "Pages" );
-		
 		return page;
 		
 	}
@@ -239,8 +246,6 @@ public class ClaymusMain extends HttpServlet {
 		} else if( requestUri.equals( "/users" ) ) {
 			pageContentList.add( UserContentHelper.newUserContent() );
 		
-		} else if( requestUri.equals( "/pages" ) ) {
-			pageContentList.add( PagesContentHelper.newPagesContent() );
 		}
 
 		return pageContentList;
