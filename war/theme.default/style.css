@@ -2,6 +2,10 @@ body {
   margin: 0px;
 }
 
+body /deep/ h1 {
+	margin: 20px 10px 20px 10px;
+}
+
 .bg-blue {
   background: #5677fc;
 }

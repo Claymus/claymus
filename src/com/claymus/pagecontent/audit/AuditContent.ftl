@@ -3,7 +3,7 @@
 <#setting time_zone="${ timeZone }">
 
 <div id="PageContent-Audit" class="container">
-	<pagecontent-audit-logs apiUrl="/api.pratilipi/audit/log/list" pageSize=20></pagecontent-audit-logs>
+	<pagecontent-audit-logs apiUrl="/api.pratilipi/audit/log/list" pageSize=10></pagecontent-audit-logs>
 </div>
 
 
