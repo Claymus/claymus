@@ -1,0 +1,181 @@
+<polymer-element name="pagecontent-audit-logs" attributes="apiUrl cursor pageSize">
+
+	<template>
+
+		<style>
+		
+			.audit-log {
+				border-bottom: 1px solid #DDD;
+			}
+			
+			.audit-log:hover {
+				background-color: #EEE;
+			}
+
+			.audit-log .summary {
+				padding: 10px;
+			}
+
+			.audit-log .details {
+				padding: 10px;
+				background-color: #FFF;
+				border-top: 1px solid #EEE;
+				overflow-x: auto;
+			}
+			
+			.unchanged {
+				padding: 3px;
+			}
+			
+			.added {
+				padding: 3px;
+				background-color : #85E085;
+				display: block;
+			}
+
+			.removed {
+				padding: 3px;
+				background-color: #FF9494;
+				display: block;
+			}
+		
+		</style>
+		
+		
+		<template repeat="{{ auditLog in auditLogList }}">
+			<div class="audit-log">
+				<div on-tap="{{ toggleDetails }}" class="summary">
+					<b>{{ auditLog.accessToken.user.email }}</b> {{ auditLog.eventId }}
+					<br/>
+					<small>{{ auditLog.creationDate }}</small>
+				</div>
+				<core-collapse>
+					<div class="details">
+						<table>
+							<template repeat="{{ key in auditLog | getKeys }}">
+								<tr>
+									<td>{{ key }}</td>
+									<template if="{{ auditLog.eventDataOld[ key ] != null && auditLog.eventDataNew[ key ] != null && auditLog.eventDataOld[ key ] == auditLog.eventDataNew[ key ] }}">
+										<td>
+											<span class="unchanged">{{ auditLog.eventDataOld[ key ] }}</span>
+										</td>
+									</template>
+									<template if="{{ auditLog.eventDataOld[ key ] != null && auditLog.eventDataNew[ key ] != null && auditLog.eventDataOld[ key ] != auditLog.eventDataNew[ key ] }}">
+										<td>
+											<span class="removed">{{ auditLog.eventDataOld[ key ] }}</span>
+											<span class="added">{{ auditLog.eventDataNew[ key ] }}</span>
+										</td>
+									</template>
+									<template if="{{ auditLog.eventDataOld[ key ] == null && auditLog.eventDataNew[ key ] != null }}">
+										<td>
+											<span class="added">{{ auditLog.eventDataNew[ key ] }}</span>
+										</td>
+									</template>
+									<template if="{{ auditLog.eventDataOld[ key ] != null && auditLog.eventDataNew[ key ] == null }}">
+										<td>
+											<span class="removed">{{ auditLog.eventDataOld[ key ] }}</span>
+										</td>
+									</template>
+								</tr>
+							</template>
+						</table>
+					</div>
+				</core-collapse>
+			</div>
+		</template>
+		
+		<div hidden?="{{ !isLoading }}">
+			<paper-spinner active></paper-spinner>
+			<span style="margin-left:10px;">Please wait...</span>
+		</div>
+		
+		<div hidden?="{{ !isFinished }}">No more items !</div>
+	
+	
+		<core-ajax
+				id="AjaxGet"
+				url="{{ apiUrl }}"
+				contentType="application/json"
+				method="GET"
+				handleAs="json"
+				on-core-response="{{ handleAjaxGetResponse }}"
+				on-core-error="{{ handleAjaxGetError }}" >
+		</core-ajax>
+
+	</template>
+
+
+	<script>
+
+		Polymer( 'pagecontent-audit-logs', {
+
+			toggleDetails: function( event ) {
+				var element = event.target;
+				var collapse = element.querySelector( 'core-collapse' );
+				while( !collapse ) {
+					element = element.parentNode;
+					collapse = element.querySelector( 'core-collapse' );
+				}
+				collapse.toggle();
+			},
+
+			getKeys: function( auditLog ) {
+				var eventDataOldKeys = Object.keys( auditLog.eventDataOld );
+				var eventDataNewKeys = Object.keys( auditLog.eventDataNew );
+
+				var eventDataKeys = [];
+				for( var i = 0; i < eventDataOldKeys.length; i++ )
+					eventDataKeys.push( eventDataOldKeys[i] );
+				for( var i = 0; i < eventDataNewKeys.length; i++ ) {
+					var found = false;
+					for( var j = 0; j < eventDataOldKeys.length; j++ ) {
+						if( eventDataNewKeys[ i ] == eventDataOldKeys[ j ] ) {
+							found = true;
+							break;
+						}
+				    }
+				    if( !found )
+						eventDataKeys.push( eventDataNewKeys[ i ] );
+				}
+
+				return eventDataKeys;
+			},
+			
+			loadAuditLogList: function() {
+				if( this.isLoading || this.isFinished )
+					return;
+
+				this.isLoading = true;
+				
+				var ajaxGet = this.$.AjaxGet;
+				ajaxGet.params = JSON.stringify( { cursor:this.cursor, resultCount:this.pageSize } );
+				ajaxGet.go();
+			},
+
+			handleAjaxGetResponse: function( event, response ) {
+				this.cursor = response.response[ 'cursor' ];
+				var auditLogList = response.response[ 'auditLogList' ];
+				for( var i = 0; i < auditLogList.length; i++ ) {
+					auditLogList[ i ][ 'eventDataOld' ] = JSON.parse( auditLogList[ i ][ 'eventDataOld' ] );
+					auditLogList[ i ][ 'eventDataNew' ] = JSON.parse( auditLogList[ i ][ 'eventDataNew' ] );
+					this.auditLogList.push( auditLogList[i] );
+				}
+				this.isFinished = auditLogList.length < this.pageSize;
+				this.isLoading = false;
+				this.fire( 'load-success' );
+			},
+
+			handleAjaxGetError: function( event, response ) {
+				this.isLoading = false;
+				this.fire( 'load-error' );
+			},
+
+			ready: function() {
+				this.auditLogList = [];
+			},
+
+		});
+		
+	</script>
+	
+</polymer-element>

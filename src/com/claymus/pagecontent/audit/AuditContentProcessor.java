@@ -27,7 +27,7 @@ public class AuditContentProcessor extends PageContentProcessor<AuditContent> {
 					
 					@Override
 					public String getTag() {
-						return "<link rel='import' href='/polymer/PageContent-AuditLog.html'>";
+						return "<link rel='import' href='/polymer/pagecontent-audit-logs.html'>";
 					}
 					
 				},
@@ -35,14 +35,13 @@ public class AuditContentProcessor extends PageContentProcessor<AuditContent> {
 	}
 	
 	@Override
-	public String generateTitle( AuditContent auditLogContent, HttpServletRequest request ) {
+	public String generateTitle( AuditContent auditContent, HttpServletRequest request ) {
 		return "Audit";
 	}
 	
 	@Override
-	public String generateHtml(
-			AuditContent auditLogContent,
-			HttpServletRequest request ) throws InsufficientAccessException, UnexpectedServerException {
+	public String generateHtml( AuditContent auditContent, HttpServletRequest request )
+			throws InsufficientAccessException, UnexpectedServerException {
 		
 		if( ! AuditContentHelper.hasRequestAccessToListAuditData( request ) )
 			throw new InsufficientAccessException();

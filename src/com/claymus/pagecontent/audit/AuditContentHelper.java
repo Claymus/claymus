@@ -119,11 +119,12 @@ public class AuditContentHelper extends PageContentHelper<
 				dataAccessor.getAuditLogList( cursor, resultCount );
 		List<AuditLogData> auditLogDataList = new ArrayList<AuditLogData>();
 		for( AuditLog auditLog : auditLogListCursorTuple.getDataList() ) {
-			AccessToken accessToken = dataAccessor.getAccessToken( auditLog.getAccessId() );
+			AccessToken accessToken = dataAccessor.getAccessTokenById( auditLog.getAccessId() );
 			User user = accessToken == null ? null : dataAccessor.getUser( accessToken.getUserId() );
 			auditLogDataList.add( createAuditLogData( auditLog, accessToken, user ));
 		}
 		
 		return new DataListCursorTuple<AuditLogData>( auditLogDataList, auditLogListCursorTuple.getCursor() );
 	}
+
 }

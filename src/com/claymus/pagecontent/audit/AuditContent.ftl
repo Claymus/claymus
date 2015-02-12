@@ -1,17 +1,17 @@
-<!-- PageContent :: Pages :: Audit -->
+<!-- PageContent :: Audit :: Start -->
 
 <#setting time_zone="${ timeZone }">
 
-<div id="PageContent-AuditLogs" class="container">
-	<pagecontent-auditlog apiUrl="/api.pratilipi/audit/log/list" pageSize=20></pagecontent-auditlog>
+<div id="PageContent-Audit" class="container">
+	<pagecontent-audit-logs apiUrl="/api.pratilipi/audit/log/list" pageSize=20></pagecontent-audit-logs>
 </div>
 
 
 
 <script language="javascript">
 
-	var pageContentAuditLog = document.querySelector( 'pagecontent-auditlog' );
-	var pageContentAuditLogDiv = jQuery( '#PageContent-AuditLogs' );
+	var pageContentAuditLog = document.querySelector( 'pagecontent-audit-logs' );
+	var pageContentAuditLogDiv = jQuery( '#PageContent-Audit' );
 	
 	function pageContentAuditLogLoad() {
 		if( pageContentAuditLog.isFinished )
@@ -42,4 +42,4 @@
 	
 </script>
 
-<!-- PageContent :: Audit Log :: End -->
+<!-- PageContent :: Audit :: End -->
