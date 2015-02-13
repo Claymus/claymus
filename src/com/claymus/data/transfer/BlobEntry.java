@@ -8,6 +8,8 @@ public interface BlobEntry extends Serializable {
 	
 	String getName();
 
+	void setName( String name );
+
 	byte[] getData();
 	
 	void setData( byte[] byteArray );

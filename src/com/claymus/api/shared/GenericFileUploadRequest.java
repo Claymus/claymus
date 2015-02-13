@@ -6,7 +6,7 @@ import com.claymus.api.annotation.Validate;
 public class GenericFileUploadRequest extends GenericRequest {
 
 	@Validate( required = true )
-	private String fileName;
+	private String name;
 
 	@Validate( required = true )
 	private byte[] data;
@@ -15,12 +15,12 @@ public class GenericFileUploadRequest extends GenericRequest {
 	private String mimeType;
 
 	
-	public String getFileName() {
-		return fileName;
+	public String getName() {
+		return name;
 	}
 
-	public void setFileName( String fileName ) {
-		this.fileName = fileName;
+	public void setName( String name ) {
+		this.name = name;
 	}
 	
 	public byte[] getData() {

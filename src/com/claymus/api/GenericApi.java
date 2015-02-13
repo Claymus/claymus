@@ -158,7 +158,7 @@ public abstract class GenericApi extends HttpServlet {
 					while( iterator.hasNext() ) {
 						FileItemStream fileItemStream = iterator.next();
 						if( ! fileItemStream.isFormField() ) {
-							gfuRequest.setFileName( fileItemStream.getName() );
+							gfuRequest.setName( fileItemStream.getName() );
 							gfuRequest.setData( IOUtils.toByteArray( fileItemStream.openStream() ) );
 							gfuRequest.setMimeType( fileItemStream.getContentType() );
 							break;

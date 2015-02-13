@@ -10,7 +10,7 @@ import com.google.appengine.tools.cloudstorage.GcsFileMetadata;
 @SuppressWarnings("serial")
 public class BlobEntryGcsImpl implements BlobEntry {
 	
-	private final String fileName;
+	private String fileName;
 	private byte[] data;
 	private long length;
 	private String mimeType;
@@ -45,6 +45,11 @@ public class BlobEntryGcsImpl implements BlobEntry {
 		return fileName;
 	}
 	
+	@Override
+	public void setName( String fileName ) {
+		this.fileName = fileName;
+	}
+
 	@Override
 	public byte[] getData() {
 		return data;
