@@ -11,7 +11,6 @@ import com.claymus.commons.shared.exception.InvalidArgumentException;
 import com.claymus.commons.shared.exception.UnexpectedServerException;
 import com.google.gwt.regexp.shared.RegExp;
 
-
 @SuppressWarnings("serial")
 public class GenericRequest implements Serializable {
 
@@ -24,22 +23,9 @@ public class GenericRequest implements Serializable {
 	protected static final String REGEX_EMAIL = "^[A-Za-z0-9]+([._+-][A-Za-z0-9]+)*@[A-Za-z0-9]+([.-][A-Za-z0-9]+)*\\.[A-Za-z]{2,4}$";
 
 	
-	private String accessToken;
+	public GenericRequest() {}
 
 
-	@SuppressWarnings("unused")
-	private GenericRequest() {}
-
-	public GenericRequest( String accessToken ) {
-		this.accessToken = accessToken;
-	}
-
-	
-	public final String getAccessToken() {
-		return accessToken;
-	}
-
-	
 	public final void validate() throws InvalidArgumentException, UnexpectedServerException {
 		for( Field field : this.getClass().getDeclaredFields() ) {
 			Validate validate = field.getAnnotation( Validate.class );

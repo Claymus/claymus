@@ -38,7 +38,7 @@ public class ResourceServlet extends HttpServlet {
 			return;
 		}
 
-			
+
 		String fileName = getFileName( request );
 		if( ! DataAccessorFactory.getBlobAccessor().createBlob( request, fileName ) )
 			response.sendError( HttpServletResponse.SC_INTERNAL_SERVER_ERROR );

@@ -8,12 +8,7 @@ public class GetPageContentListRequest extends GenericRequest {
 	@Validate( required = true )
 	private Long pageId;
 	
-	
-	private GetPageContentListRequest() {
-		super( null );
-	}
 
-	
 	public Long getPageId() {
 		return pageId;
 	}

@@ -57,6 +57,11 @@ public class AccessTokenEntity implements AccessToken {
 	public void setCreationDate( Date creationDate ) {
 		this.creationDate = creationDate;
 	}
+	
+	@Override
+	public boolean isExpired() {
+		return expiry.before( new Date() );
+	}
 
 	@Override
 	public Date getExpiry() {

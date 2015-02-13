@@ -53,7 +53,7 @@ public class AuditContentProcessor extends PageContentProcessor<AuditContent> {
 		dataModel.put( "timeZone", claymusHelper.getCurrentUserTimeZone() );
 
 		// Processing template
-		return FreeMarkerUtil.processTemplate( dataModel, getTemplateName() );
+		return FreeMarkerUtil.processTemplate( dataModel, getTemplateName( request ) );
 	}
 	
 }

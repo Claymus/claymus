@@ -20,11 +20,11 @@ import com.claymus.data.transfer.Page;
 
 @SuppressWarnings("serial")
 public class SiteMapServlet extends HttpServlet {
-	
+
 	private static final Logger logger =
 			Logger.getLogger( SiteMapServlet.class.getName() );
 
-	
+
 	@Override
 	public void doGet(
 			HttpServletRequest request,
@@ -32,7 +32,7 @@ public class SiteMapServlet extends HttpServlet {
 
 		DataAccessor dataAccessor = DataAccessorFactory.getDataAccessor( request );
 		List<Page> pageList = dataAccessor.getPageList( null, 1000 ).getDataList();
-		
+
 		// Creating data model required for template processing
 		Map<String, Object> dataModel = new HashMap<>();
 		dataModel.put( "domain", ClaymusHelper.getSystemProperty( "domain" ) );
@@ -46,6 +46,7 @@ public class SiteMapServlet extends HttpServlet {
 			logger.log( Level.SEVERE, "Template processing failed.", e );
 			response.sendError( HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
 		}
-		
+
 	}
+
 }

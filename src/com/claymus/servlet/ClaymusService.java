@@ -21,10 +21,10 @@ public class ClaymusService extends HttpServlet {
 	
 	static {
 		ApiRegistry.register( PageContentListApi.class );
-		ApiRegistry.register( AuditLogListApi.class );
 
 		ApiRegistry.register( PageApi.class );
 		ApiRegistry.register( PageListApi.class );
+		ApiRegistry.register( AuditLogListApi.class );
 	}
 	
 	@Override

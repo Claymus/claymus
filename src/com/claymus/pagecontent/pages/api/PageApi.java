@@ -10,7 +10,6 @@ import com.claymus.pagecontent.pages.PagesContentHelper;
 import com.claymus.pagecontent.pages.api.shared.PutPageRequest;
 import com.claymus.pagecontent.pages.api.shared.PutPageResponse;
 
-
 @SuppressWarnings("serial")
 @Bind( uri = "/page" )
 public class PageApi extends GenericApi {

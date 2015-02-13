@@ -18,11 +18,6 @@ public class PutPageRequest extends GenericRequest {
 	private boolean hasTitle;
 	
 	
-	public PutPageRequest( String accessToken ) {
-		super( null );
-	}
-
-	
 	public Long getId() {
 		return id;
 	}

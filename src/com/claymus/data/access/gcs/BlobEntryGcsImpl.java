@@ -90,5 +90,4 @@ public class BlobEntryGcsImpl implements BlobEntry {
 		return metaData.get( key );
 	}
 
-
 }

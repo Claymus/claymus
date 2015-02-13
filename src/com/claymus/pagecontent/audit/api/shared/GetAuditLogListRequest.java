@@ -10,11 +10,6 @@ public class GetAuditLogListRequest extends GenericRequest {
 	private Integer resultCount;
 	
 	
-	public GetAuditLogListRequest() {
-		super( null );
-	}
-	
-	
 	public String getCursor() {
 		return cursor;
 	}

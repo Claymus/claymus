@@ -23,14 +23,6 @@ public class PagesContentProcessor extends PageContentProcessor<PagesContent> {
 					
 					@Override
 					public String getTag() {
-						return "<link rel='import' href='/polymer/pagecontent-page-form.html'>";
-					}
-					
-				},
-				new Resource() {
-					
-					@Override
-					public String getTag() {
 						return "<link rel='import' href='/polymer/pagecontent-pages.html'>";
 					}
 					
@@ -50,7 +42,7 @@ public class PagesContentProcessor extends PageContentProcessor<PagesContent> {
 		if( ! PagesContentHelper.hasRequestAccessToListPageData( request ) )
 			throw new InsufficientAccessException();
 
-		return FreeMarkerUtil.processTemplate( pagesContent, getTemplateName() );
+		return FreeMarkerUtil.processTemplate( pagesContent, getTemplateName( request ) );
 	}
 
 }

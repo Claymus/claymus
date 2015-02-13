@@ -13,6 +13,8 @@ public interface AccessToken extends Serializable {
 	
 	void setCreationDate( Date creationDate );
 	
+	boolean isExpired();
+	
 	Date getExpiry();
 	
 	void setExpiry( Date expiry);

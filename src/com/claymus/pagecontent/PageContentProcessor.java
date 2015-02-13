@@ -85,11 +85,18 @@ public abstract class PageContentProcessor<T extends PageContent> {
 	public String generateHtml( T pageContent, HttpServletRequest request )
 			throws InvalidArgumentException, InsufficientAccessException, UnexpectedServerException {
 		
-		return FreeMarkerUtil.processTemplate( pageContent, getTemplateName() );
+		return FreeMarkerUtil.processTemplate( pageContent, getTemplateName( request ) );
 	}
 	
+	@Deprecated
 	protected String getTemplateName() {
 		return this.getClass().getName().replaceAll( "[.]", "/" ).replace( "Processor", ".ftl" );
 	}
 	
+	protected String getTemplateName( HttpServletRequest request ) {
+		return ClaymusHelper.get( request ).isModeBasic()
+				? this.getClass().getName().replaceAll( "[.]", "/" ).replace( "Processor", "Basic.ftl" )
+				: this.getClass().getName().replaceAll( "[.]", "/" ).replace( "Processor", ".ftl" );
+	}
+
 }

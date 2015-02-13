@@ -10,11 +10,6 @@ public class GetPageListRequest extends GenericRequest {
 	private Integer resultCount;
 	
 	
-	private GetPageListRequest() {
-		super( null );
-	}
-
-	
 	public String getCursor() {
 		return cursor;
 	}
