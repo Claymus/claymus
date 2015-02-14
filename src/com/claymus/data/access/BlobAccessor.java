@@ -19,7 +19,7 @@ public interface BlobAccessor {
 	BlobEntry getBlob( String fileName )
 			throws IOException;
 
-	List<String> getFileNameList( String prefix )
+	List<String> getNameList( String prefix )
 			throws IOException;
 	
 	@Deprecated

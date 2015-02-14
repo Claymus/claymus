@@ -7,5 +7,4 @@ import com.claymus.pagecontent.filebrowser.FileBrowser;
 
 @SuppressWarnings("serial")
 @PersistenceCapable
-public class FileBrowserEntity extends PageContentEntity implements FileBrowser {
-}
+public class FileBrowserEntity extends PageContentEntity implements FileBrowser { }

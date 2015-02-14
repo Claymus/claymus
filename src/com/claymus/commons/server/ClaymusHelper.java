@@ -38,7 +38,6 @@ public class ClaymusHelper implements Serializable {
 	public static final String URL_RESOURCE_STATIC =
 			ClaymusHelper.getSystemProperty( "resource.static" );
 
-	public static final String URL_UPLOAD_IMAGE = "pratilipi-content/image-upload";
 	private static final String URL_LOGIN_PAGE = "#signin";
 	private static final String URL_LOGOUT_PAGE = "/logout?dest=";
 	private static final String URL_REGISTER_PAGE = "#signup";

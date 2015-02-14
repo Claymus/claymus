@@ -28,7 +28,6 @@ import com.google.appengine.tools.cloudstorage.GcsInputChannel;
 import com.google.appengine.tools.cloudstorage.GcsOutputChannel;
 import com.google.appengine.tools.cloudstorage.GcsService;
 import com.google.appengine.tools.cloudstorage.GcsServiceFactory;
-import com.google.appengine.tools.cloudstorage.ListItem;
 import com.google.appengine.tools.cloudstorage.ListOptions;
 import com.google.appengine.tools.cloudstorage.ListResult;
 import com.google.appengine.tools.cloudstorage.RetryParams;
@@ -83,15 +82,18 @@ public class BlobAccessorGcsImpl implements BlobAccessor {
 	}
 
 	@Override
-	public List<String> getFileNameList( String prefix ) throws IOException {
+	public List<String> getNameList( String prefix ) throws IOException {
 		ListOptions.Builder options = new ListOptions.Builder();
 		options.setPrefix( prefix );
 		
 		ListResult result = gcsService.list( bucketName, options.build() );
 		
 		List<String> fileNameList = new LinkedList<>();
-		while( result.hasNext() )
-			fileNameList.add( result.next().getName() );
+		while( result.hasNext() ) {
+			String fileName = result.next().getName();
+			if( ! fileName.equals( prefix ) )
+				fileNameList.add( fileName.substring( prefix.length() ) );
+		}
 		return fileNameList;
 	}
 
@@ -146,9 +148,6 @@ public class BlobAccessorGcsImpl implements BlobAccessor {
 				FileItemStream fileItemStream = iterator.next();
 				InputStream inputStream = fileItemStream.openStream();
 	
-				if( fileName.contains( "upload" ))
-					fileName = fileName + "/" + fileItemStream.getName();
-				
 				if( fileItemStream.isFormField() ) {
 					logger.log(
 							Level.WARNING,

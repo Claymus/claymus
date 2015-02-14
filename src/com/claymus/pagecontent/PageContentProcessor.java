@@ -88,7 +88,6 @@ public abstract class PageContentProcessor<T extends PageContent> {
 		return FreeMarkerUtil.processTemplate( pageContent, getTemplateName( request ) );
 	}
 	
-	@Deprecated
 	protected String getTemplateName() {
 		return this.getClass().getName().replaceAll( "[.]", "/" ).replace( "Processor", ".ftl" );
 	}

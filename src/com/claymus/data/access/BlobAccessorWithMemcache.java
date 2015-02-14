@@ -108,10 +108,10 @@ public class BlobAccessorWithMemcache implements BlobAccessor {
 	}
 	
 	@Override
-	public List<String> getFileNameList( String prefix ) throws IOException {
+	public List<String> getNameList( String prefix ) throws IOException {
 		List<String> fileNameList = memcache.get( PREFIX_LIST + prefix );
 		if( fileNameList == null ) {
-			fileNameList = blobAccessor.getFileNameList( prefix );
+			fileNameList = blobAccessor.getNameList( prefix );
 			if( fileNameList != null )
 				memcache.put( PREFIX_LIST + prefix, new ArrayList<>( fileNameList  ) );
 		}
