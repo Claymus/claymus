@@ -28,6 +28,7 @@ import com.claymus.api.annotation.Post;
 import com.claymus.api.annotation.Put;
 import com.claymus.api.shared.GenericFileDownloadResponse;
 import com.claymus.api.shared.GenericFileUploadRequest;
+import com.claymus.api.shared.GenericHtmlResponse;
 import com.claymus.api.shared.GenericRequest;
 import com.claymus.api.shared.GenericResponse;
 import com.claymus.commons.shared.exception.InsufficientAccessException;
@@ -217,6 +218,12 @@ public abstract class GenericApi extends HttpServlet {
 				out.write( gfdResponse.getData() );
 				out.close();
 			}
+			
+		} else if( apiResponse instanceof GenericHtmlResponse ) {
+			response.setCharacterEncoding( "UTF-8" );
+			PrintWriter writer = response.getWriter();
+			writer.println( ((GenericHtmlResponse) apiResponse).getHtml() );
+			writer.close();
 			
 		} else if( apiResponse instanceof GenericResponse ) {
 			response.setCharacterEncoding( "UTF-8" );
