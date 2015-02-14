@@ -37,6 +37,7 @@ import com.claymus.pagecontent.audit.AuditContentHelper;
 import com.claymus.pagecontent.blog.BlogContentHelper;
 import com.claymus.pagecontent.blogpost.BlogPostContent;
 import com.claymus.pagecontent.blogpost.BlogPostContentHelper;
+import com.claymus.pagecontent.filebrowser.FileBrowserContentHelper;
 import com.claymus.pagecontent.html.HtmlContentHelper;
 import com.claymus.pagecontent.pages.PagesContentHelper;
 import com.claymus.pagecontent.roleaccess.RoleAccessContentHelper;
@@ -63,6 +64,7 @@ public class ClaymusMain extends HttpServlet {
 		PageContentRegistry.register( UserContentHelper.class );
 		PageContentRegistry.register( RoleAccessContentHelper.class );
 		PageContentRegistry.register( AuditContentHelper.class );		// 5.0
+		PageContentRegistry.register( FileBrowserContentHelper.class );		// 5.0
 		
 		WebsiteWidgetRegistry.register( HtmlWidgetHelper.class );
 		WebsiteWidgetRegistry.register( HeaderWidgetHelper.class );

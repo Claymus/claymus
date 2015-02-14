@@ -17,19 +17,19 @@ import com.claymus.data.access.BlobAccessor;
 import com.claymus.data.access.DataAccessorFactory;
 import com.claymus.pagecontent.PageContentProcessor;
 
-public class FileBrowserProcessor extends PageContentProcessor<FileBrowser> {
+public class FileBrowserContentProcessor extends PageContentProcessor<FileBrowserContent> {
 
 	private static final Logger logger =
-			Logger.getLogger( FileBrowserProcessor.class.getName() );
+			Logger.getLogger( FileBrowserContentProcessor.class.getName() );
 
 	
 	@Override
-	public String generateTitle( FileBrowser fileBrowser, HttpServletRequest request ) {
+	public String generateTitle( FileBrowserContent fileBrowserContent, HttpServletRequest request ) {
 		return "Browse Files";
 	}
 	
 	@Override
-	public String generateHtml( FileBrowser fileBrowser, HttpServletRequest request )
+	public String generateHtml( FileBrowserContent fileBrowserContent, HttpServletRequest request )
 			throws InvalidArgumentException, InsufficientAccessException, UnexpectedServerException {
 		
 		String folder = request.getParameter( "folder" );
