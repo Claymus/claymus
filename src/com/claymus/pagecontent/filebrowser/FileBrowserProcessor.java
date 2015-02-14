@@ -35,9 +35,6 @@ public class FileBrowserProcessor extends PageContentProcessor<FileBrowser> {
 		String folder = request.getParameter( "folder" );
 		String urlPrefix = request.getParameter( "urlPrefix" );
 		
-		System.out.println( folder );
-		System.out.println( urlPrefix );
-		
 		if( folder == null || folder.isEmpty() )
 			throw new InvalidArgumentException( "Folder name is missing." );
 		else if( urlPrefix == null || urlPrefix.isEmpty() )
@@ -54,9 +51,6 @@ public class FileBrowserProcessor extends PageContentProcessor<FileBrowser> {
 			logger.log( Level.SEVERE, "Failed to fetch file list.", e );
 			throw new UnexpectedServerException();
 		}
-		
-		
-		System.out.println( nameList.size() );
 		
 
 		// Creating data model required for template processing

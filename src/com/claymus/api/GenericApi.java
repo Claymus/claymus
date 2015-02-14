@@ -90,12 +90,12 @@ public abstract class GenericApi extends HttpServlet {
 			HttpServletRequest request,
 			HttpServletResponse response ) throws ServletException, IOException {
 		
-		String requestPayload = IOUtils.toString( request.getInputStream(), "UTF-8" );
+		String method = request.getMethod();
 
 		// Creating JsonObject from request body (JSON)
-		JsonObject requestPayloadJson = requestPayload == null || requestPayload.isEmpty()
-				? new JsonObject()
-				: gson.fromJson( requestPayload, JsonElement.class ).getAsJsonObject();
+		JsonObject requestPayloadJson = method.equals( "PUT" )
+				? gson.fromJson( IOUtils.toString( request.getInputStream(), "UTF-8" ), JsonElement.class ).getAsJsonObject()
+				: new JsonObject();
 
 		// Adding query string data in JsonObject
 		Enumeration<String> queryParams = request.getParameterNames();
@@ -122,7 +122,6 @@ public abstract class GenericApi extends HttpServlet {
 		
 		// Invoking get/put method for API response
 		Object apiResponse = null;
-		String method = request.getMethod();
 		if( method.equals( "GET" ) && getMethod != null )
 			apiResponse = executeApi( getMethod, requestPayloadJson, getMethodParameterType, request );
 		else if( method.equals( "PUT" ) && putMethod != null )
