@@ -63,3 +63,12 @@ function setCookie( cname, cvalue, exdays, path ) {
 	}
 	document.cookie = cname + "=" + cvalue + expires + path;
 }
+
+
+/* Url Parameters */
+
+function getUrlParam( paramName ) {
+    var reParam = new RegExp( '(?:[\?&]|&)' + paramName + '=([^&]+)', 'i' ) ;
+    var match = window.location.search.match( reParam ) ;
+    return ( match && match.length > 1 ) ? match[ 1 ] : null ;
+}
