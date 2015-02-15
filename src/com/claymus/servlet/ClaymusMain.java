@@ -60,11 +60,11 @@ public class ClaymusMain extends HttpServlet {
 		PageContentRegistry.register( HtmlContentHelper.class );
 		PageContentRegistry.register( BlogContentHelper.class );
 		PageContentRegistry.register( BlogPostContentHelper.class );
-		PageContentRegistry.register( PagesContentHelper.class );		// 5.0
+		PageContentRegistry.register( PagesContentHelper.class );		// 5.1
 		PageContentRegistry.register( UserContentHelper.class );
 		PageContentRegistry.register( RoleAccessContentHelper.class );
-		PageContentRegistry.register( AuditContentHelper.class );		// 5.0
-		PageContentRegistry.register( FileBrowserContentHelper.class );		// 5.0
+		PageContentRegistry.register( AuditContentHelper.class );		// 5.1
+		PageContentRegistry.register( FileBrowserContentHelper.class );	// 5.1
 		
 		WebsiteWidgetRegistry.register( HtmlWidgetHelper.class );
 		WebsiteWidgetRegistry.register( HeaderWidgetHelper.class );

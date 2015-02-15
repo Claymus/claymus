@@ -155,16 +155,22 @@
 			},
 
 			handleAjaxGetResponse: function( event, response ) {
-				this.cursor = response.response[ 'cursor' ];
-				var auditLogList = response.response[ 'auditLogList' ];
-				for( var i = 0; i < auditLogList.length; i++ ) {
-					auditLogList[ i ][ 'eventDataOld' ] = JSON.parse( auditLogList[ i ][ 'eventDataOld' ] );
-					auditLogList[ i ][ 'eventDataNew' ] = JSON.parse( auditLogList[ i ][ 'eventDataNew' ] );
-					this.auditLogList.push( auditLogList[i] );
+				if( response.response == '' ) {
+					this.isLoading = false;
+					this.fire( 'load-error' );
+
+				} else {
+					this.cursor = response.response[ 'cursor' ];
+					var auditLogList = response.response[ 'auditLogList' ];
+					for( var i = 0; i < auditLogList.length; i++ ) {
+						auditLogList[ i ][ 'eventDataOld' ] = JSON.parse( auditLogList[ i ][ 'eventDataOld' ] );
+						auditLogList[ i ][ 'eventDataNew' ] = JSON.parse( auditLogList[ i ][ 'eventDataNew' ] );
+						this.auditLogList.push( auditLogList[i] );
+					}
+					this.isFinished = auditLogList.length < this.pageSize;
+					this.isLoading = false;
+					this.fire( 'load-success' );
 				}
-				this.isFinished = auditLogList.length < this.pageSize;
-				this.isLoading = false;
-				this.fire( 'load-success' );
 			},
 
 			handleAjaxGetError: function( event, response ) {

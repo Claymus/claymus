@@ -39,7 +39,7 @@ public class AuditContentHelper extends PageContentHelper<
 
 	@Override
 	public Double getModuleVersion() {
-		return 5.0;
+		return 5.1;
 	}
 
 	@Override

@@ -69,14 +69,20 @@
 			},
 
 			handleAjaxGetResponse: function( event, response ) {
-				this.cursor = response.response['cursor'];
-				var pageList = response.response['pageList'];
-				for( var i = 0; i < pageList.length; i++ )
-					this.pageList.push( pageList[i] );
-		
-				this.isFinished = pageList.length < this.pageSize;
-				this.isLoading = false;
-				this.fire( 'load-success' );
+				if( response.response == '' ) {
+					this.isLoading = false;
+					this.fire( 'load-error' );
+
+				} else {
+					this.cursor = response.response['cursor'];
+					var pageList = response.response['pageList'];
+					for( var i = 0; i < pageList.length; i++ )
+						this.pageList.push( pageList[i] );
+			
+					this.isFinished = pageList.length < this.pageSize;
+					this.isLoading = false;
+					this.fire( 'load-success' );
+				}
 			},
 
 			handleAjaxGetError: function( event, response ) {

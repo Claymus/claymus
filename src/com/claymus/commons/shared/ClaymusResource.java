@@ -26,11 +26,13 @@ public enum ClaymusResource implements Resource {
 	POLYMER_PAPER_DIALOG			( "<link rel='import' href='//cdn-asia.pratilipi.com/third-party/polymer-0.5.2/paper-dialog/paper-dialog.html'>" ),
 	POLYMER_PAPER_FAB				( "<link rel='import' href='//cdn-asia.pratilipi.com/third-party/polymer-0.5.2/paper-fab/paper-fab.html'>" ),
 	POLYMER_PAPER_ICON_BUTTON		( "<link rel='import' href='//cdn-asia.pratilipi.com/third-party/polymer-0.5.2/paper-icon-button/paper-icon-button.html'>" ),
+	POLYMER_PAPER_INPUT				( "<link rel='import' href='//cdn-asia.pratilipi.com/third-party/polymer-0.5.2/paper-input/paper-input.html'>" ),
 	POLYMER_PAPER_INPUT_DECORATOR	( "<link rel='import' href='//cdn-asia.pratilipi.com/third-party/polymer-0.5.2/paper-input/paper-input-decorator.html'>" ),
 	POLYMER_PAPER_ITEM				( "<link rel='import' href='//cdn-asia.pratilipi.com/third-party/polymer-0.5.2/paper-item/paper-item.html'>" ),
 	POLYMER_PAPER_MENU_BUTTON		( "<link rel='import' href='//cdn-asia.pratilipi.com/third-party/polymer-0.5.2/paper-menu-button/paper-menu-button.html'>" ),
 	POLYMER_PAPER_SLIDER			( "<link rel='import' href='//cdn-asia.pratilipi.com/third-party/polymer-0.5.2/paper-slider/paper-slider.html'>" ),
 	POLYMER_PAPER_SPINNER			( "<link rel='import' href='//cdn-asia.pratilipi.com/third-party/polymer-0.5.2/paper-spinner/paper-spinner.html'>" ),
+	POLYMER_PAPER_TOAST				( "<link rel='import' href='//cdn-asia.pratilipi.com/third-party/polymer-0.5.2/paper-toast/paper-toast.html'>" ),
 	;
 	
 

@@ -48,7 +48,7 @@ public class PagesContentHelper extends PageContentHelper<
 
 	@Override
 	public Double getModuleVersion() {
-		return 5.0;
+		return 5.1;
 	}
 
 	public Access[] getAccessList() {

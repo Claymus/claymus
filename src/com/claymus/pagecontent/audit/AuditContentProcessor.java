@@ -17,21 +17,30 @@ public class AuditContentProcessor extends PageContentProcessor<AuditContent> {
 
 	@Override
 	public Resource[] getDependencies( AuditContent auditLogContent, HttpServletRequest request ) {
-		return new Resource[] {
-				ClaymusResource.JQUERY_2,
-				ClaymusResource.POLYMER,
-				ClaymusResource.POLYMER_CORE_AJAX,
-				ClaymusResource.POLYMER_CORE_COLLAPSE,
-				ClaymusResource.POLYMER_PAPER_SPINNER,
-				new Resource() {
-					
-					@Override
-					public String getTag() {
-						return "<link rel='import' href='/polymer/pagecontent-audit-logs.html'>";
-					}
-					
-				},
-		};
+		
+		ClaymusHelper claymusHelper = ClaymusHelper.get( request );
+
+		if( claymusHelper.isModeBasic() ) {
+			return new Resource[] {};
+		
+		} else {
+			return new Resource[] {
+					ClaymusResource.JQUERY_2,
+					ClaymusResource.POLYMER,
+					ClaymusResource.POLYMER_CORE_AJAX,
+					ClaymusResource.POLYMER_CORE_COLLAPSE,
+					ClaymusResource.POLYMER_PAPER_SPINNER,
+					new Resource() {
+						
+						@Override
+						public String getTag() {
+							return "<link rel='import' href='/polymer/pagecontent-audit-logs.html'>";
+						}
+						
+					},
+			};
+		}
+		
 	}
 	
 	@Override
