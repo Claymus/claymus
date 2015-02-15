@@ -10,16 +10,20 @@ core-toolbar.bg-green, core-toolbar.bg-green a {
   color: white;
 }
 
-paper-slider.bg-green {
+
+
+body /deep/ paper-slider.bg-green {
   background-color: transparent;
 }
 
-paper-spinner.red::shadow .circle {
-  border-color: #ff0000;
+body /deep/ paper-slider.bg-green::shadow #sliderKnobInner,
+body /deep/ paper-slider.bg-green::shadow #sliderKnobInner::before,
+body /deep/ paper-slider.bg-green::shadow #sliderBar::shadow #activeProgress {
+  background-color: #259b24;
 }
 
-paper-slider.bg-green::shadow #sliderKnobInner,
-paper-slider.bg-green::shadow #sliderKnobInner::before,
-paper-slider.bg-green::shadow #sliderBar::shadow #activeProgress {
-  background-color: #259b24;
+
+
+paper-spinner.red::shadow .circle {
+  border-color: #ff0000;
 }

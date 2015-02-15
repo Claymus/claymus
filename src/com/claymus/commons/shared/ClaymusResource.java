@@ -12,6 +12,7 @@ public enum ClaymusResource implements Resource {
 
 	POLYMER_CORE_AJAX				( "<link rel='import' href='//cdn-asia.pratilipi.com/third-party/polymer-0.5.2/core-ajax/core-ajax.html'>" ),
 	POLYMER_CORE_COLLAPSE			( "<link rel='import' href='//cdn-asia.pratilipi.com/third-party/polymer-0.5.2/core-collapse/core-collapse.html'>" ),
+	POLYMER_CORE_DRAWER_PANEL		( "<link rel='import' href='//cdn-asia.pratilipi.com/third-party/polymer-0.5.2/core-drawer-panel/core-drawer-panel.html'>" ),
 	POLYMER_CORE_HEADER_PANEL		( "<link rel='import' href='//cdn-asia.pratilipi.com/third-party/polymer-0.5.2/core-header-panel/core-header-panel.html'>" ),
 	POLYMER_CORE_ICON_BUTTON		( "<link rel='import' href='//cdn-asia.pratilipi.com/third-party/polymer-0.5.2/core-icon-button/core-icon-button.html'>" ),
 	POLYMER_CORE_ICONS				( "<link rel='import' href='//cdn-asia.pratilipi.com/third-party/polymer-0.5.2/core-icons/core-icons.html'>" ),
