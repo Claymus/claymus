@@ -59,6 +59,7 @@ import com.claymus.taskqueue.Task;
 import com.claymus.taskqueue.TaskQueue;
 import com.claymus.taskqueue.TaskQueueFactory;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import com.pratilipi.pagecontent.author.AuthorContentHelper;
 
 import freemarker.template.TemplateException;
 
@@ -173,6 +174,8 @@ public class ClaymusServiceImpl extends RemoteServiceServlet
 
 		user = dataAccessor.createOrUpdateUser( user );
 		
+		AuthorContentHelper.createAuthorProfile( this.getThreadLocalRequest(), user );
+		
 		UserRole userRole = dataAccessor.newUserRole();
 		userRole.setUserId( user.getId() );
 		userRole.setRoleId( "member" );
@@ -233,7 +236,10 @@ public class ClaymusServiceImpl extends RemoteServiceServlet
 
 		if( ! EncryptPassword.check( request.getPassword(), user.getPassword() ) )
 			throw new InvalidArgumentException( "Incorrect password !" );
-
+		
+		if( !AuthorContentHelper.hasAuthorProfile( this.getThreadLocalRequest(), user.getId() ))
+			AuthorContentHelper.createAuthorProfile( this.getThreadLocalRequest(), user );
+		
 		//Update Access Token Entity
 		String accessTokenId = ( String ) this.getThreadLocalRequest().getAttribute( ClaymusHelper.REQUEST_ATTRIB_ACCESS_TOKEN_ID );
 		claymusHelper.updateAccessToken( accessTokenId, user.getId(), new Date(), null, null );
