@@ -8,6 +8,12 @@ public class TaskGaeImpl implements Task {
 
 	
 	@Override
+	public Task setUrl( String url ) {
+		taskOptions.url( url );
+		return this;
+	}
+
+	@Override
 	public Task addParam( String paramName, String value ) {
 		taskOptions.param( paramName, value );
 		return this;

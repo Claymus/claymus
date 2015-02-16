@@ -132,7 +132,7 @@ public abstract class GenericApi extends HttpServlet {
 		else if( method.equals( "DELETE" ) && deleteMethod != null )
 			apiResponse = executeApi( deleteMethod, requestPayloadJson, deleteMethodParameterType, request );
 		else
-			apiResponse = new UnexpectedServerException( "Invalid resource or method." );
+			apiResponse = new InvalidArgumentException( "Invalid resource or method." );
 
 		
 		// Dispatching API response
