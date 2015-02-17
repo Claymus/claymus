@@ -1,3 +1,24 @@
+body /deep/ h1 {
+	margin: 20px 10px 20px 10px;
+}
+
+body /deep/ h3 {
+	margin: 10px 10px 10px 10px;
+}
+
+body /deep/ a {
+	color: black;
+	text-decoration: none;
+}
+
+
+
+body /deep/ .bg-green {
+  background: #259b24;
+}
+
+
+
 core-toolbar core-icon-button {
   margin: 0px !important;
 }
