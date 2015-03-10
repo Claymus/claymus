@@ -14,7 +14,7 @@ public class GaeQueryBuilder {
 		NOT_NULL,
 		EQUALS,
 		LESS_THAN,
-		LESST_THAN_OR_EQUAL,
+		LESS_THAN_OR_EQUAL,
 		GREATER_THAN,
 		GREATER_THAN_OR_EQUAL,
 		CONTAINS
@@ -62,7 +62,7 @@ public class GaeQueryBuilder {
 			case LESS_THAN:
 				filters.add( param + " < " + paramKey );
 				break;
-			case LESST_THAN_OR_EQUAL:
+			case LESS_THAN_OR_EQUAL:
 				filters.add( param + " <= " + paramKey );
 				break;
 			case GREATER_THAN:
