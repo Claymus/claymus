@@ -6,14 +6,19 @@ import com.claymus.commons.server.ClaymusHelper;
 
 public class DataAccessorFactory {
 	
-	private static final String GOOGLE_CLOUD_STORAGE_BUCKET =
+	protected static final String GOOGLE_APP_ENGINE_SEARCH_INDEX =
+			ClaymusHelper.getSystemProperty( "searchservice.gae.index" );
+
+	protected static final String GOOGLE_CLOUD_STORAGE_BUCKET =
 			ClaymusHelper.getSystemProperty( "blobservice.gcs.bucket" );
 
+	
 	protected static final Memcache cacheL1 = new MemcacheClaymusImpl();
 	protected static final Memcache cacheL2 = new MemcacheGaeImpl();
-	private static BlobAccessor blobAccessor = new BlobAccessorGcsImpl( GOOGLE_CLOUD_STORAGE_BUCKET );
-	
+	private static final BlobAccessor blobAccessor = new BlobAccessorGcsImpl( GOOGLE_CLOUD_STORAGE_BUCKET );
+	private static final SearchAccessor searchAccessor = new SearchAccessorGaeImpl( GOOGLE_APP_ENGINE_SEARCH_INDEX );
 
+	
 	public static Memcache getL1CacheAccessor() {
 		return cacheL1;
 	}
@@ -31,6 +36,10 @@ public class DataAccessorFactory {
 			cacheL1.put( "DataAccessor-" + request.hashCode(), dataAccessor );
 		}
 		return dataAccessor;
+	}
+	
+	public static SearchAccessor getSearchAccessor() {
+		return searchAccessor;
 	}
 	
 	public static BlobAccessor getBlobAccessor() {
