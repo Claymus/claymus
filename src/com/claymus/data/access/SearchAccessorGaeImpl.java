@@ -6,12 +6,19 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.claymus.commons.shared.exception.UnexpectedServerException;
+import com.google.appengine.api.search.Cursor;
 import com.google.appengine.api.search.Document;
 import com.google.appengine.api.search.Index;
 import com.google.appengine.api.search.IndexSpec;
+import com.google.appengine.api.search.MatchScorer;
 import com.google.appengine.api.search.PutException;
+import com.google.appengine.api.search.Query;
+import com.google.appengine.api.search.QueryOptions;
+import com.google.appengine.api.search.Results;
+import com.google.appengine.api.search.ScoredDocument;
 import com.google.appengine.api.search.SearchService;
 import com.google.appengine.api.search.SearchServiceFactory;
+import com.google.appengine.api.search.SortOptions;
 import com.google.appengine.api.search.StatusCode;
 
 public class SearchAccessorGaeImpl implements SearchAccessor {
@@ -30,6 +37,30 @@ public class SearchAccessorGaeImpl implements SearchAccessor {
 	}
 
 	
+	public Results<ScoredDocument> search(
+			String searchQuery, SortOptions sortOptions, String cursorStr,
+			Integer resultCount, String fieldsToReturn ) {
+		
+		if( sortOptions == null )
+			sortOptions = SortOptions.newBuilder()
+					.setMatchScorer( MatchScorer.newBuilder() )
+					.setLimit( 10000 )
+					.build();
+		
+		QueryOptions queryOptions = QueryOptions.newBuilder()
+				.setSortOptions( sortOptions )
+				.setCursor( cursorStr == null ? null : Cursor.newBuilder().build( cursorStr ) )
+				.setLimit( resultCount == null ? 10000 : resultCount )
+				.setFieldsToReturn( fieldsToReturn )
+				.build();
+		
+		Query query = Query.newBuilder()
+				.setOptions( queryOptions )
+				.build( searchQuery );
+
+	    return searchIndex.search( query );
+	}
+
 	protected void indexDocument( Document document ) throws UnexpectedServerException {
 		List<Document> documentList = new ArrayList<>( 1 );
 		documentList.add( document );
