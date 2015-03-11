@@ -42,7 +42,7 @@ public class ClaymusService extends HttpServlet {
 		GenericApi api = ApiRegistry.getApi( requestUri );
 		
 		if( api == null )
-			super.service( request, response ); 
+			super.service( request, response );
 		else
 			api.service( request, response );
 	}

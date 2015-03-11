@@ -151,14 +151,6 @@ public class ClaymusMain extends HttpServlet {
 		
 		resourceSet.add( ClaymusResource.POLYMER_CORE_SCROLL_HEADER_PANEL );
 		resourceSet.add( ClaymusResource.POLYMER_CORE_TOOLBAR );
-		resourceSet.add( new Resource() {
-			
-			@Override
-			public String getTag() {
-				return "<link rel='import' href='/polymer/pagecontent.html'>";
-			}
-			
-		} );
 		
 		List<String> resourceTagList = new ArrayList<String>( resourceSet.size() );
 		for( Resource resource : resourceSet )

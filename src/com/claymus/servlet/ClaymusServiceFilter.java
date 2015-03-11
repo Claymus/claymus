@@ -1,15 +1,20 @@
 package com.claymus.servlet;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
+import javax.servlet.ServletInputStream;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
@@ -42,7 +47,9 @@ public class ClaymusServiceFilter implements Filter {
 		HttpServletResponse response = ( HttpServletResponse ) resp;
 
 		String requestUri = request.getRequestURI();
-		if( requestUri.equals( "/remote-api." ) || requestUri.equals( "/oauth" ) ) {
+		if( requestUri.equals( "/remote-api." )
+				|| requestUri.equals( "/oauth" )
+				|| request.getHeader( "X-AppEngine-QueueName" ) != null ) {
 			chain.doFilter( request, response );
 			return;
 		}
@@ -52,10 +59,24 @@ public class ClaymusServiceFilter implements Filter {
 		
 		String accessTokenId = request.getParameter( "accessToken" );
 		if( accessTokenId == null || accessTokenId.isEmpty() ) {
-			String requestPayload = IOUtils.toString( request.getInputStream(), "UTF-8" );
+			final String requestPayload = IOUtils.toString( request.getInputStream(), "UTF-8" );
 			accessTokenId = requestPayload == null || requestPayload.isEmpty()
 					? null
 					: gson.fromJson( requestPayload, JsonElement.class ).getAsJsonObject().get( "accessToken" ).getAsString();
+
+			request = new HttpServletRequestWrapper( request ) {
+				
+				public ServletInputStream getInputStream() throws IOException {
+					return new ServletInputStream() {
+						InputStream in = new ByteArrayInputStream( requestPayload.getBytes( StandardCharsets.UTF_8 ) );
+						@Override
+						public int read() throws IOException {
+							return in.read();
+						}
+					};
+				}
+
+			};
 		}
 		
 		if( accessTokenId == null ) {
