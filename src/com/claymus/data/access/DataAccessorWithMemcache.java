@@ -28,8 +28,8 @@ public class DataAccessorWithMemcache implements DataAccessor {
 	private final static String PREFIX_USER_ROLE_LIST = "UserRoleList-";
 	private final static String PREFIX_ROLE_ACCESS = "RoleAccess-";
 	private final static String PREFIX_PAGE = "Page-";
-	private final static String PREFIX_PAGE_CONTENT = "PageConent-";
-	private final static String PREFIX_PAGE_CONTENT_LIST = "PageConentList-";
+	private final static String PREFIX_PAGE_CONTENT = "PageContent-";
+	private final static String PREFIX_PAGE_CONTENT_LIST = "PageContentList-";
 	private final static String PREFIX_ACCESS_TOKEN = "AccessToken-";
 	
 	private final DataAccessor dataAccessor;
