@@ -15,8 +15,8 @@ public class DataAccessorFactory {
 	
 	protected static final Memcache cacheL1 = new MemcacheClaymusImpl();
 	protected static final Memcache cacheL2 = new MemcacheGaeImpl();
-	private static final BlobAccessor blobAccessor = new BlobAccessorGcsImpl( GOOGLE_CLOUD_STORAGE_BUCKET );
 	private static final SearchAccessor searchAccessor = new SearchAccessorGaeImpl( GOOGLE_APP_ENGINE_SEARCH_INDEX );
+	private static final BlobAccessor blobAccessor = new BlobAccessorGcsImpl( GOOGLE_CLOUD_STORAGE_BUCKET );
 
 	
 	public static Memcache getL1CacheAccessor() {

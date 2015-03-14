@@ -3,7 +3,7 @@ package com.claymus.pagecontent.pages.api.shared;
 import java.util.List;
 
 import com.claymus.api.shared.GenericResponse;
-import com.claymus.data.transfer.client.PageData;
+import com.claymus.data.transfer.shared.PageData;
 
 @SuppressWarnings("serial")
 public class GetPageListResponse extends GenericResponse {

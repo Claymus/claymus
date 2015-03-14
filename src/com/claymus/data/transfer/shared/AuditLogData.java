@@ -1,4 +1,4 @@
-package com.claymus.data.transfer.client;
+package com.claymus.data.transfer.shared;
 
 import java.io.Serializable;
 import java.util.Date;

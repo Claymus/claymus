@@ -7,7 +7,7 @@ import com.claymus.commons.shared.exception.InsufficientAccessException;
 import com.claymus.commons.shared.exception.InvalidArgumentException;
 import com.claymus.commons.shared.exception.UnexpectedServerException;
 import com.claymus.data.access.DataListCursorTuple;
-import com.claymus.data.transfer.client.AuditLogData;
+import com.claymus.data.transfer.shared.AuditLogData;
 import com.claymus.pagecontent.audit.AuditContentHelper;
 import com.claymus.pagecontent.audit.api.shared.GetAuditLogListRequest;
 import com.claymus.pagecontent.audit.api.shared.GetAuditLogListResponse;

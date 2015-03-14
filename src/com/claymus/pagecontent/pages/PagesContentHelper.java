@@ -19,7 +19,7 @@ import com.claymus.data.access.DataListCursorTuple;
 import com.claymus.data.transfer.AccessToken;
 import com.claymus.data.transfer.AuditLog;
 import com.claymus.data.transfer.Page;
-import com.claymus.data.transfer.client.PageData;
+import com.claymus.data.transfer.shared.PageData;
 import com.claymus.pagecontent.PageContentHelper;
 import com.claymus.pagecontent.pages.gae.PagesContentEntity;
 import com.claymus.pagecontent.pages.shared.PagesContentData;
