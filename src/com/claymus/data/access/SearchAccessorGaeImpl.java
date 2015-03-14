@@ -39,7 +39,7 @@ public class SearchAccessorGaeImpl implements SearchAccessor {
 	
 	public Results<ScoredDocument> search(
 			String searchQuery, SortOptions sortOptions, String cursorStr,
-			Integer resultCount, String fieldsToReturn ) {
+			Integer resultCount, String... fieldsToReturn ) {
 		
 		if( sortOptions == null )
 			sortOptions = SortOptions.newBuilder()
@@ -49,7 +49,7 @@ public class SearchAccessorGaeImpl implements SearchAccessor {
 		
 		QueryOptions queryOptions = QueryOptions.newBuilder()
 				.setSortOptions( sortOptions )
-				.setCursor( cursorStr == null ? null : Cursor.newBuilder().build( cursorStr ) )
+				.setCursor( cursorStr == null ? Cursor.newBuilder().build() : Cursor.newBuilder().build( cursorStr ) )
 				.setLimit( resultCount == null ? 10000 : resultCount )
 				.setFieldsToReturn( fieldsToReturn )
 				.build();
