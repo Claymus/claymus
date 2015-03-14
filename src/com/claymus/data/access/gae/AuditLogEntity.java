@@ -18,6 +18,9 @@ public class AuditLogEntity implements AuditLog {
 	@Persistent( column = "AUDIT_LOG_ID", valueStrategy = IdGeneratorStrategy.IDENTITY )
 	private Long id;
 	
+	@Persistent( column = "ACCESS_ID" )
+	private String accessId;
+	
 	@Persistent( column = "EVENT_ID" )
 	private String eventId;
 	
@@ -27,8 +30,8 @@ public class AuditLogEntity implements AuditLog {
 	@Persistent( column = "EVENT_DATA_NEW" )
 	private Text eventDataNew;
 	
-	@Persistent( column = "ACCESS_ID" )
-	private String accessId;
+	@Persistent( column = "EVENT_COMMENT" )
+	private String eventComment;
 	
 	@Persistent( column = "CREATION_DATE" )
 	private Date creationDate;
@@ -37,6 +40,16 @@ public class AuditLogEntity implements AuditLog {
 	@Override
 	public Long getId() {
 		return id;
+	}
+
+	@Override
+	public String getAccessId() {
+		return accessId;
+	}
+
+	@Override
+	public void setAccessId( String accessId ) {
+		this.accessId = accessId;
 	}
 
 	@Override
@@ -70,13 +83,13 @@ public class AuditLogEntity implements AuditLog {
 	}
 
 	@Override
-	public String getAccessId() {
-		return accessId;
+	public String getEventComment() {
+		return eventComment;
 	}
 
 	@Override
-	public void setAccessId( String accessId ) {
-		this.accessId = accessId;
+	public void setEventComment( String eventComment ) {
+		this.eventComment = eventComment;
 	}
 
 	@Override

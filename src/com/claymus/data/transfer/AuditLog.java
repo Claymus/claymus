@@ -7,6 +7,10 @@ public interface AuditLog extends Serializable {
 	
 	Long getId();
 
+	String getAccessId();
+
+	void setAccessId( String accessId );
+	
 	String getEventId();
 	
 	void setEventId( String eventId );
@@ -19,10 +23,10 @@ public interface AuditLog extends Serializable {
 
 	void setEventDataNew(  String eventDataNew );
 
-	String getAccessId();
-
-	void setAccessId( String accessId );
+	String getEventComment();
 	
+	void setEventComment( String eventComment );
+
 	Date getCreationDate();
 
 }
