@@ -49,6 +49,7 @@ public class ClaymusServiceFilter implements Filter {
 		String requestUri = request.getRequestURI();
 		if( requestUri.equals( "/remote-api." )
 				|| requestUri.equals( "/oauth" )
+				|| requestUri.equals( "/_ah/warmup" )
 				|| request.getHeader( "X-AppEngine-QueueName" ) != null ) {
 			chain.doFilter( request, response );
 			return;
