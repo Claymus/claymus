@@ -35,7 +35,7 @@ public abstract class PageContentProcessor<T extends PageContent> {
 			throws InvalidArgumentException, InsufficientAccessException, UnexpectedServerException {
 
 		Memcache memcache = DataAccessorFactory.getL2CacheAccessor();
-		CacheLevel cacheLevel = getCacheLevel();
+		CacheLevel cacheLevel = getCacheLevel( pageContent, request );
 		String html = null;
 		
 		if( cacheLevel != CacheLevel.NONE ) {
@@ -73,7 +73,7 @@ public abstract class PageContentProcessor<T extends PageContent> {
 	}
 
 	
-	protected CacheLevel getCacheLevel() {
+	protected CacheLevel getCacheLevel( T pageContent, HttpServletRequest request ) {
 		return CacheLevel.NONE;
 	}
 	

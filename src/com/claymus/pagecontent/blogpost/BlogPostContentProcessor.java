@@ -15,7 +15,7 @@ import com.claymus.pagecontent.blogpost.shared.BlogPostContentData;
 public class BlogPostContentProcessor extends PageContentProcessor<BlogPostContent> {
 
 	@Override
-	protected CacheLevel getCacheLevel() {
+	protected CacheLevel getCacheLevel( BlogPostContent blogPostContent, HttpServletRequest request ) {
 		return CacheLevel.USER_ROLE;
 	}
 
