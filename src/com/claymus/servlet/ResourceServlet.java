@@ -26,28 +26,6 @@ public class ResourceServlet extends HttpServlet {
 
 	
 	@Override
-	public void doPost(
-			HttpServletRequest request,
-			HttpServletResponse response ) throws IOException {
-
-		ServletConfig servletConfig = getServletConfig();
-
-		String resourceServletType = servletConfig.getInitParameter( "ResourceServletType" );
-		if( resourceServletType != null && resourceServletType.equals( "DOWNLOAD_ONLY" ) ) {
-			response.sendError( HttpServletResponse.SC_METHOD_NOT_ALLOWED );
-			return;
-		}
-
-
-		String fileName = getFileName( request );
-		if( ! DataAccessorFactory.getBlobAccessor().createBlob( request, fileName ) )
-			response.sendError( HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
-		
-		
-		postUpload( request );
-	}
-	
-	@Override
 	public void doGet(
 			HttpServletRequest request,
 			HttpServletResponse response ) throws IOException {
@@ -108,7 +86,5 @@ public class ResourceServlet extends HttpServlet {
 		return request.getRequestURI()
 				.substring( ClaymusHelper.URL_RESOURCE.length() );
 	}
-	
-	protected void postUpload( HttpServletRequest request ) throws IOException {}
 	
 }

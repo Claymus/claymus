@@ -3,7 +3,6 @@ package com.claymus.data.access;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -12,10 +11,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.servlet.http.HttpServletRequest;
-
 import com.claymus.data.transfer.BlobEntry;
-
 
 public class BlobAccessorWithMemcache implements BlobAccessor {
 
@@ -46,6 +42,17 @@ public class BlobAccessorWithMemcache implements BlobAccessor {
 	@Override
 	public BlobEntry newBlob( String fileName, byte[] data, String mimeType ) {
 		return blobAccessor.newBlob( fileName, data, mimeType );
+	}
+
+	@Override
+	public List<String> getNameList( String prefix ) throws IOException {
+		List<String> fileNameList = memcache.get( PREFIX_LIST + prefix );
+		if( fileNameList == null ) {
+			fileNameList = blobAccessor.getNameList( prefix );
+			if( fileNameList != null )
+				memcache.put( PREFIX_LIST + prefix, new ArrayList<>( fileNameList  ) );
+		}
+		return fileNameList;
 	}
 
 	@Override
@@ -107,49 +114,6 @@ public class BlobAccessorWithMemcache implements BlobAccessor {
 		return blobEntry;
 	}
 	
-	@Override
-	public List<String> getNameList( String prefix ) throws IOException {
-		List<String> fileNameList = memcache.get( PREFIX_LIST + prefix );
-		if( fileNameList == null ) {
-			fileNameList = blobAccessor.getNameList( prefix );
-			if( fileNameList != null )
-				memcache.put( PREFIX_LIST + prefix, new ArrayList<>( fileNameList  ) );
-		}
-		return fileNameList;
-	}
-
-	@Override
-	public void createBlob( String fileName, String mimeType, byte[] bytes )
-			throws IOException {
-		
-		blobAccessor.createBlob( fileName, mimeType, bytes );
-		memcache.remove( PREFIX + fileName );
-	}
-
-	@Override
-	public void createBlob( String fileName, String mimeType, byte[] bytes,
-			String acl, Map<String, String> metaDataMap) throws IOException {
-		
-		blobAccessor.createBlob( fileName, mimeType, bytes, acl, metaDataMap );
-		memcache.remove( PREFIX + fileName );
-	}
-
-	@Override
-	public void createBlob( String fileName, String mimeType, String content, Charset charset )
-			throws IOException {
-		
-		blobAccessor.createBlob( fileName, mimeType, content, charset );
-		memcache.remove( PREFIX + fileName );
-	}
-
-	@Override
-	public boolean createBlob( HttpServletRequest request, String fileName ) {
-		boolean blobCreated = blobAccessor.createBlob( request, fileName );
-		if( blobCreated )
-			memcache.remove( PREFIX + fileName );
-		return blobCreated;
-	}
-
 	@Override
 	public void createOrUpdateBlob( BlobEntry blobEntry )
 			throws IOException {
