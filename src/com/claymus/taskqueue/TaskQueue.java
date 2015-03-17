@@ -6,6 +6,6 @@ public interface TaskQueue {
 
 	void add( Task task );
 
-	void add( List<Task> taskList );
+	void addAll( List<Task> taskList );
 	
 }
