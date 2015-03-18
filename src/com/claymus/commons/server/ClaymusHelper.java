@@ -7,7 +7,6 @@ import java.util.List;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import com.claymus.commons.shared.UserStatus;
 import com.claymus.data.access.DataAccessor;
@@ -45,16 +44,15 @@ public class ClaymusHelper implements Serializable {
 	private static final String URL_FORGOTPASSWORD_PAGE = "#forgotpassword";
 	
 	protected final HttpServletRequest request;
-	private final HttpSession session;
 	
-	private Long currentUserId;
 	private User currentUser;
 	private List<UserRole> currentUserRoleList;
+	
+	private AccessToken accessToken;
 
 	
 	protected ClaymusHelper( HttpServletRequest request ) {
 		this.request = request;
-		this.session = request.getSession();
 	}
 	
 	public static ClaymusHelper get( HttpServletRequest request ) {
@@ -69,22 +67,16 @@ public class ClaymusHelper implements Serializable {
 	
 	
 	public final boolean isUserLoggedIn() {
-		if( currentUserId == null ) {
-			currentUserId = (Long) session.getAttribute( SESSION_ATTRIB_CURRENT_USER_ID );
-			if( currentUserId == null )
-				currentUserId = 0L;
-		}
-		return currentUserId != 0L;
+		if( accessToken == null )
+			accessToken = ( AccessToken ) request.getAttribute( REQUEST_ATTRIB_ACCESS_TOKEN );
+		return accessToken.getUserId() != 0L;
 	}
 
 	@Deprecated
 	public final Long getCurrentUserId() {
-		if( currentUserId == null ) {
-			currentUserId = (Long) session.getAttribute( SESSION_ATTRIB_CURRENT_USER_ID );
-			if( currentUserId == null )
-				currentUserId = 0L;
-		}
-		return currentUserId;
+		if( accessToken == null )
+			accessToken = ( AccessToken ) request.getAttribute( REQUEST_ATTRIB_ACCESS_TOKEN );
+		return accessToken.getUserId();
 	}
 
 	public final User getCurrentUser() {
@@ -351,7 +343,7 @@ public class ClaymusHelper implements Serializable {
 	}
 	
 	//Update access token entity on user login/logout/register
-	public final void updateAccessToken( String accessTokenId, 
+	public final AccessToken updateAccessToken( String accessTokenId, 
 											Long userId, Date loginDate, 
 											Date logoutDate, Date expiry ){
 		
@@ -372,6 +364,8 @@ public class ClaymusHelper implements Serializable {
 			accessToken.setExpiry( expiry );
 		
 		dataAccessor.updateAccessToken( accessToken );
+		
+		return accessToken;
 		
 	}
 	

@@ -19,6 +19,7 @@ import com.claymus.commons.shared.exception.UnexpectedServerException;
 import com.claymus.data.access.DataAccessor;
 import com.claymus.data.access.DataAccessorFactory;
 import com.claymus.data.access.DataListCursorTuple;
+import com.claymus.data.transfer.AccessToken;
 import com.claymus.data.transfer.EmailTemplate;
 import com.claymus.data.transfer.PageContent;
 import com.claymus.data.transfer.RoleAccess;
@@ -189,11 +190,10 @@ public class ClaymusServiceImpl extends RemoteServiceServlet
 		
 		//Update Access Token Entity
 		ClaymusHelper claymusHelper = ClaymusHelper.get( this.getThreadLocalRequest() );
-		String accessTokenId = ( String ) this.getThreadLocalRequest().getAttribute( ClaymusHelper.REQUEST_ATTRIB_ACCESS_TOKEN_ID );
-		claymusHelper.updateAccessToken( accessTokenId, user.getId(), new Date(), null, null );
+		AccessToken accessToken = ( AccessToken ) this.getThreadLocalRequest().getAttribute( ClaymusHelper.REQUEST_ATTRIB_ACCESS_TOKEN );
+		claymusHelper.updateAccessToken( accessToken.getId(), user.getId(), new Date(), null, null );
 		
-		this.getThreadLocalRequest().getSession().setAttribute(
-				ClaymusHelper.SESSION_ATTRIB_CURRENT_USER_ID, user.getId() );
+		this.getThreadLocalRequest().setAttribute( ClaymusHelper.REQUEST_ATTRIB_ACCESS_TOKEN, accessToken );
 		
 		String message = "SignUp successful! ";
 		
@@ -241,10 +241,10 @@ public class ClaymusServiceImpl extends RemoteServiceServlet
 			AuthorContentHelper.createAuthorProfile( this.getThreadLocalRequest(), user );
 		
 		//Update Access Token Entity
-		String accessTokenId = ( String ) this.getThreadLocalRequest().getAttribute( ClaymusHelper.REQUEST_ATTRIB_ACCESS_TOKEN_ID );
-		claymusHelper.updateAccessToken( accessTokenId, user.getId(), new Date(), null, null );
+		AccessToken accessToken = ( AccessToken ) this.getThreadLocalRequest().getAttribute( ClaymusHelper.REQUEST_ATTRIB_ACCESS_TOKEN );
+		accessToken = claymusHelper.updateAccessToken( accessToken.getId(), user.getId(), new Date(), null, null );
 		
-		this.getThreadLocalRequest().getSession().setAttribute( ClaymusHelper.SESSION_ATTRIB_CURRENT_USER_ID, user.getId() );
+		this.getThreadLocalRequest().setAttribute( ClaymusHelper.REQUEST_ATTRIB_ACCESS_TOKEN, accessToken );
 		
 		return new LoginUserResponse();
 	}
@@ -252,12 +252,13 @@ public class ClaymusServiceImpl extends RemoteServiceServlet
 	@Override
 	public void logoutUser() {
 		//Update Access Token Entity
-		String accessTokenId = ( String ) this.getThreadLocalRequest()
-												.getAttribute( ClaymusHelper.REQUEST_ATTRIB_ACCESS_TOKEN_ID );
-		ClaymusHelper claymusHelper = ClaymusHelper.get( this.getThreadLocalRequest() );
-		claymusHelper.updateAccessToken( accessTokenId, null, null, new Date(), new Date() );
+		AccessToken accessToken = ( AccessToken ) this.getThreadLocalRequest()
+												.getAttribute( ClaymusHelper.REQUEST_ATTRIB_ACCESS_TOKEN );
 		
-		this.getThreadLocalRequest().getSession().invalidate();
+		ClaymusHelper claymusHelper = ClaymusHelper.get( this.getThreadLocalRequest() );
+		accessToken = claymusHelper.updateAccessToken( accessToken.getId(), null, null, new Date(), new Date() );
+		
+		this.getThreadLocalRequest().setAttribute( ClaymusHelper.REQUEST_ATTRIB_ACCESS_TOKEN, accessToken );
 	}
 
 	@Override
