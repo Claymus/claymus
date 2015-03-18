@@ -58,7 +58,7 @@ public class ClaymusGaeFilter implements Filter {
 						userRole = dataAccessor.createOrUpdateUserRole( userRole );
 					}
 				}
-				request.getSession().setAttribute( ClaymusHelper.SESSION_ATTRIB_CURRENT_USER_ID, user.getId() );
+// TODO: FIX IT	request.getSession().setAttribute( ClaymusHelper.SESSION_ATTRIB_CURRENT_USER_ID, user.getId() );
 				response.sendRedirect( "/" );
 
 			} else {
