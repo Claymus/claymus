@@ -27,14 +27,14 @@ public class ClaymusHelper implements Serializable {
 	public static final String REQUEST_ATTRIB_MODE_BASIC = "BasicMode";
 	public static final String REQUEST_ATTRIB_MODE_EMBED = "EmbedMode";
 	public static final String REQUEST_ATTRIB_ACCESS_TOKEN = "AccessToken";
-	@Deprecated
-	public static final String REQUEST_ATTRIB_ACCESS_TOKEN_ID = "AccessTokenId";
 	public static final String SESSION_ATTRIB_CURRENT_USER_ID = "CurrentUserId";
 	@Deprecated
 	public static final String SEARCH_INDEX_NAME = "GLOBAL_INDEX";
 	
+	@Deprecated
 	public static final String URL_RESOURCE =
 			ClaymusHelper.getSystemProperty( "resource" );
+	@Deprecated
 	public static final String URL_RESOURCE_STATIC =
 			ClaymusHelper.getSystemProperty( "resource.static" );
 

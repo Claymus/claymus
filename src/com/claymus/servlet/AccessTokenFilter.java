@@ -65,7 +65,6 @@ public class AccessTokenFilter implements Filter {
 		}
 		
 		request.setAttribute( ClaymusHelper.REQUEST_ATTRIB_ACCESS_TOKEN, accessToken );
-		request.setAttribute( ClaymusHelper.REQUEST_ATTRIB_ACCESS_TOKEN_ID, accessTokenId );
 		
 		chain.doFilter( request, response );
 	}

@@ -30,14 +30,6 @@ public class ResourceServlet extends HttpServlet {
 			HttpServletRequest request,
 			HttpServletResponse response ) throws IOException {
 
-		ServletConfig servletConfig = getServletConfig();
-		String resourceServletType = servletConfig.getInitParameter( "ResourceServletType" );
-		if( resourceServletType != null && resourceServletType.equals( "UPLOAD_ONLY" ) ) {
-			response.sendError( HttpServletResponse.SC_METHOD_NOT_ALLOWED );
-			return;
-		}
-
-		
 		BlobEntry blobEntry = getBlobEntry( request );
 		if( blobEntry == null ) {
 			response.sendError( HttpServletResponse.SC_NOT_FOUND );
@@ -57,6 +49,7 @@ public class ResourceServlet extends HttpServlet {
 			response.setHeader( "ETag", blobEntry.getETag() );
 
 			OutputStream out = response.getOutputStream();
+			ServletConfig servletConfig = getServletConfig();
 			String resizeImageParam = servletConfig.getInitParameter( "ResizeImage" );
 			
 			if( resizeImageParam != null ) {
