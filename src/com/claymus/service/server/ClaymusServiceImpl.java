@@ -465,10 +465,10 @@ public class ClaymusServiceImpl extends RemoteServiceServlet
 				
 				//Update Access Token
 				ClaymusHelper claymusHelper = ClaymusHelper.get( this.getThreadLocalRequest() );
-				String accessTokenId = ( String ) this.getThreadLocalRequest().getAttribute( ClaymusHelper.REQUEST_ATTRIB_ACCESS_TOKEN_ID );
-				claymusHelper.updateAccessToken( accessTokenId, user.getId(), new Date(), null, null );
+				AccessToken accessToken = ( AccessToken ) this.getThreadLocalRequest().getAttribute( ClaymusHelper.REQUEST_ATTRIB_ACCESS_TOKEN );
+				accessToken = claymusHelper.updateAccessToken( accessToken.getId(), user.getId(), new Date(), null, null );
 				
-				this.getThreadLocalRequest().getSession().setAttribute( ClaymusHelper.SESSION_ATTRIB_CURRENT_USER_ID, user.getId() );
+				this.getThreadLocalRequest().setAttribute( ClaymusHelper.REQUEST_ATTRIB_ACCESS_TOKEN, accessToken );
 				
 			}
 			else
