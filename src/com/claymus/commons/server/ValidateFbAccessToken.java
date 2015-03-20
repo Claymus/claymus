@@ -32,7 +32,7 @@ public class ValidateFbAccessToken {
 		try {
 			String urlParameters = "input_token=" + URLEncoder.encode( inputToken, "UTF-8" )
                     + "&client_id=" + URLEncoder.encode( facebookCredentials.get( "appId" ), "UTF-8" )
-                    + "&redirect_url=" + URLEncoder.encode( "http://www.pratilipi.con", "UTF-8" )
+                    + "&redirect_url=" + URLEncoder.encode( "http://www.pratilipi.com", "UTF-8" )
                     + "&access_token=" + URLEncoder.encode( facebookCredentials.get( "appId" ) + "|" + facebookCredentials.get( "appSecret" ), "UTF-8" );
 					
 			String validateURL = "https://graph.facebook.com/debug_token?" + urlParameters;
