@@ -19,7 +19,7 @@ public class GoogleApi {
 			Logger.getLogger( GoogleApi.class.getName() );
 	
 	
-	public static HttpRequestInitializer getCredential( Collection<String> scopes ) {
+	private static HttpRequestInitializer getCredential( Collection<String> scopes ) {
 		return new AppIdentityCredential( scopes ); // Works only on Google AppEngine
 	}
 

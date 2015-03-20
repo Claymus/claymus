@@ -52,7 +52,7 @@ public class QueueWelcomeUserServlet extends HttpServlet {
 
 		EmailTemplate passwordResetEmailTemplate = dataAccessor.newEmailTemplate();
 		passwordResetEmailTemplate.setSenderName( "Ranjeet (Pratilipi)" );
-		passwordResetEmailTemplate.setSenderEmail( "no-reply@pratilipi.com" );
+		passwordResetEmailTemplate.setSenderEmail( "contact@pratilipi.com" );
 		passwordResetEmailTemplate.setReplyToName( "Pratilipi Team" );
 		passwordResetEmailTemplate.setReplyToEmail( "contact+welcome@pratilipi.com" );
 		passwordResetEmailTemplate.setSubject( subject );
