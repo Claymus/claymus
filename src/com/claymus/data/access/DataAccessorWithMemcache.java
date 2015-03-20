@@ -7,6 +7,7 @@ import java.util.List;
 import javax.jdo.PersistenceManager;
 
 import com.claymus.data.transfer.AccessToken;
+import com.claymus.data.transfer.AppProperty;
 import com.claymus.data.transfer.AuditLog;
 import com.claymus.data.transfer.Comment;
 import com.claymus.data.transfer.EmailTemplate;
@@ -22,6 +23,7 @@ import com.claymus.pagecontent.blogpost.BlogPostContent;
 @SuppressWarnings("serial")
 public class DataAccessorWithMemcache implements DataAccessor {
 	
+	private final static String PREFIX_APP_PROPERTY = "AppProperty-";
 	private final static String PREFIX_USER = "User-";
 	private final static String PREFIX_USER_LIST = "UserList-";
 	private final static String PREFIX_ROLE = "Role-";
@@ -50,6 +52,30 @@ public class DataAccessorWithMemcache implements DataAccessor {
 	}
 
 	
+	@Override
+	public AppProperty newAppProperty( String id ) {
+		return dataAccessor.newAppProperty( id );
+	}
+
+	@Override
+	public AppProperty getAppProperty( String id ) {
+		AppProperty appProperty = memcache.get( PREFIX_APP_PROPERTY + id );
+		if( appProperty == null ) {
+			appProperty = dataAccessor.getAppProperty( id );
+			if( appProperty != null )
+				memcache.put( PREFIX_APP_PROPERTY + id, appProperty );
+		}
+		return appProperty;
+	}
+
+	@Override
+	public AppProperty createOrUpdateAppProperty( AppProperty appProperty ) {
+		appProperty = dataAccessor.createOrUpdateAppProperty( appProperty );
+		memcache.put( PREFIX_APP_PROPERTY + appProperty.getId(), appProperty );
+		return appProperty;
+	}
+
+
 	@Override
 	public User newUser() {
 		return dataAccessor.newUser();

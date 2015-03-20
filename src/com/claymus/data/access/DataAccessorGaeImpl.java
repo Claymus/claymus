@@ -18,6 +18,7 @@ import javax.jdo.Query;
 import javax.jdo.Transaction;
 
 import com.claymus.data.access.gae.AccessTokenEntity;
+import com.claymus.data.access.gae.AppPropertyEntity;
 import com.claymus.data.access.gae.AuditLogEntity;
 import com.claymus.data.access.gae.CommentEntity;
 import com.claymus.data.access.gae.EmailTemplateEntity;
@@ -29,6 +30,7 @@ import com.claymus.data.access.gae.RoleEntity;
 import com.claymus.data.access.gae.UserEntity;
 import com.claymus.data.access.gae.UserRoleEntity;
 import com.claymus.data.transfer.AccessToken;
+import com.claymus.data.transfer.AppProperty;
 import com.claymus.data.transfer.AuditLog;
 import com.claymus.data.transfer.Comment;
 import com.claymus.data.transfer.EmailTemplate;
@@ -88,7 +90,32 @@ public class DataAccessorGaeImpl implements DataAccessor {
 		pm.deletePersistent( entity );
 	}
 
+
+	@Override
+	public AppProperty newAppProperty( String id ) {
+		AppPropertyEntity appProperty = new AppPropertyEntity();
+		appProperty.setId( id );
+		return appProperty;
+	}
+
+	@Override
+	public AppProperty getAppProperty( String id ) {
+		if( id == null )
+			return null;
+		
+		try{
+			return getEntity( AppProperty.class, id );
+		} catch( JDOObjectNotFoundException e ) {
+			return null;
+		}
+	}
 	
+	@Override
+	public AppProperty createOrUpdateAppProperty( AppProperty appProperty ) {
+		return createOrUpdateEntity( appProperty );
+	}
+
+
 	@Override
 	public User newUser() {
 		return new UserEntity();
@@ -440,7 +467,7 @@ public class DataAccessorGaeImpl implements DataAccessor {
 
 		Transaction tx = null;
 		while( true ) {
-			accessToken.setId( UUID.randomUUID().toString() );
+			((AccessTokenEntity) accessToken).setId( UUID.randomUUID().toString() );
 			try {
 				tx = pm.currentTransaction();
 				tx.begin();

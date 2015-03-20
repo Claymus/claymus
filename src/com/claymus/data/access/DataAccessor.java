@@ -6,6 +6,7 @@ import java.util.List;
 import javax.jdo.PersistenceManager;
 
 import com.claymus.data.transfer.AccessToken;
+import com.claymus.data.transfer.AppProperty;
 import com.claymus.data.transfer.AuditLog;
 import com.claymus.data.transfer.Comment;
 import com.claymus.data.transfer.EmailTemplate;
@@ -24,6 +25,13 @@ public interface DataAccessor extends Serializable {
 	PersistenceManager getPersistenceManager();
 
 	
+	AppProperty newAppProperty( String id );
+
+	AppProperty getAppProperty( String id );
+	
+	AppProperty createOrUpdateAppProperty( AppProperty appProperty );
+
+
 	User newUser();
 
 	User getUser( Long id );
@@ -112,6 +120,7 @@ public interface DataAccessor extends Serializable {
 	
 	DataListCursorTuple<AuditLog> getAuditLogList( String cursor, Integer resultCount );
 
+	
 	void destroy();
 	
 }

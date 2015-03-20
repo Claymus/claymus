@@ -14,7 +14,7 @@ public class AccessTokenEntity implements AccessToken {
 
 	@PrimaryKey
 	@Persistent( column = "ACCESS_TOKEN_ID" )
-	private String accessTokenId;
+	private String id;
 	
 	@Persistent( column = "CREATION_DATE" )
 	private Date creationDate;
@@ -40,12 +40,11 @@ public class AccessTokenEntity implements AccessToken {
 	
 	@Override
 	public String getId() {
-		return accessTokenId;
+		return id;
 	}
 
-	@Override
-	public void setId( String accessTokenId ) {
-		this.accessTokenId = accessTokenId;
+	public void setId( String id ) {
+		this.id = id;
 	}
 
 	@Override

@@ -7,8 +7,6 @@ public interface AccessToken extends Serializable {
 
 	String getId();
 	
-	void setId( String accessTokenId );
-	
 	Date getCreationDate();
 	
 	void setCreationDate( Date creationDate );

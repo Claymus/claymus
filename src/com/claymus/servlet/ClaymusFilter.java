@@ -37,7 +37,8 @@ public class ClaymusFilter implements Filter {
 		Page page;
 
 		
-		if( requestUri.startsWith( "/api." )
+		if( requestUri.startsWith( "/api/" )
+				|| requestUri.startsWith( "/api." )
 				|| requestUri.startsWith( "/service." )
 				|| requestUri.startsWith( "/resource." )
 				|| requestUri.startsWith( "/_ah/queue/" ) ) {
