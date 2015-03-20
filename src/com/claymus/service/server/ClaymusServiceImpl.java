@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -446,8 +447,9 @@ public class ClaymusServiceImpl extends RemoteServiceServlet
 			throw new InvalidArgumentException( "Your Email address is required to complete basic login activities. Please provide provide access to your facebook email address" );
 		
 		ValidateFbAccessToken validateToken = new ValidateFbAccessToken( fbLoginUserData.getAccessToken() );
+		Map<String, String> facebookCredentials = dataAccessor.getAppProperty( "Facebook.Credentials" ).getValue();
 		try {
-			if( validateToken.isValid() ) {
+			if( validateToken.isValid( facebookCredentials ) ) {
 				if( user == null ) {
 					user = dataAccessor.newUser();
 					user.setEmail( fbLoginUserData.getEmail() );

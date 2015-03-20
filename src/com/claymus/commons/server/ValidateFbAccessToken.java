@@ -7,6 +7,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -26,13 +27,13 @@ public class ValidateFbAccessToken {
 	}
 	
 	
-	public boolean isValid() throws IOException, JSONException {
+	public boolean isValid( Map<String, String> facebookCredentials ) throws IOException, JSONException {
 		URL url;
 		try {
 			String urlParameters = "input_token=" + URLEncoder.encode( inputToken, "UTF-8" )
-					+ "&client_id=" + URLEncoder.encode( "293990794105516", "UTF-8" )
-					+ "&redirect_url=" + URLEncoder.encode( "http://mark-2d3.devo-pratilipi.appspot.com", "UTF-8" )
-					+ "&access_token=" + URLEncoder.encode( "293990794105516|XXXXXXXXXXXXXXXXXXXXXXXXXXXXX", "UTF-8" );
+                    + "&client_id=" + URLEncoder.encode( facebookCredentials.get( "appId" ), "UTF-8" )
+                    + "&redirect_url=" + URLEncoder.encode( "http://www.pratilipi.con", "UTF-8" )
+                    + "&access_token=" + URLEncoder.encode( facebookCredentials.get( "appId" ) + "|" + facebookCredentials.get( "appSecret" ), "UTF-8" );
 					
 			String validateURL = "https://graph.facebook.com/debug_token?" + urlParameters;
 			
