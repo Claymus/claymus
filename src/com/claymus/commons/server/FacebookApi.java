@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -15,10 +17,12 @@ import com.claymus.data.access.DataAccessorFactory;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 
 public class FacebookApi {
 
+	private static final Logger logger = Logger.getLogger( FacebookApi.class.getName() );
+
+	
 	private static final Gson gson = new GsonBuilder().create();
 	
 	private static final String APP_PROPERTY_ID = "Facebook.Credentials";
@@ -39,13 +43,14 @@ public class FacebookApi {
 					+ "&access_token=" + getAccessToken( request );
 
 			String responsePayload = IOUtils.toString( new URL( requestUrl ).openStream(), "UTF-8" );
-			JsonElement responseJson = gson.fromJson( responsePayload, JsonElement.class );
+			logger.log( Level.INFO, "Response Payload: " + responsePayload );
 			
+			JsonElement responseJson = gson.fromJson( responsePayload, JsonElement.class );
 			JsonElement shareJson = responseJson.getAsJsonObject().get( "share" );
 			if( shareJson == null )
 				return 0L;
-			
 			JsonElement shareCountJson = shareJson.getAsJsonObject().get( "share_count" );
+
 			return shareCountJson != null ? shareCountJson.getAsLong() : 0L; 
 		} catch( IOException e ) {
 			throw new UnexpectedServerException();

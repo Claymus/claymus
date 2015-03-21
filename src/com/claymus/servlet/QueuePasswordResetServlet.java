@@ -58,7 +58,7 @@ public class QueuePasswordResetServlet extends HttpServlet {
 
 		EmailTemplate passwordResetEmailTemplate = dataAccessor.newEmailTemplate();
 		passwordResetEmailTemplate.setSenderName( "Pratilipi" );
-		passwordResetEmailTemplate.setSenderEmail( "no-reply@pratilipi.com" );
+		passwordResetEmailTemplate.setSenderEmail( "contact@pratilipi.com" );
 		passwordResetEmailTemplate.setReplyToName( "Pratilipi Team" );
 		passwordResetEmailTemplate.setReplyToEmail( "contact+password-reset@pratilipi.com" );
 		passwordResetEmailTemplate.setSubject( "Forgot Password: Pratilipi.com" );
