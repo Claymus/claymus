@@ -1,6 +1,5 @@
 <datastore-indexes autoGenerate="false">
 
-  <!-- Required by ClaymusService.savePage -->
   <datastore-index kind="PAGE" ancestor="false" source="manual">
     <property name="URI" direction="asc"/>
     <property name="CREATION_DATE" direction="asc"/>
@@ -10,19 +9,18 @@
     <property name="URI_ALIAS" direction="asc"/>
     <property name="CREATION_DATE" direction="asc"/>
   </datastore-index>
-  
+
   <datastore-index kind="PAGE" ancestor="false" source="manual">
     <property name="PAGE_TYPE" direction="asc"/>
     <property name="PRIMARY_CONTENT_ID" direction="asc"/>
     <property name="CREATION_DATE" direction="asc"/>
   </datastore-index>
-  
-  
-  <!-- Required by ClaymusService.getBlogPostContentList -->
+
+
   <datastore-index kind="PAGE_CONTENT" ancestor="false" source="manual">
     <property name="X_COL_2" direction="asc"/>
     <property name="_TYPE" direction="asc"/>
     <property name="CREATION_DATE" direction="desc"/>
   </datastore-index>
-    
+
 </datastore-indexes>

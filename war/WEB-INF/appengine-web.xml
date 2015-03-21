@@ -6,7 +6,6 @@
   <version>mark-0p0</version>
 
   <threadsafe>true</threadsafe>
-  <sessions-enabled>true</sessions-enabled>
 
   <instance-class>F1</instance-class>
 
@@ -32,19 +31,9 @@
     <property name="devo-claymus.domain" value="devo.claymus.com"/>
     <property name="prod-claymus.domain" value="www.claymus.com"/>
 
-	<!-- Configure resource path -->
-    <property name="devo-claymus.resource" value="/resource."/>
-    <property name="prod-claymus.resource" value="/resource."/>
-
-    <property name="devo-claymus.resource.static" value="/resource."/>
-    <property name="prod-claymus.resource.static" value="//static.claymus.com/"/>
-
 	<!-- Configure emails -->
-    <property name="devo-claymus.email.contact" value="dev-team@claymus.com"/>
-    <property name="prod-claymus.email.contact" value="contact@claymus.com"/>
-
-    <property name="devo-claymus.email.noreply" value="no-reply@claymus.com"/>
-    <property name="prod-claymus.email.noreply" value="no-reply@claymus.com"/>
+    <property name="devo-claymus.email" value="dev-team@claymus.com"/>
+    <property name="prod-claymus.email" value="contact@claymus.com"/>
 
 	<!-- Configure Blob Storage -->
     <property name="devo-claymus.blobservice.gcs.bucket" value="devo-claymus.appspot.com"/>
