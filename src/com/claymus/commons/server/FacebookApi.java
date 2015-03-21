@@ -15,6 +15,7 @@ import com.claymus.data.access.DataAccessorFactory;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 public class FacebookApi {
 
@@ -36,11 +37,16 @@ public class FacebookApi {
 			String requestUrl = GRAPH_API_URL
 					+ "?id=" + URLEncoder.encode( url, "UTF-8" )
 					+ "&access_token=" + getAccessToken( request );
-			System.out.println( requestUrl );
+
 			String responsePayload = IOUtils.toString( new URL( requestUrl ).openStream(), "UTF-8" );
-			return gson.fromJson( responsePayload, JsonElement.class ).getAsJsonObject()
-					.get( "share" ).getAsJsonObject()
-					.get( "share_count" ).getAsLong();
+			JsonElement responseJson = gson.fromJson( responsePayload, JsonElement.class );
+			
+			JsonElement shareJson = responseJson.getAsJsonObject().get( "share" );
+			if( shareJson == null )
+				return 0L;
+			
+			JsonElement shareCountJson = shareJson.getAsJsonObject().get( "share_count" );
+			return shareCountJson != null ? shareCountJson.getAsLong() : 0L; 
 		} catch( IOException e ) {
 			throw new UnexpectedServerException();
 		}
