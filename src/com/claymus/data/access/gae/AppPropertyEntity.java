@@ -14,7 +14,7 @@ public class AppPropertyEntity implements AppProperty {
 	@Persistent( column = "APP_PROPERTY_ID" )
 	private String id;
 	
-	@Persistent( column = "VALUE", serialized = "true" )
+	@Persistent( column = "VALUE", serialized = "true", defaultFetchGroup = "true" )
 	private Object value;
 
 

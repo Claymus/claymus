@@ -104,7 +104,7 @@ public class DataAccessorGaeImpl implements DataAccessor {
 			return null;
 		
 		try{
-			return getEntity( AppProperty.class, id );
+			return getEntity( AppPropertyEntity.class, id );
 		} catch( JDOObjectNotFoundException e ) {
 			return null;
 		}
