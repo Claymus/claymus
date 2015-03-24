@@ -12,7 +12,9 @@ public class ImageUtil {
 
 	public static byte[] resize( byte[] imageData, int width, int height ) {
 		Image image = ImagesServiceFactory.makeImage( imageData );
-		Transform resize = ImagesServiceFactory.makeResize( width, height );
+		Transform resize = ImagesServiceFactory.makeResize(
+				width < 4000 ? width : 4000,
+				height < 4000 ? height : 4000 );
 		return imagesService.applyTransform( resize, image ).getImageData();
 	}
 	
