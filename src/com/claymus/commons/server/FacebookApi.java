@@ -30,6 +30,12 @@ public class FacebookApi {
 	private static final String GRAPH_API_URL = "https://graph.facebook.com/v2.2";
 	
 	
+	public static String getAppId( HttpServletRequest request ) {
+		DataAccessor dataAccessor = DataAccessorFactory.getDataAccessor( request );
+		Map<String, String> facebookCredentials = dataAccessor.getAppProperty( APP_PROPERTY_ID ).getValue();
+		return facebookCredentials.get( "appId" );
+	}
+	
 	public static String getAccessToken( HttpServletRequest request ) {
 		DataAccessor dataAccessor = DataAccessorFactory.getDataAccessor( request );
 		Map<String, String> facebookCredentials = dataAccessor.getAppProperty( APP_PROPERTY_ID ).getValue();
