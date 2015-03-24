@@ -19,12 +19,12 @@ public class StarRating extends Composite implements HasValue<Integer> {
     private Image[] stars;
     
     private Integer rating = 0;
-    private int rating_max = 5;
+    private int rating_max = 0;
     private int hover_index = 0;
     private boolean read_only = false;     
-    private String star_selected_path = "images/selected_blue.png";
-    private String star_unselected_path = "images/unselected.png";
-    private String star_hover_path = "images/hover_blue.png";
+    private String star_selected_path = "/theme.pratilipi/images/selected_blue.png";
+    private String star_unselected_path = "/theme.pratilipi/images/unselected.png";
+    private String star_hover_path = "/theme.pratilipi/images/hover_blue.png";
     
     //Default Constructor
     public StarRating() {
@@ -33,31 +33,30 @@ public class StarRating extends Composite implements HasValue<Integer> {
     
     public StarRating(Integer rating, boolean read_only){
         this( rating, 5, read_only );
-        
     }
     
     public StarRating(Integer rating, int rating_max, boolean read_only){
     	stars = new Image[ rating_max ];
     	for( int i=0; i< rating_max; i++)
         	stars[i] = new Image();
-        this.setRating(rating);
-        this.setRatingMax(rating_max);
-        this.setReadOnly(read_only);
+        this.rating = rating;
+        this.rating_max = rating_max;
+        this.read_only = read_only;
         this.buildWidget();
     }
     
     //Build the widget
     private void buildWidget() {        
-        Image.prefetch(this.getStarSelectedPath());
-        Image.prefetch(this.getStarUnselectedPath());
-        Image.prefetch(this.getStarHoverPath());
+        Image.prefetch( getStarSelectedPath() );
+        Image.prefetch( getStarUnselectedPath() );
+        Image.prefetch( getStarHoverPath() );
         
         //Initialize
-        initWidget(mainPanel); 
-        mainPanel.setStyleName("starrating");
+        initWidget( mainPanel ); 
+        mainPanel.setStyleName( "starrating" );
                 
         //Stars
-        for (int i = 0; i < this.getRatingMax(); i++) {
+        for (int i = 0; i < getRatingMax(); i++) {
 
         	//Settings
             stars[i].setStyleName("star");
@@ -66,13 +65,13 @@ public class StarRating extends Composite implements HasValue<Integer> {
         }
         
         //If not readonly
-        if (!this.isReadOnly()) {
+        if ( !this.isReadOnly() ) {
         	for (int i = 0; i < this.getRatingMax(); i++) 
                 stars[i].getElement().getStyle().setCursor(Style.Cursor.POINTER);
         }
         
         //Set the star images
-        this.setStarImages();                
+        setStarImages();                
     }
     
     //Out Mouse Handler
@@ -84,7 +83,7 @@ public class StarRating extends Composite implements HasValue<Integer> {
     public void setStarImages() {
         for (int i = 0; i < this.getRatingMax(); i++) {
             Image image = (Image)mainPanel.getWidget(i);
-            image.setUrl(this.getImagePath(i));        
+            image.setUrl( this.getImagePath(i) );        
         }
     }
     
@@ -108,7 +107,7 @@ public class StarRating extends Composite implements HasValue<Integer> {
     }
 
     //Sets rating
-    public void setRating(Integer rating) {
+    public void setRating( Integer rating ) {
         this.rating = rating;
     }
 
@@ -128,7 +127,7 @@ public class StarRating extends Composite implements HasValue<Integer> {
     }
 
     //sets Hover Index
-    public void setHoverIndex(int hover_index) {
+    public void setHoverIndex( int hover_index ) {
         this.hover_index = hover_index;
     }
     
@@ -176,17 +175,9 @@ public class StarRating extends Composite implements HasValue<Integer> {
     		stars[i].addMouseOverHandler( mouseOverHandler );
     }
     
-    /*//Mouse over event
-    public void onMouseOver(MouseOverEvent event) {
-        if (!this.isReadOnly()) {
-            Image image = (Image)event.getSource();    
-            this.setHoverIndex(Integer.parseInt(image.getTitle()));                
-            this.setStarImages();
-        }
-    }*/
     
    //Onclick event
-    public void addStarsClickHandler(ClickHandler clickHandler){
+    public void addStarsClickHandler( ClickHandler clickHandler ){
     	for(int i=0; i< this.getRatingMax(); i++)
     		stars[i].addClickHandler( clickHandler );
     }
@@ -195,10 +186,6 @@ public class StarRating extends Composite implements HasValue<Integer> {
     public HandlerRegistration addStarsMouseOutHandler( MouseOutHandler mouseOutHandler ){
     	return this.addMouseOutHandler( mouseOutHandler );
     }    
-    /*public void onMouseOut(MouseOutEvent event) {
-        this.setHoverIndex(0);
-        this.setStarImages();
-    }*/
 
     /**
      * Adds a ValueChangehandler
@@ -213,7 +200,7 @@ public class StarRating extends Composite implements HasValue<Integer> {
     }
 
     //sets rating value
-    public void setValue(Integer value) {
+    public void setValue( Integer value ) {
         this.setRating(value);
         this.setStarImages();
     }
@@ -222,7 +209,7 @@ public class StarRating extends Composite implements HasValue<Integer> {
     public void setValue(Integer value, boolean fireEvents) {
         this.setValue(value);
         if (fireEvents)
-            ValueChangeEvent.fire(this, value);
+            ValueChangeEvent.fire( this, value );
     }
     
 }
