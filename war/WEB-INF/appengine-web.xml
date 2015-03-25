@@ -6,12 +6,13 @@
   <version>mark-0p0</version>
 
   <threadsafe>true</threadsafe>
+  <sessions-enabled>false</sessions-enabled>
 
   <instance-class>F1</instance-class>
 
   <automatic-scaling>
     <min-idle-instances>1</min-idle-instances>
-    <max-idle-instances>automatic</max-idle-instances>
+    <max-idle-instances>2</max-idle-instances>
     <min-pending-latency>automatic</min-pending-latency>
     <max-pending-latency>10ms</max-pending-latency>
   </automatic-scaling>
@@ -27,17 +28,21 @@
     <!-- Configure java.util.logging -->
     <property name="java.util.logging.config.file" value="WEB-INF/logging.properties"/>
 
-	<!-- Configure web domain -->
+	<!-- Configure Web Domain -->
     <property name="devo-claymus.domain" value="devo.claymus.com"/>
     <property name="prod-claymus.domain" value="www.claymus.com"/>
 
-	<!-- Configure emails -->
+	<!-- Configure Emails -->
     <property name="devo-claymus.email" value="dev-team@claymus.com"/>
     <property name="prod-claymus.email" value="contact@claymus.com"/>
 
 	<!-- Configure Blob Storage -->
     <property name="devo-claymus.blobservice.gcs.bucket" value="devo-claymus.appspot.com"/>
     <property name="prod-claymus.blobservice.gcs.bucket" value="prod-claymus.appspot.com"/>
+
+	<!-- Configure Search Index -->
+    <property name="devo-claymus.searchservice.gae.index" value="GLOBAL_INDEX"/>
+    <property name="prod-claymus.searchservice.gae.index" value="GLOBAL_INDEX"/>
   </system-properties>
 
 </appengine-web-app>
