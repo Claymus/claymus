@@ -159,7 +159,7 @@ public class ClaymusServiceImpl extends RemoteServiceServlet
 				user.setReferer( userData.getReferer() );
 			user.setSignUpDate( new Date() );
 
-		} else if( user.getStatus() == UserStatus.POSTLAUNCH_SIGNUP ) {
+		} else if( user.getStatus() == UserStatus.POSTLAUNCH_SIGNUP || user.getStatus() == UserStatus.POSTLAUNCH_SIGNUP_SOCIALLOGIN ) {
 			throw new InvalidArgumentException( "This email id is already registered !" );
 
 		} else {
@@ -171,8 +171,12 @@ public class ClaymusServiceImpl extends RemoteServiceServlet
 		
 		user.setFirstName( userData.getFirstName() );
 		user.setLastName( userData.getLastName() );
-		user.setPassword( EncryptPassword.getSaltedHash( userData.getPassword() ) );
-		user.setStatus( UserStatus.POSTLAUNCH_SIGNUP );
+		if( userData.getPassword() != null )
+			user.setPassword( EncryptPassword.getSaltedHash( userData.getPassword() ) );
+		if( userData.getStatus() != null )
+			user.setStatus( userData.getStatus() );
+		else
+			user.setStatus( UserStatus.POSTLAUNCH_SIGNUP );
 
 		user = dataAccessor.createOrUpdateUser( user );
 		
@@ -451,18 +455,17 @@ public class ClaymusServiceImpl extends RemoteServiceServlet
 		try {
 			if( validateToken.isValid( facebookCredentials ) ) {
 				if( user == null ) {
-					user = dataAccessor.newUser();
-					user.setEmail( fbLoginUserData.getEmail() );
-					user.setFirstName( fbLoginUserData.getFirstName() );
-					user.setLastName( fbLoginUserData.getLastName() );
-					user.setCampaign( fbLoginUserData.getCampaign() );
-					user.setReferer( fbLoginUserData.getReferer() );
-					user.setStatus( UserStatus.POSTLAUNCH_SIGNUP_SOCIALLOGIN );
-					user.setSignUpDate( new Date() );
+					UserData userData = new UserData();
+					userData.setEmail( fbLoginUserData.getEmail() );
+					userData.setFirstName( fbLoginUserData.getFirstName() );
+					userData.setLastName( fbLoginUserData.getLastName() );
+					userData.setCampaign( fbLoginUserData.getCampaign() );
+					userData.setReferer( fbLoginUserData.getReferer() );
+					userData.setStatus( UserStatus.POSTLAUNCH_SIGNUP_SOCIALLOGIN );
 					
-					dataAccessor.createOrUpdateUser( user );
+					registerUser( new RegisterUserRequest( userData ));
 					//Getting new user.
-					user = dataAccessor.getUserByEmail( user.getEmail() );
+					user = dataAccessor.getUserByEmail( userData.getEmail() );
 				}
 				
 				//Update Access Token
