@@ -1,3 +1,8 @@
+body /deep/ h1, body /deep/ h2, body /deep/ h3, body /deep/ h4, body /deep/ h5, body /deep/ h6 {
+	color: #555;
+	font-weight: 700;
+}
+
 body /deep/ h1 {
 	margin: 20px 10px 20px 10px;
 }
@@ -6,8 +11,9 @@ body /deep/ h3 {
 	margin: 10px 10px 10px 10px;
 }
 
-body /deep/ a {
-	color: black;
+body /deep/ a, body /deep/ .a {
+	cursor: pointer;
+	color: #777;
 	text-decoration: none;
 }
 
@@ -17,6 +23,27 @@ body /deep/ .bg-green {
   background: #259b24;
 }
 
+body /deep/ .bg-gray {
+  background: #EEE;
+}
+
+
+body /deep/ .red {
+  color: #F00;
+}
+
+body /deep/ .gray {
+  color: #999;
+}
+
+
+body /deep/ .br-default {
+	border: 1px solid #999;
+}
+
+body /deep/ .br-gray {
+	border: 1px solid #EEE;
+}
 
 
 core-toolbar core-icon-button {
