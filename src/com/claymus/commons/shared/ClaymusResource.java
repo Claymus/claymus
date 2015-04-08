@@ -5,7 +5,10 @@ public enum ClaymusResource implements Resource {
 	CKEDITOR( "<script src='//cdn-asia.pratilipi.com/third-party/ckeditor-4.4.5-full/ckeditor.js' charset='utf-8'></script>" ),
 
 	JQUERY_1( "" ),
-	JQUERY_2( "" ),
+	JQUERY_2( "<script src='//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>" ),
+
+	BOOTSTRAP( "<link rel='stylesheet' href='//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css'>"
+			+ "<script src='//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js'></script>" ),
 
 	POLYMER( "<script src='//cdn-asia.pratilipi.com/third-party/polymer-0.5.5/webcomponentsjs/webcomponents.js'></script>"
 			+ "<link rel='import' href='//cdn-asia.pratilipi.com/third-party/polymer-0.5.5/polymer/polymer.html'>" ),
