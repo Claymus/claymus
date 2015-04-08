@@ -318,7 +318,7 @@ public class ClaymusHelper implements Serializable {
 						+ "-";
 		
 		uriAlias = uriAlias.replaceAll( "[-]+", "-" );
-		if( uriAlias.length() > uriPrefix.length() ) {
+		if( uriAlias.length() > uriPrefix.length() + 1 ) {
 			if( uriAlias.charAt( uriPrefix.length() ) == '-' )
 				uriAlias = uriPrefix + uriAlias.substring( uriPrefix.length() + 1, uriAlias.length() - 1 );
 			else

@@ -27,10 +27,12 @@ public class GoogleApi {
 			throws UnexpectedServerException {
 		
 		try {
-			return new Analytics(
+			return new Analytics.Builder(
 					GoogleNetHttpTransport.newTrustedTransport(),
 					JacksonFactory.getDefaultInstance(),
-					getCredential( scopes ) );
+					getCredential( scopes ) )
+				.setApplicationName( "Claymus" )
+				.build();
 		} catch( GeneralSecurityException | IOException e ) {
 			logger.log( Level.SEVERE, "Failed to create Analytics Service Object.", e );
 			throw new UnexpectedServerException();
