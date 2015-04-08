@@ -13,4 +13,6 @@ public @interface Validate {
 	
 	public String regEx() default "";
 
+	public long minLong() default Long.MIN_VALUE;
+
 }

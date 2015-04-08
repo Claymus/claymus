@@ -2,6 +2,8 @@ package com.claymus.api.shared;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -18,6 +20,7 @@ public class GenericRequest implements Serializable {
 			Logger.getLogger( GenericApi.class.getName() );
 
 	
+	protected static final String REGEX_NON_EMPTY_STRING = "^(\\s*\\S+\\s*)+$";
 	protected static final String REGEX_NUMBER = "^[0-9]+$";
 	protected static final String REGEX_URI = "^(/[A-Za-z0-9-]+)+$";
 	protected static final String REGEX_EMAIL = "^[A-Za-z0-9]+([._+-][A-Za-z0-9]+)*@[A-Za-z0-9]+([.-][A-Za-z0-9]+)*\\.[A-Za-z]{2,4}$";
@@ -26,6 +29,7 @@ public class GenericRequest implements Serializable {
 	public GenericRequest() {}
 
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public final void validate() throws InvalidArgumentException, UnexpectedServerException {
 		for( Field field : this.getClass().getDeclaredFields() ) {
 			Validate validate = field.getAnnotation( Validate.class );
@@ -33,13 +37,25 @@ public class GenericRequest implements Serializable {
 				field.setAccessible( true );
 				try {
 					Object value = field.get( this );
-					if( validate.required() && value == null ) {
-						throw new InvalidArgumentException( "'" + field.getName() + "' is missing." );
+					if( value == null ) {
+
+						if( validate.required() )
+							throw new InvalidArgumentException( "'" + field.getName() + "' is missing." );
+					
+					} else if( value != null ) {
 						
-					} else if( !validate.regEx().isEmpty() && field.getType() == String.class && value != null ) {
-						RegExp regEx = RegExp.compile( validate.regEx() );
-						if( regEx.exec( (String) value ) == null )
-							throw new InvalidArgumentException( "'" + field.getName() + "' value is invalid." );
+						if( field.getType() == String.class ) {
+							if( !validate.regEx().isEmpty() && RegExp.compile( validate.regEx() ).exec( (String) value ) == null )
+								throw new InvalidArgumentException( "'" + field.getName() + "' value is invalid." );
+	
+						} else if( field.getType() == Long.class ) {
+							if( (Long) value < validate.minLong() )
+								throw new InvalidArgumentException( "'" + field.getName() + "' must be greater than or equal to " + validate.minLong() );
+						
+						} else if( field.getType() == List.class && GenericRequest.class.isAssignableFrom( (Class) ( (ParameterizedType) field.getGenericType() ).getActualTypeArguments()[0] ) ) {
+							for( GenericRequest request : (List<GenericRequest>) value )
+								request.validate();
+						}
 					}
 				} catch( IllegalAccessException e ) {
 					logger.log( Level.SEVERE, "Unexpected exception occured !", e );

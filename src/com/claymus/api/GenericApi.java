@@ -245,7 +245,7 @@ public abstract class GenericApi extends HttpServlet {
 			else
 				response.setStatus( HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
 			
-			writer.println( ((Throwable) apiResponse ).getMessage() );
+			writer.println( "{\"message\":\"" + ((Throwable) apiResponse ).getMessage() + "\"}" );
 			writer.close();
 
 		}
