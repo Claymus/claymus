@@ -38,8 +38,8 @@ public class BlobAccessorGcsImpl implements BlobAccessor {
 	}
 
 	@Override
-	public BlobEntry newBlob( String fileName, byte[] data, String mimeType ) {
-		return new BlobEntryGcsImpl( fileName, data, mimeType );
+	public BlobEntry newBlob( String fileName, byte[] data, String mimeType, String cacheControl ) {
+		return new BlobEntryGcsImpl( fileName, data, mimeType, cacheControl );
 	}
 
 	@Override
@@ -94,6 +94,8 @@ public class BlobAccessorGcsImpl implements BlobAccessor {
 		Builder builder = new GcsFileOptions.Builder();
 		if( blobEntry.getMimeType() != null )
 			builder.mimeType( blobEntry.getMimeType() );
+		if( blobEntry.getCacheControl() != null )
+			builder.cacheControl( blobEntry.getCacheControl() );
 		GcsFileOptions gcsFileOptions = builder.build();
 
 		GcsOutputChannel gcsOutputChannel = gcsService

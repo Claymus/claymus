@@ -13,6 +13,9 @@ public class GenericFileUploadRequest extends GenericRequest {
 
 	@Validate( required = true )
 	private String mimeType;
+	
+	@Validate( required = true )
+	private String cacheControl;
 
 	
 	public String getName() {
@@ -37,6 +40,14 @@ public class GenericFileUploadRequest extends GenericRequest {
 	
 	public void setMimeType( String mimeType ) {
 		this.mimeType = mimeType;
+	}
+	
+	public String getCacheControl(){
+		return cacheControl;
+	}
+	
+	public void setCacheControl( String cacheControl ){
+		this.cacheControl = cacheControl;
 	}
 	
 }

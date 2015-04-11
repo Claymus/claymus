@@ -14,6 +14,7 @@ public class BlobEntryGcsImpl implements BlobEntry {
 	private byte[] data;
 	private long length;
 	private String mimeType;
+	private String cacheControl;
 	private String eTag;
 	private Date lastModified;
 	private Map<String, String> metaData;
@@ -23,10 +24,11 @@ public class BlobEntryGcsImpl implements BlobEntry {
 		this.fileName = fileName;
 	}
 	
-	public BlobEntryGcsImpl( String fileName, byte[] data, String mimeType ) {
+	public BlobEntryGcsImpl( String fileName, byte[] data, String mimeType, String cacheControl ) {
 		this.fileName = fileName;
 		this.data = data;
 		this.mimeType = mimeType;
+		this.cacheControl = cacheControl;
 	}
 	
 	public BlobEntryGcsImpl( ByteBuffer byteBuffer, GcsFileMetadata gcsFileMetadata ) {
@@ -34,6 +36,7 @@ public class BlobEntryGcsImpl implements BlobEntry {
 		this.data = byteBuffer.array();
 		this.length = gcsFileMetadata.getLength();
 		this.mimeType = gcsFileMetadata.getOptions().getMimeType();
+		this.cacheControl = gcsFileMetadata.getOptions().getCacheControl();
 		this.eTag = gcsFileMetadata.getEtag();
 		this.lastModified = gcsFileMetadata.getLastModified();
 		this.metaData = gcsFileMetadata.getOptions().getUserMetadata();
@@ -73,6 +76,16 @@ public class BlobEntryGcsImpl implements BlobEntry {
 	@Override
 	public void setMimeType( String mimeType ) {
 		this.mimeType = mimeType;
+	}
+	
+	@Override
+	public String getCacheControl() {
+		return cacheControl;
+	}
+
+	@Override
+	public void setCacheControl(String cacheControl) {
+		this.cacheControl = cacheControl;
 	}
 	
 	@Override
