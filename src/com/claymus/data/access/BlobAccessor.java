@@ -9,7 +9,7 @@ public interface BlobAccessor {
 	
 	BlobEntry newBlob( String fileName );
 
-	BlobEntry newBlob( String fileName, byte[] data, String mimeType, String cacheControl );
+	BlobEntry newBlob( String fileName, byte[] data, String mimeType );
 
 	List<String> getNameList( String prefix )
 			throws IOException;

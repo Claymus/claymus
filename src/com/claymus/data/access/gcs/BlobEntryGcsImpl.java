@@ -24,11 +24,10 @@ public class BlobEntryGcsImpl implements BlobEntry {
 		this.fileName = fileName;
 	}
 	
-	public BlobEntryGcsImpl( String fileName, byte[] data, String mimeType, String cacheControl ) {
+	public BlobEntryGcsImpl( String fileName, byte[] data, String mimeType ) {
 		this.fileName = fileName;
 		this.data = data;
 		this.mimeType = mimeType;
-		this.cacheControl = cacheControl;
 	}
 	
 	public BlobEntryGcsImpl( ByteBuffer byteBuffer, GcsFileMetadata gcsFileMetadata ) {

@@ -40,8 +40,8 @@ public class BlobAccessorWithMemcache implements BlobAccessor {
 	}
 
 	@Override
-	public BlobEntry newBlob( String fileName, byte[] data, String mimeType, String cacheControl ) {
-		return blobAccessor.newBlob( fileName, data, mimeType, cacheControl );
+	public BlobEntry newBlob( String fileName, byte[] data, String mimeType ) {
+		return blobAccessor.newBlob( fileName, data, mimeType );
 	}
 
 	@Override

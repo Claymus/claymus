@@ -14,7 +14,6 @@ public class GenericFileUploadRequest extends GenericRequest {
 	@Validate( required = true )
 	private String mimeType;
 	
-	@Validate( required = true )
 	private String cacheControl;
 
 	
