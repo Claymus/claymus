@@ -115,7 +115,7 @@ public class ClaymusMain extends HttpServlet {
 				String websiteWidgetHtml = websiteWidgetProcessor.generateHtml( websiteWidget, request );
 				websiteWidgetHtmlList.add( websiteWidgetHtml );
 			} catch( InsufficientAccessException e ) {
-				// Do nothing
+				logger.log( Level.SEVERE, "InsufficientAccessException", e );
 			} catch( UnexpectedServerException e ) {
 				logger.log( Level.SEVERE, "Failed to generate website widget html.", e );
 				response.setStatus( HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
