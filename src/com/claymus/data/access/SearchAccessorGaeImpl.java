@@ -44,13 +44,13 @@ public class SearchAccessorGaeImpl implements SearchAccessor {
 		if( sortOptions == null )
 			sortOptions = SortOptions.newBuilder()
 					.setMatchScorer( MatchScorer.newBuilder() )
-					.setLimit( 10000 )
+					.setLimit( 1000 )
 					.build();
 		
 		QueryOptions queryOptions = QueryOptions.newBuilder()
 				.setSortOptions( sortOptions )
 				.setCursor( cursorStr == null ? Cursor.newBuilder().build() : Cursor.newBuilder().build( cursorStr ) )
-				.setLimit( resultCount == null ? 10000 : resultCount )
+				.setLimit( resultCount == null ? 1000 : resultCount )
 				.setFieldsToReturn( fieldsToReturn )
 				.build();
 		
