@@ -424,7 +424,7 @@ public class ClaymusServiceImpl extends RemoteServiceServlet
 		
 		try {
 			EmailUtil.sendMail(
-					null, ClaymusHelper.getSystemProperty( "email.contact" ),
+					null, ClaymusHelper.getSystemProperty( "email" ),
 					emailTemplate, null );
 			return new SendQueryResponse( "Query submitted successfully !" );
 			
