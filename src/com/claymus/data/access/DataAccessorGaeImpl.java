@@ -17,6 +17,8 @@ import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.Query;
 import javax.jdo.Transaction;
 
+import com.claymus.commons.shared.CommentFilter;
+import com.claymus.commons.shared.CommentParentType;
 import com.claymus.data.access.gae.AccessTokenEntity;
 import com.claymus.data.access.gae.AppPropertyEntity;
 import com.claymus.data.access.gae.AuditLogEntity;
@@ -395,18 +397,52 @@ public class DataAccessorGaeImpl implements DataAccessor {
 	public Comment newComment() {
 		return new CommentEntity();
 	}
-
+	
 	@Override
-	public DataListCursorTuple<Comment> getCommentList(
-			String refId, String cursorStr, int resultCount ) {
+	public Comment getCommentById( Long id ){
+		if( id == null )
+			return null;
 		
+		try{
+			return getEntity( CommentEntity.class, id );
+		} catch( JDOObjectNotFoundException e ) {
+			return null;
+		}
+	}
+
+	public List<Comment> getCommentList( String parentId , CommentParentType parentType, Long userId ){
 		Query query =
 				new GaeQueryBuilder( pm.newQuery( CommentEntity.class ) )
-						.addFilter( "refId", refId )
-						.addOrdering( "creationDate", false )
-						.setRange( 0, resultCount )
-						.build();
-
+					.addFilter( "parentId", parentId)
+					.addFilter( "parentType", parentType)
+					.addFilter( "userId", userId )
+					.addOrdering( "commentLastUpdatedDate", false )
+					.build();
+		
+		@SuppressWarnings("unchecked")
+		List<Comment> commnetList = (List<Comment>) query.execute( parentId, parentType, userId );
+		
+		return (List<Comment>) pm.detachCopyAll( commnetList );
+		 
+	}
+	
+	@Override
+	public DataListCursorTuple<Comment> getCommentList(
+			CommentFilter commentFilter, String cursorStr, Integer resultCount ) {
+		
+		GaeQueryBuilder gaeQueryBuilder =
+				new GaeQueryBuilder( pm.newQuery( CommentEntity.class ) );
+		
+		if( commentFilter.getParentId() != null )
+			gaeQueryBuilder.addFilter( "parentId", commentFilter.getParentId() );
+		if( commentFilter.getParentType() != null )
+			gaeQueryBuilder.addFilter( "parentType", commentFilter.getParentType() );
+		if( commentFilter.getUserId() != null )
+			gaeQueryBuilder.addFilter( "userId", commentFilter.getUserId() );
+		
+		gaeQueryBuilder.addOrdering( "commentLastUpdatedDate", false );
+		
+		Query query = gaeQueryBuilder.build();
 		if( cursorStr != null ) {
 			Cursor cursor = Cursor.fromWebSafeString( cursorStr );
 			Map<String, Object> extensionMap = new HashMap<String, Object>();
@@ -414,8 +450,12 @@ public class DataAccessorGaeImpl implements DataAccessor {
 			query.setExtensions(extensionMap);
 		}
 		
+		if( resultCount != null )
+			gaeQueryBuilder.setRange( 0, resultCount ); 
+		
 		@SuppressWarnings("unchecked")
-		List<Comment> commentList = (List<Comment>) query.execute( refId );
+		List<Comment> commentList = 
+							(List<Comment>) query.executeWithMap( gaeQueryBuilder.getParamNameValueMap() );
 		Cursor cursor = JDOCursorHelper.getCursor( commentList );
 
 		return new DataListCursorTuple<Comment>(

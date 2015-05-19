@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.jdo.PersistenceManager;
 
+import com.claymus.commons.shared.CommentFilter;
+import com.claymus.commons.shared.CommentParentType;
 import com.claymus.data.transfer.AccessToken;
 import com.claymus.data.transfer.AppProperty;
 import com.claymus.data.transfer.AuditLog;
@@ -98,7 +100,11 @@ public interface DataAccessor extends Serializable {
 	
 	Comment newComment();
 	
-	DataListCursorTuple<Comment> getCommentList( String refId , String cursor, int resultCount );
+	Comment getCommentById( Long id );
+	
+	List<Comment> getCommentList( String parentId , CommentParentType parentType, Long userId );
+	
+	DataListCursorTuple<Comment> getCommentList( CommentFilter commentFilter , String cursor, Integer resultCount );
 	
 	Comment createOrUpdateComment( Comment comment );
 	

@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.jdo.PersistenceManager;
 
+import com.claymus.commons.shared.CommentFilter;
+import com.claymus.commons.shared.CommentParentType;
 import com.claymus.data.transfer.AccessToken;
 import com.claymus.data.transfer.AppProperty;
 import com.claymus.data.transfer.AuditLog;
@@ -33,6 +35,8 @@ public class DataAccessorWithMemcache implements DataAccessor {
 	private final static String PREFIX_PAGE_CONTENT = "PageContent-";
 	private final static String PREFIX_PAGE_CONTENT_LIST = "PageContentList-";
 	private final static String PREFIX_ACCESS_TOKEN = "AccessToken-";
+	private final static String PREFIX_COMMENT = "Comment-";
+	private final static String PREFIX_COMMENT_LIST = "CommentList-";
 	
 	private final DataAccessor dataAccessor;
 	private final Memcache memcache;
@@ -319,12 +323,29 @@ public class DataAccessorWithMemcache implements DataAccessor {
 	public Comment newComment() {
 		return dataAccessor.newComment();
 	}
+	
+	@Override
+	public Comment getCommentById( Long id ){
+		Comment comment = memcache.get( PREFIX_COMMENT + id );
+		if( comment == null ) {
+			comment = dataAccessor.getCommentById( id );
+			if( comment != null )
+				memcache.put( PREFIX_COMMENT + id, comment );
+		}
+		
+		return comment;
+	}
+	
+	@Override
+	public List<Comment> getCommentList( String parentId, CommentParentType parentType, Long userId ){
+		return dataAccessor.getCommentList( parentId, parentType, userId );
+	}
 
 	@Override
 	public DataListCursorTuple<Comment> getCommentList(
-			String refId, String cursor, int resultCount  ) {
+			CommentFilter commentFilter, String cursor, Integer resultCount  ) {
 		
-		return dataAccessor.getCommentList(refId, cursor, resultCount);
+		return dataAccessor.getCommentList( commentFilter, cursor, resultCount);
 	}
 
 	@Override
