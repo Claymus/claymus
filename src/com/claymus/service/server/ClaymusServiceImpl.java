@@ -382,7 +382,7 @@ public class ClaymusServiceImpl extends RemoteServiceServlet
 
 			@Override
 			public String getSenderEmail() {
-				return ClaymusHelper.getSystemProperty( "email.noreply" );
+				return ClaymusHelper.getSystemProperty( "email" );
 			}
 
 			@Override
