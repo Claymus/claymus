@@ -5,7 +5,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 public enum CommentState implements IsSerializable{
 
 	PENDING_APPROVAL,
-	REJECTED,
+	DELETED,
 	APPROVED,
 	AUTO_APPROVED,
 
