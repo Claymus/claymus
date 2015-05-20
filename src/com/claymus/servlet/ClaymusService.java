@@ -12,6 +12,7 @@ import com.claymus.api.ApiRegistry;
 import com.claymus.api.GenericApi;
 import com.claymus.api.PageContentListApi;
 import com.claymus.pagecontent.audit.api.AuditLogListApi;
+import com.claymus.pagecontent.comments.api.CommentsApi;
 import com.claymus.pagecontent.pages.api.PageApi;
 import com.claymus.pagecontent.pages.api.PageListApi;
 
@@ -25,6 +26,8 @@ public class ClaymusService extends HttpServlet {
 		ApiRegistry.register( PageApi.class );
 		ApiRegistry.register( PageListApi.class );
 		ApiRegistry.register( AuditLogListApi.class );
+		
+		ApiRegistry.register( CommentsApi.class );
 	}
 	
 	@Override
