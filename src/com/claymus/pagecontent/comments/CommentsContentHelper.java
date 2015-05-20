@@ -12,6 +12,7 @@ import com.claymus.commons.server.Access;
 import com.claymus.commons.server.ClaymusHelper;
 import com.claymus.commons.shared.CommentFilter;
 import com.claymus.commons.shared.CommentParentType;
+import com.claymus.commons.shared.NotificationType;
 import com.claymus.commons.shared.exception.InsufficientAccessException;
 import com.claymus.commons.shared.exception.InvalidArgumentException;
 import com.claymus.data.access.DataListCursorTuple;
@@ -22,10 +23,15 @@ import com.claymus.data.transfer.shared.CommentData;
 import com.claymus.pagecontent.PageContentHelper;
 import com.claymus.pagecontent.comments.gae.CommentsContentEntity;
 import com.claymus.pagecontent.comments.shared.CommentContentData;
+import com.claymus.taskqueue.Task;
+import com.claymus.taskqueue.TaskQueue;
 import com.pratilipi.commons.server.PratilipiHelper;
 import com.pratilipi.data.access.DataAccessor;
 import com.pratilipi.data.access.DataAccessorFactory;
+import com.pratilipi.data.transfer.Author;
+import com.pratilipi.data.transfer.Pratilipi;
 import com.pratilipi.data.transfer.UserPratilipi;
+import com.pratilipi.taskqueue.TaskQueueFactory;
 
 public class CommentsContentHelper extends PageContentHelper<
 		CommentsContent,
@@ -228,6 +234,7 @@ public class CommentsContentHelper extends PageContentHelper<
 		AccessToken accessToken = (AccessToken) request.getAttribute( ClaymusHelper.REQUEST_ATTRIB_ACCESS_TOKEN );
 		DataAccessor dataAccessor = DataAccessorFactory.getDataAccessor( request );
 		Comment comment = null;
+		String notificationType = null;
 		
 		if( commentData.getId() != null && commentData.hasContent() ){
 			comment = dataAccessor.getCommentById( commentData.getId() );
@@ -238,9 +245,13 @@ public class CommentsContentHelper extends PageContentHelper<
 		else {
 			if( !commentData.hasContent() ){	//MULTIPLE COMMENT ON ONE REVIEW
 				List<Comment> commentList = getCommentList( commentData.getParentId(), commentData.getParentType(), accessToken.getUserId(), request );
-				for( Comment c : commentList )
+				for( Comment c : commentList ){
 					if( c.getUpvote() == 1 || c.getDownvote() == 1 )
 						comment = c;
+					
+					if( comment == null && commentList.size() >= 1 )
+						comment = commentList.get( commentList.size() -1 );	//First comment entity for passed set of filters
+				}
 			}
 		}
 		
@@ -253,10 +264,11 @@ public class CommentsContentHelper extends PageContentHelper<
 			comment.setParentType( commentData.getParentType() );
 			comment.setUser( accessToken.getUserId() );
 			comment.setCreationDate( new Date() );
-			logger.log( Level.INFO, "USERID-" + comment.getUserId() );
+			notificationType = NotificationType.COMMENT_ADD.toString();
 		} else{
 			if( !hasRequestAccessToUpdateCommentData( request, comment ))
 				throw new InsufficientAccessException( "Insufficient access to update comment" );
+			
 		}
 		
 		
@@ -266,11 +278,13 @@ public class CommentsContentHelper extends PageContentHelper<
 				comment.setCommentDate( new Date() );
 			comment.setCommentLastUpdatedDate( new Date() );
 			
+			if( notificationType == null )
+				notificationType = NotificationType.COMMENT_UPDATE.toString();
 		}
 		
 		if( commentData.hasUpvote() && commentData.hasDownvote() )
 			throw new InvalidArgumentException( "User cannot upvote and downvote at same time" );
-		logger.log( Level.INFO, "HASUPVOTE-" + commentData.hasUpvote() );
+
 		if( commentData.hasUpvote() ){
 			if( commentData.getUpvote() != 1 && commentData.getUpvote() != 0 )
 				throw new InvalidArgumentException( "Invalid Upvote" );
@@ -278,7 +292,6 @@ public class CommentsContentHelper extends PageContentHelper<
 			
 			comment.setUpvote( commentData.getUpvote() );
 			comment.setDownvote( 0 );
-			logger.log( Level.INFO, "UPVOTE-" + comment.getUpvote() );
 		}
 		
 		if( commentData.hasDownvote() ){
@@ -292,9 +305,43 @@ public class CommentsContentHelper extends PageContentHelper<
 		comment = dataAccessor.createOrUpdateComment( comment );
 		commentData = createCommentData( comment, null, request);
 		
-		logger.log( Level.INFO, "COMMENT-" + comment.getId() );
+		logger.log( Level.INFO, "Comment Entry created-" + comment.getId() );
+		
+		if( notificationType != null ){
+			UserPratilipi userPratilipi = dataAccessor.getUserPratilipiById( comment.getParentId() );
+			Pratilipi pratilipi = dataAccessor.getPratilipi( userPratilipi.getPratilipiId() );
+			Author author = dataAccessor.getAuthor( pratilipi.getAuthorId() );
+			
+			String recipientIdString;
+			if( accessToken.getUserId().equals( author.getUserId() ))
+				//WHEN AUTHOR MAKES A COMMENT.
+				recipientIdString = userPratilipi.getUserId().toString();
+			else
+				recipientIdString = author.getUserId() + "~" + userPratilipi.getUserId();
+			
+			createEmailTasks( 
+					recipientIdString, 
+					accessToken.getUserId().toString(), 
+					pratilipi.getId().toString(), 
+					notificationType );
+			
+		}
 		
 		return commentData;
+	}
+	
+	private static void createEmailTasks( String recipientIdString, String userId, String pratilipiId, String notificationType ){
+		String[] recipientIdArray = recipientIdString.split( "~" );
+		for( int i = 0; i < recipientIdArray.length; i++){
+			Task task = TaskQueueFactory.newTask();
+			task.addParam( "userId", userId );
+			task.addParam( "recipientId", recipientIdArray[i] );
+			task.addParam( "pratilipiId", pratilipiId );
+			task.addParam( "notificationType", notificationType );
+			
+			TaskQueue taskQueue = TaskQueueFactory.getNotificationTaskQueue();
+			taskQueue.add( task );
+		}
 	}
 	
 }
