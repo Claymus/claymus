@@ -89,3 +89,35 @@ a, a:hover, a:focus .a {
 	text-shadow: 1px 1px gray;
 	opacity: 0.25;
 }
+
+
+.backDrop
+{
+	display: inline-flex;
+	z-index:9;
+	top: 0;
+	left: 0;
+	width: 100%; 
+	height:100%; 
+	text-align:center;
+	position: fixed;	
+	opacity:.8;
+	background-color: #fff;
+}
+
+#popup{
+	margin: auto auto;
+	width: 50%;
+	padding: 10px;
+	border: 1px solid #888888;
+	background: #fff;
+	border-radius: 2px;
+	display: none;
+	box-shadow: 3px 3px 3px #888888;
+	z-index: 10;
+}
+
+#popupCloseButton {
+	position: relative;
+	float: right;
+}

@@ -64,6 +64,35 @@ function setCookie( cname, cvalue, exdays, path ) {
 	document.cookie = cname + "=" + cvalue + expires + path;
 }
 
+function getVisitCount() {
+	var visitNumber = 0;
+	var path = window.location.pathname;
+	
+	if( getCookie("visit_number") != "" ){
+		visitNumber = parseInt( getCookie( "visit_number" ) );
+	}
+	
+	console.log( "sesison storage :" + sessionStorage.isNewSession );
+	
+	if( !sessionStorage.isNewSession ){
+		sessionStorage.isNewSession = Boolean( 1 );
+		console.log( "sesison storage :" + sessionStorage.isNewSession );
+		visitNumber++;
+		setCookie( "visit_number", visitNumber, 365, "/");
+	}
+	
+	//count number of pages visited by the user
+	if( getCookie( "pages_visited" ) != "" ){
+		var pagesVisited = getCookie( "pages_visited" );
+		setCookie( "pages_visited", parseInt( pagesVisited )+1, 365, "/" );
+		console.log( "Pages visited : " + pagesVisited );
+	} else
+		setCookie( "pages_visited", 1, 365, "/" ); 
+	
+	
+	return visitNumber;
+}
+
 
 /* Url Parameters */
 
@@ -72,3 +101,6 @@ function getUrlParam( paramName ) {
     var match = window.location.search.match( reParam ) ;
     return ( match && match.length > 1 ) ? match[ 1 ] : null ;
 }
+
+
+/* Onload popup */
