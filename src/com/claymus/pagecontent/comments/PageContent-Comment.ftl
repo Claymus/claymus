@@ -11,7 +11,7 @@
 					<img class="Like-Img" onclick="vote( this )" src="/theme.pratilipi/images/upvote.png" title="Upvote" alt="Upvote" data-value="1" />
 				</#if>
 			<#else>
-				<img class="Disabled" src="/theme.pratilipi/images/upvote_disabled.png" title="Upvote" alt="Upvote" data-value="0" />
+				<img class="Disabled" src="/theme.pratilipi/images/upvote_disabled.png" title="Upvote" alt="Upvote" data-value="0" data-toggle='modal' data-target="#loginModal" onclick="window.location.href='#Comment'" />
 			</#if>
 			<#if reviewLikesList?? && reviewLikesList?length gt 0>
 				<span class="Likes">${ reviewLikesSeq?size }</span>
@@ -26,7 +26,7 @@
 					<img class="Dislike-Img" onclick="vote( this )" src="/theme.pratilipi/images/downvote.png" title="Downvote" alt="Downvote" data-value="1"/>
 				</#if>
 			<#else>
-				<img class="Disabled" src="/theme.pratilipi/images/downvote_disabled.png" title="Downvote" alt="Downvote" data-value="0" />
+				<img class="Disabled" src="/theme.pratilipi/images/downvote_disabled.png" title="Downvote" alt="Downvote" data-value="0" data-toggle='modal' data-target="#loginModal" onclick="window.location.href='#Comment'" />
 			</#if>			
 			<#if reviewDislikesList?? && reviewDislikesList?length gt 0>
 				<span class="Dislikes">${ reviewDislikesSeq?size }</span>
@@ -63,7 +63,7 @@
 								<img class="Like-Img" onclick="vote( this )" src="/theme.pratilipi/images/upvote.png" title="Upvote" alt="Upvote" src="/war/image/like.jpg" data-value="1">
 							</#if>
 						<#else>
-							<img class="Disabled" src="/theme.pratilipi/images/upvote_disabled.png" title="Upvote" alt="Upvote" src="/war/image/like.jpg" data-value="0">
+							<img class="Disabled" src="/theme.pratilipi/images/upvote_disabled.png" title="Upvote" alt="Upvote" src="/war/image/like.jpg" data-value="0" data-toggle='modal' data-target="#loginModal" onclick="window.location.href='#Comment'">
 						</#if>
 						<#if commentLikesMap[ commentSeq[0] ]?? && commentLikesMap[ commentSeq[0] ]?length gt 0>
 							<span class="Likes">${ commentLikesSeq?size }</span>
@@ -79,7 +79,7 @@
 								<img class="Dislike-Img" onclick="vote( this )" src="/theme.pratilipi/images/downvoted.png" title="Downvote" alt="Downvote" src="/war/image/like.jpg" data-value="1">
 							</#if>
 						<#else>
-							<img class="Disabled" src="/theme.pratilipi/images/downvote_disabled.png" title="Downvote" alt="Downvote" src="/war/image/like.jpg" data-value="0">
+							<img class="Disabled" src="/theme.pratilipi/images/downvote_disabled.png" title="Downvote" alt="Downvote" src="/war/image/like.jpg" data-value="0" data-toggle='modal' data-target="#loginModal" onclick="window.location.href='#Comment'">
 						</#if>
 						<#if commentDislikesMap[ commentSeq[0] ]?? && commentDislikesMap[ commentSeq[0] ]?length gt 0>
 							<span class="Dislikes">${ commentDislikesSeq?size }</span>
@@ -128,9 +128,6 @@
 			font-size : 80%;
 		}
 		
-		.Disabled {
-			cursor : default !important;
-		}
 	</style>
 	
 	
