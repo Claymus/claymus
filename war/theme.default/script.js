@@ -65,32 +65,27 @@ function setCookie( cname, cvalue, exdays, path ) {
 }
 
 function getVisitCount() {
-	var visitNumber = 0;
+	var visitCount = 0;
 	var path = window.location.pathname;
 	
-	if( getCookie("visit_number") != "" ){
-		visitNumber = parseInt( getCookie( "visit_number" ) );
+	if( getCookie("visit_count") != "" ){
+		visitCount = parseInt( getCookie( "visit_count" ) );
 	}
-	
-	console.log( "sesison storage :" + sessionStorage.isNewSession );
 	
 	if( !sessionStorage.isNewSession ){
 		sessionStorage.isNewSession = Boolean( 1 );
-		console.log( "sesison storage :" + sessionStorage.isNewSession );
-		visitNumber++;
-		setCookie( "visit_number", visitNumber, 365, "/");
+		visitCount++;
+		setCookie( "visit_count", visitCount, 365, "/");
 	}
 	
 	//count number of pages visited by the user
-	if( getCookie( "pages_visited" ) != "" ){
-		var pagesVisited = getCookie( "pages_visited" );
-		setCookie( "pages_visited", parseInt( pagesVisited )+1, 365, "/" );
-		console.log( "Pages visited : " + pagesVisited );
+	if( getCookie( "page_count" ) != "" ){
+		var pagesVisited = getCookie( "page_count" );
+		setCookie( "page_count", parseInt( pagesVisited )+1, 365, "/" );
 	} else
-		setCookie( "pages_visited", 1, 365, "/" ); 
+		setCookie( "page_count", 1, 365, "/" ); 
 	
-	
-	return visitNumber;
+	return visitCount;
 }
 
 
