@@ -2,48 +2,52 @@
 
 <#assign commentDataSeq=commentDataList?split( "~" ) reviewLikesSeq=reviewLikesList?split( "~" ) reviewDislikesSeq=reviewDislikesList?split( "~" )>
 
-	<div id="PageContent-Pratilipi-Comment">
-		<div id="PageContent-Pratilipi-Comment-FormDiv"  data-id="${ review.getId() }" data-type="REVIEW">
+	<div class="Comment-Div">
+		<div  data-id="${ review.getId() }" data-type="REVIEW">
 			<#if userData.getEmail()?? && review.getUserId() != userData.getId()>
 				<#if reviewLikesSeq?seq_contains( userData.getId()?c )>
-					<img onclick="vote( this )" src="/theme.pratilipi/images/upvoted.png" title="Upvote" alt="Upvote" data-value="0" />
+					<img class="Like-Img" onclick="vote( this )" src="/theme.pratilipi/images/upvoted.png" title="Upvote" alt="Upvote" data-value="0" />
 				<#else>
-					<img onclick="vote( this )" src="/theme.pratilipi/images/upvote.png" title="Upvote" alt="Upvote" data-value="1" />
+					<img class="Like-Img" onclick="vote( this )" src="/theme.pratilipi/images/upvote.png" title="Upvote" alt="Upvote" data-value="1" />
 				</#if>
 			<#else>
-				<img class="disabled" src="/theme.pratilipi/images/upvote_disabled.png" title="Upvote" alt="Upvote" data-value="0" />
+				<img class="Disabled" src="/theme.pratilipi/images/upvote_disabled.png" title="Upvote" alt="Upvote" data-value="0" />
 			</#if>
 			<#if reviewLikesList?? && reviewLikesList?length gt 0>
-				<span id="PageContent-Pratilipi-Review-Likes">${ reviewLikesSeq?size }</span>
+				<span class="Likes">${ reviewLikesSeq?size }</span>
 			<#else>
-				<span id="PageContent-Pratilipi-Review-Likes"></span>
+				<span class="Likes"></span>
 			</#if>
 		
 			<#if userData.getEmail()?? && review.getUserId() != userData.getId()>
 				<#if reviewDislikesSeq?seq_contains( userData.getId()?c )>
-					<img onclick="vote( this )" src="/theme.pratilipi/images/downvoted.png" title="Downvote" alt="Downvote" data-value="0"/>
+					<img class="Dislike-Img" onclick="vote( this )" src="/theme.pratilipi/images/downvoted.png" title="Downvote" alt="Downvote" data-value="0"/>
 				<#else>
-					<img onclick="vote( this )" src="/theme.pratilipi/images/downvote.png" title="Downvote" alt="Downvote" data-value="1"/>
+					<img class="Dislike-Img" onclick="vote( this )" src="/theme.pratilipi/images/downvote.png" title="Downvote" alt="Downvote" data-value="1"/>
 				</#if>
 			<#else>
-				<img class="disabled" src="/theme.pratilipi/images/downvote_disabled.png" title="Downvote" alt="Downvote" data-value="0" />
+				<img class="Disabled" src="/theme.pratilipi/images/downvote_disabled.png" title="Downvote" alt="Downvote" data-value="0" />
 			</#if>			
 			<#if reviewDislikesList?? && reviewDislikesList?length gt 0>
-				<span id="PageContent-Pratilipi-Review-Dislikes">${ reviewDislikesSeq?size }</span>
+				<span class="Dislikes">${ reviewDislikesSeq?size }</span>
 			<#else>
-				<span id="PageContent-Pratilipi-Review-Dislikes"></span>
+				<span class="Dislikes"></span>
 			</#if>
 			
 			<br/>
-			<textarea id="PageContent-Pratilipi-Comment-Form-Textarea" placeholder="Reply to above review" rows=2 cols=80 onkeydown="onEnter(this)" style="margin-top: 10px"></textarea>
+			<#if userData.getEmail()??>
+				<textarea placeholder="Reply to above review" rows=2 onkeydown="onEnter(this)"></textarea>
+			<#else>
+				<textarea placeholder="Reply to above review" rows=2 data-toggle='modal' data-target="#loginModal" onclick="window.location.href='#Comment'"></textarea>
+			</#if>
 		</div>
 		
 		
-		<div id="PageContent-Pratilipi-Comment-List">
+		<div id="PageContent-Pratilipi-Comment-List-${ review.getId() }" class="Comment-List">
 			<#list commentDataSeq as commentData>
 				<#assign commentSeq=commentData?split( "_" )>
 				<#if commentSeq?size == 5>
-					<div class="comment" data-id="${ commentSeq[0] }" data-type="COMMENT">
+					<div class="Comment" data-id="${ commentSeq[0] }" data-type="COMMENT">
 						<p>
 							<b>${ commentSeq[2] } </b>
 							${ commentSeq[3] }
@@ -54,33 +58,33 @@
 						<#assign commentLikesSeq=commentLikesMap[ commentSeq[0] ]?split( "~" )>
 						<#if userData.getEmail()?? && userData.getId()?c != commentSeq[1]>
 							<#if commentLikesSeq?seq_contains( userData.getId()?c )>
-								<img onclick="vote( this )" src="/theme.pratilipi/images/upvoted.png" title="Upvote" alt="Upvote" src="/war/image/like.jpg" data-value="0">
+								<img class="Like-Img" onclick="vote( this )" src="/theme.pratilipi/images/upvoted.png" title="Upvote" alt="Upvote" src="/war/image/like.jpg" data-value="0">
 							<#else>
-								<img onclick="vote( this )" src="/theme.pratilipi/images/upvote.png" title="Upvote" alt="Upvote" src="/war/image/like.jpg" data-value="1">
+								<img class="Like-Img" onclick="vote( this )" src="/theme.pratilipi/images/upvote.png" title="Upvote" alt="Upvote" src="/war/image/like.jpg" data-value="1">
 							</#if>
 						<#else>
-							<img class="disabled" src="/theme.pratilipi/images/upvote_disabled.png" title="Upvote" alt="Upvote" src="/war/image/like.jpg" data-value="0">
+							<img class="Disabled" src="/theme.pratilipi/images/upvote_disabled.png" title="Upvote" alt="Upvote" src="/war/image/like.jpg" data-value="0">
 						</#if>
 						<#if commentLikesMap[ commentSeq[0] ]?? && commentLikesMap[ commentSeq[0] ]?length gt 0>
-							<span id="PageContent-Pratilipi-Comment-Likes">${ commentLikesSeq?size }</span>
+							<span class="Likes">${ commentLikesSeq?size }</span>
 						<#else>
-							<span id="PageContent-Pratilipi-Comment-Likes"></span>
+							<span class="Likes"></span>
 						</#if>
 						
 						<#assign commentDislikesSeq=commentDislikesMap[ commentSeq[0] ]?split( "~" )>
 						<#if userData.getEmail()?? && userData.getId()?c != commentSeq[1]>
 							<#if commentDislikesSeq?seq_contains( userData.getId()?c )>
-								<img onclick="vote( this )" src="/theme.pratilipi/images/downvote.png" title="Downvote" alt="Downvote" src="/war/image/like.jpg" data-value="0">
+								<img class="Dislike-Img" onclick="vote( this )" src="/theme.pratilipi/images/downvote.png" title="Downvote" alt="Downvote" src="/war/image/like.jpg" data-value="0">
 							<#else>
-								<img onclick="vote( this )" src="/theme.pratilipi/images/downvoted.png" title="Downvote" alt="Downvote" src="/war/image/like.jpg" data-value="1">
+								<img class="Dislike-Img" onclick="vote( this )" src="/theme.pratilipi/images/downvoted.png" title="Downvote" alt="Downvote" src="/war/image/like.jpg" data-value="1">
 							</#if>
 						<#else>
-							<img class="disabled" src="/theme.pratilipi/images/downvote_disabled.png" title="Downvote" alt="Downvote" src="/war/image/like.jpg" data-value="0">
+							<img class="Disabled" src="/theme.pratilipi/images/downvote_disabled.png" title="Downvote" alt="Downvote" src="/war/image/like.jpg" data-value="0">
 						</#if>
 						<#if commentDislikesMap[ commentSeq[0] ]?? && commentDislikesMap[ commentSeq[0] ]?length gt 0>
-							<span id="PageContent-Pratilipi-Comment-Dislikes">${ commentDislikesSeq?size }</span>
+							<span class="Dislikes">${ commentDislikesSeq?size }</span>
 						<#else>
-							<span id="PageContent-Pratilipi-Comment-Dislikes"></span>
+							<span class="Dislikes"></span>
 						</#if>
 					</div>
 				</#if>
@@ -89,28 +93,33 @@
 	</div>
 	
 	<style>
-		#PageContent-Pratilipi-Comment img{
+		.Comment-Div img{
 			cursor : pointer;
 			width:  24px;
 		}
 		
-		#PageContent-Pratilipi-Review-Likes, #PageContent-Pratilipi-Comment-Likes {
+		.Comment-Div textarea {
+			margin-top: 10px;
+			width: 50%;
+		}
+		
+		.Likes {
 		    font-size: 14px;
 		    color: rgb(57, 181, 74);
 		    padding : 3px 14px 3px 0px;
 		}
 		
-		#PageContent-Pratilipi-Review-Dislikes, #PageContent-Pratilipi-Comment-Dislikes {
+		.Dislikes {
 		    font-size: 14px;
 		    color: rgb(193, 39, 45);
 		    padding : 3px;
 		}
 		
-		#PageContent-Pratilipi-Comment-List {
+		.Comment-List {
 			margin-top : 10px;
 		}
 		
-		.comment {
+		.Comment {
 			padding-left : 10px;
 			font-size : 15px;
 		}
@@ -119,7 +128,7 @@
 			font-size : 80%;
 		}
 		
-		.disabled {
+		.Disabled {
 			cursor : default !important;
 		}
 	</style>
@@ -177,7 +186,9 @@
 				dataType: "json",
 				handleAs: "json",
 				data: requestData,
-				beforeSend: function( data, object ){
+				beforeSend: function(){
+					if( tagName == 'IMG' )
+						setVote( object, tagName );
 				},
 				success: function( response, status, xhr ) {
 					handleAjaxPostResponse(object, response );
@@ -194,22 +205,9 @@
 		function handleAjaxPostResponse( object, response ){
 			var newComment = response[ 'commentData' ];
 			var title = jQuery( object ).attr( 'title' ).toLowerCase();
-			var latestComment = jQuery( '#PageContent-Pratilipi-Comment-List' ).first();
+			var latestComment = jQuery( '#PageContent-Pratilipi-Comment-List-${ review.getId() }' ).first();
 			if( requestType == "vote" ){
-				var span = jQuery( object ).next();
-				var currentVotes = span.text();
-				if( span.is(':empty') )
-					span.text( parseInt( 1 ));
-				else {
-					if( parseInt( newComment[ title ] ) > 0 )
-						span.text( parseInt( currentVotes ) + 1 );
-					else 
-						span.text( parseInt( currentVotes ) - 1 );
-				}
-					
 				var src = "/theme.pratilipi/images/" + title;
-				
-				console.log( "Object clicked : " + jQuery( object ).prop( "tagName" ) );
 				
 				if( parseInt( newComment[ title ] ) == 1 ){
 					jQuery( object ).attr( 'src', src + 'd.png' );
@@ -225,8 +223,12 @@
 		}
 		
 		function postComment(object){
-			addComment( object.value );
+			addComment( object );
 			ajaxPost( object )
+		}
+		
+		function vote( object ){
+			ajaxPost( object );
 		}
 		
 		function onEnter(object){
@@ -239,20 +241,71 @@
 			 }
 		}
 		
-		function addComment( comment){
+		function  setVote( object ){
+			var title;
+			if( jQuery( object ).attr( 'title' ) == null || jQuery( object ).attr( 'title' ) == '' )
+				return;
+			else
+				title = jQuery( object ).attr( 'title' ).toLowerCase();
+				
+			var span = jQuery( object ).next();
+			var parent = jQuery( object ).parent();
+			var value = jQuery( object ).attr( 'data-value' );
+			var currentVotes = span.text();
+			var sibling;
+			var siblineImg;
+			var src = "/theme.pratilipi/images/" + title;
+			
+			if( title == 'upvote' ){
+				sibling = parent.find( '.Dislikes' );
+				siblingImg = parent.find( '.Dislike-Img' );
+				if( siblingImg.attr( 'data-value' ) < 1 ){
+					siblingImg.attr( 'src', '/theme.pratilipi/images/downvote.png' );
+					siblingImg.attr( 'data-value', '1' );
+					var dislikes = sibling.text();
+					sibling.text( parseInt( dislikes ) - 1 );
+				}
+			}
+			else if( title == 'downvote' ){
+				sibling = parent.find( '.Likes' );
+				siblingImg = parent.find( '.Like-Img' );
+				if( siblingImg.attr( 'data-value' ) < 1 ) {
+					siblingImg.attr( 'src', '/theme.pratilipi/images/upvote.png' );
+					siblingImg.attr( 'data-value', '1' );
+					var likes = sibling.text();
+					sibling.text( parseInt( likes ) - 1 );
+				}
+			}
+
+			if( span.is(':empty') )
+				span.text( parseInt( 1 ));
+			else {
+				if( parseInt( value ) > 0 )
+					span.text( parseInt( currentVotes ) + 1 );
+				else 
+					span.text( parseInt( currentVotes ) - 1 );
+			}
+			
+			if( parseInt( value ) == 1 ){
+				jQuery( object ).attr( 'src', src + '.png' );
+				jQuery( object ).attr( 'data-value', '0' );
+			} else {
+				jQuery( object ).attr( 'src', src + 'd.png' );
+				jQuery( object ).attr( 'data-value', '1' );
+			}
+		}
+		
+		function addComment( object ){
 			var userName = '<b>${ userData.getName() }</b> ';
 			var date = '<br/><small>Now</small>';
-			var commentList = jQuery( "#PageContent-Pratilipi-Comment-List" );
+			var commentList = jQuery( object ).parent().next();
 			var newCommentDiv =jQuery( "<div></div>" );
-			newCommentDiv.addClass( "comment" );
+			newCommentDiv.addClass( "Comment" );
 			commentList.prepend( newCommentDiv );
 			var commentString =jQuery( "<p></p>" );
-			commentString.html( userName + comment + date );
+			commentString.html( userName + object.value + date );
 			newCommentDiv.append( commentString );
 		}
 		
-		function vote( object ){
-			ajaxPost( object );
-		}
 	</script>
 </#macro>

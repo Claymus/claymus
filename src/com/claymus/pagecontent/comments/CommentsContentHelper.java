@@ -313,11 +313,14 @@ public class CommentsContentHelper extends PageContentHelper<
 			Author author = dataAccessor.getAuthor( pratilipi.getAuthorId() );
 			
 			String recipientIdString;
-			if( accessToken.getUserId().equals( author.getUserId() ))
+			if( accessToken.getUserId().equals( author.getUserId() ) || author.getUserId() == null )
 				//WHEN AUTHOR MAKES A COMMENT.
 				recipientIdString = userPratilipi.getUserId().toString();
-			else
-				recipientIdString = author.getUserId() + "~" + userPratilipi.getUserId();
+			else{
+					recipientIdString = author.getUserId() + "~" + userPratilipi.getUserId();
+			}
+			
+			logger.log( Level.INFO, "Recipient Id string : " + recipientIdString );
 			
 			createEmailTasks( 
 					recipientIdString, 
@@ -331,7 +334,12 @@ public class CommentsContentHelper extends PageContentHelper<
 	}
 	
 	private static void createEmailTasks( String recipientIdString, String userId, String pratilipiId, String notificationType ){
-		String[] recipientIdArray = recipientIdString.split( "~" );
+		String[] recipientIdArray;
+		if( recipientIdString.indexOf( "~" ) != -1 )
+			recipientIdArray = recipientIdString.split( "~" );
+		else
+			recipientIdArray = new String[]{ recipientIdString };
+		
 		for( int i = 0; i < recipientIdArray.length; i++){
 			Task task = TaskQueueFactory.newTask();
 			task.addParam( "userId", userId );

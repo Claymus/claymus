@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FileUtils;
 
+import com.claymus.commons.shared.exception.InvalidArgumentException;
 import com.claymus.data.access.DataAccessor;
 import com.claymus.data.access.DataAccessorFactory;
 import com.claymus.data.transfer.EmailTemplate;
@@ -40,14 +41,49 @@ public class QueueNotificationServlet extends HttpServlet {
 
 		DataAccessor dataAccessor = DataAccessorFactory.getDataAccessor( request );
 		Long userId = Long.parseLong( request.getParameter( "userId" ) );
-		User user = dataAccessor.getUser( userId );
 		String recipientId = request.getParameter( "recipientId" );
-		User recipient = dataAccessor.getUser( Long.parseLong( recipientId ) );
 		String pratilipiId = request.getParameter( "pratilipiId" );
+		String notificationType = request.getParameter( "notificationType" );
+		
+		logger.log( Level.INFO, "UserId : " + request.getParameter( "userId" )
+							+ "Recipient Id : " + recipientId 
+							+ "Pratilipi Id : " + pratilipiId 
+							+ "Notification Type " + notificationType );
+
+		try {
+			if( userId == null || userId == 0L )
+				throw new InvalidArgumentException( "UserId is null" );
+			
+			if( recipientId == null )
+				throw new InvalidArgumentException( "Recipient Id is null" );
+			
+			if( pratilipiId == null )
+				throw new InvalidArgumentException( "PratilipiId is null" );
+			
+			if( notificationType == null )
+				throw new InvalidArgumentException( "Notification Type is null" );
+		} catch (InvalidArgumentException e1) {
+			e1.printStackTrace();
+		}
+		
+		User user = dataAccessor.getUser( userId );
+		User recipient = dataAccessor.getUser( Long.parseLong( recipientId ) );
 		Pratilipi pratilipi = com.pratilipi.data.access.DataAccessorFactory.getDataAccessor( request )
 									.getPratilipi( Long.parseLong( pratilipiId ));
 		PratilipiData pratilipiData = PratilipiContentHelper.createPratilipiData( pratilipi, null, null, request );
-		String notificationType = request.getParameter( "notificationType" );
+		
+		try {
+			if( user == null )
+				throw new InvalidArgumentException( "Could not find user. Invalid userId!" );
+			
+			if( recipient == null )
+				throw new InvalidArgumentException( "Could not find recipient. Invalid recipientId!" );
+			
+			if( pratilipi == null )
+				throw new InvalidArgumentException( "Pratilipi is null. Invalid pratilipiId!" );
+		} catch (InvalidArgumentException e1) {
+			e1.printStackTrace();
+		}
 		
 		// Creating Email Template
 		// TODO: migrate it to DataStore
