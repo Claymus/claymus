@@ -9,12 +9,12 @@ public class HtmlWidgetHelper extends WebsiteWidgetHelper<
 	
 	@Override
 	public String getModuleName() {
-		return "HTML";
+		return "HTML Widget";
 	}
 
 	@Override
 	public Double getModuleVersion() {
-		return 4.0;
+		return 6.0;
 	}
 
 	

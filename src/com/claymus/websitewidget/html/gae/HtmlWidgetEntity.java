@@ -11,10 +11,7 @@ import com.google.appengine.api.datastore.Text;
 @PersistenceCapable
 public class HtmlWidgetEntity extends WebsiteWidgetEntity implements HtmlWidget {
 
-	@Persistent( column = "X_COL_0" )
-	private String title;
-	
-	@Persistent( column = "X_COL_1" )
+	@Persistent( column = "X_TXT_0" )
 	private Text html;
 
 	
