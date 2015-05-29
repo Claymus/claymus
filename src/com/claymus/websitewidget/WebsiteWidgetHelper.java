@@ -1,15 +1,11 @@
 package com.claymus.websitewidget;
 
-import javax.servlet.http.HttpServletRequest;
-
 import com.claymus.commons.server.Access;
 import com.claymus.data.transfer.WebsiteWidget;
-import com.claymus.service.shared.data.WebsiteWidgetData;
 
 public abstract class WebsiteWidgetHelper<
 		P extends WebsiteWidget,
-		Q extends WebsiteWidgetData,
-		R extends WebsiteWidgetProcessor<P>> {
+		Q extends WebsiteWidgetProcessor<P>> {
 	
 	public abstract String getModuleName();
 	
@@ -19,16 +15,12 @@ public abstract class WebsiteWidgetHelper<
 		return new Access[]{};
 	};
 	
-	public boolean hasRequestAccessToAddWidget( HttpServletRequest request ) {
+	public boolean hasRequestAccessToAddWidget() {
 		return false;
 	};
 	
-	public boolean hasRequestAccessToUpdateWidget( HttpServletRequest request ) {
+	public boolean hasRequestAccessToUpdateWidget() {
 		return false;
 	};
 	
-	public P createOrUpdateFromData( Q websiteWidgetData, P websiteWidget ) {
-		return websiteWidget;
-	};
-
 }

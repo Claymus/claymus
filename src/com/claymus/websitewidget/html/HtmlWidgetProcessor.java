@@ -2,5 +2,10 @@ package com.claymus.websitewidget.html;
 
 import com.claymus.websitewidget.WebsiteWidgetProcessor;
 
-public class HtmlWidgetProcessor
-		extends WebsiteWidgetProcessor<HtmlWidget> { }
+public class HtmlWidgetProcessor extends WebsiteWidgetProcessor<HtmlWidget> {
+	
+	protected boolean hasBasicMode() {
+		return false;
+	}
+	
+}
