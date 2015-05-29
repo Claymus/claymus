@@ -20,20 +20,20 @@ public abstract class WebsiteWidgetEntity implements WebsiteWidget {
 	@Persistent( column = "WEBSITE_WIDGET_ID", valueStrategy = IdGeneratorStrategy.IDENTITY )
 	private Long id;
 	
+	@Persistent( column = "HOME" )
+	private String home;
+	
+	@Persistent( column = "PAGE_TYPE_LIST" )
+	private String[] pageTypeList;
+
+	@Persistent( column = "PAGE_TYPE_LIST_INCLUSIVE" )
+	private Boolean pageTypeListInclusive;
+
 	@Persistent( column = "POSITION" )
 	private String position;
 	
-	@Persistent( column = "PAGE_TYPES_BASIC_MODE" )
-	private String[] basicModePageTypes;
-
-	@Persistent( column = "PAGE_TYPES_BASIC_MODE_INCLUSIVE" )
-	private Boolean basicModePageTypesInclusive;
-
-	@Persistent( column = "PAGE_TYPES_STANDARD_MODE" )
-	private String[] standardModePageTypes;
-	
-	@Persistent( column = "PAGE_TYPES_STANDARD_MODE_INCLUSIVE" )
-	private Boolean standardModePageTypesInclusive;
+	@Persistent( column = "ORDER" )
+	private Integer order;
 	
 	@Persistent( column = "CREATION_DATE" )
 	private Date creationDate;
@@ -48,6 +48,37 @@ public abstract class WebsiteWidgetEntity implements WebsiteWidget {
 	}
 
 	@Override
+	public String getHome() {
+		return home;
+	}
+
+	@Override
+	public void setHome( String home ) {
+		this.home = home;
+	}
+
+	@Override
+	public String[] getPageTypeList() {
+		return pageTypeList == null ? new String[0] : pageTypeList;
+	}
+	
+	@Override
+	public boolean isPageTypeListInclusive() {
+		return pageTypeListInclusive == null ? false : pageTypeListInclusive;
+	}
+	
+	@Override
+	public void setPageTypeList( String[] pageTypeList ) {
+		setPageTypeList( pageTypeList, true );
+	}
+	
+	@Override
+	public void setPageTypeList( String[] pageTypeList, boolean inclusive ) {
+		this.pageTypeList = pageTypeList;
+		this.pageTypeListInclusive = inclusive;
+	}
+
+	@Override
 	public String getPosition() {
 		return position;
 	}
@@ -58,45 +89,13 @@ public abstract class WebsiteWidgetEntity implements WebsiteWidget {
 	}
 
 	@Override
-	public String[] getBasicModePageTypes() {
-		return basicModePageTypes == null ? new String[0] : basicModePageTypes;
-	}
-	
-	@Override
-	public boolean isBasicModePageTypeListInclusive() {
-		return basicModePageTypesInclusive == null ? false : basicModePageTypesInclusive;
-	}
-	
-	@Override
-	public void setBasicModePageTypes( String[] pageTypes ) {
-		setBasicModePageTypes( pageTypes, true );
-	}
-	
-	@Override
-	public void setBasicModePageTypes( String[] pageTypes, boolean include ) {
-		this.basicModePageTypes = pageTypes;
-		this.basicModePageTypesInclusive = include;
+	public Integer getOrder() {
+		return order;
 	}
 
 	@Override
-	public String[] getStandardModePageTypes() {
-		return standardModePageTypes == null ? new String[0] : standardModePageTypes;
-	}
-	
-	@Override
-	public boolean isStandardModePageTypeListInclusive() {
-		return standardModePageTypesInclusive == null ? false : standardModePageTypesInclusive;
-	}
-	
-	@Override
-	public void setStandardModePageTypes( String[] pageTypes ) {
-		setStandardModePageTypes( pageTypes, true );
-	}
-	
-	@Override
-	public void setStandardModePageTypes( String[] pageTypes, boolean include ) {
-		this.standardModePageTypes = pageTypes;
-		this.standardModePageTypesInclusive = include;
+	public void setOrder( Integer order ) {
+		this.order = order;
 	}
 
 	@Override
