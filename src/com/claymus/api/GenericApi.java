@@ -211,7 +211,11 @@ public abstract class GenericApi extends HttpServlet {
 				response.setStatus( HttpServletResponse.SC_NOT_MODIFIED );
 			
 			} else {
-				response.setContentType( gfdResponse.getMimeType() );
+				//TODO : REMOVE BELOW HACK ASAP
+				if( response.getContentType() == null || response.getContentType().equals( "application/octet-stream" ) )
+					response.setContentType( "image/png" );
+				else
+					response.setContentType( gfdResponse.getMimeType() );
 				response.setHeader( "ETag", gfdResponse.getETag() );
 
 				OutputStream out = response.getOutputStream();
