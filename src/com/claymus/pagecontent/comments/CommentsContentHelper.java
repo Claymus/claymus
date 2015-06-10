@@ -264,7 +264,8 @@ public class CommentsContentHelper extends PageContentHelper<
 			comment.setParentType( commentData.getParentType() );
 			comment.setUser( accessToken.getUserId() );
 			comment.setCreationDate( new Date() );
-			notificationType = NotificationType.COMMENT_ADD.toString();
+			if( commentData.hasContent() )
+				notificationType = NotificationType.COMMENT_ADD.toString();
 		} else{
 			if( !hasRequestAccessToUpdateCommentData( request, comment ))
 				throw new InsufficientAccessException( "Insufficient access to update comment" );
