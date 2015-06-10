@@ -4,11 +4,15 @@
 
 	<div class="Comment-Div">
 		<div  data-id="${ review.getId() }" data-type="REVIEW">
-			<#if userData.getEmail()?? && review.getUserId() != userData.getId()>
-				<#if reviewLikesSeq?seq_contains( userData.getId()?c )>
-					<img class="Like-Img" onclick="vote( this )" src="/theme.pratilipi/images/upvoted.png" title="Upvote" alt="Upvote" data-value="0" />
+			<#if userData.getEmail()??>
+				<#if review.getUserId() != userData.getId()>
+					<#if reviewLikesSeq?seq_contains( userData.getId()?c )>
+						<img class="Like-Img" onclick="vote( this )" src="/theme.pratilipi/images/upvoted.png" title="Upvote" alt="Upvote" data-value="0" />
+					<#else>
+						<img class="Like-Img" onclick="vote( this )" src="/theme.pratilipi/images/upvote.png" title="Upvote" alt="Upvote" data-value="1" />
+					</#if>
 				<#else>
-					<img class="Like-Img" onclick="vote( this )" src="/theme.pratilipi/images/upvote.png" title="Upvote" alt="Upvote" data-value="1" />
+					<img class="Disabled" src="/theme.pratilipi/images/upvote_disabled.png" title="Upvote" alt="Upvote" data-value="0"/>
 				</#if>
 			<#else>
 				<img class="Disabled" src="/theme.pratilipi/images/upvote_disabled.png" title="Upvote" alt="Upvote" data-value="0" data-toggle='modal' data-target="#loginModal" onclick="window.location.href='#Comment'" />
@@ -18,12 +22,16 @@
 			<#else>
 				<span class="Likes"></span>
 			</#if>
-		
-			<#if userData.getEmail()?? && review.getUserId() != userData.getId()>
-				<#if reviewDislikesSeq?seq_contains( userData.getId()?c )>
-					<img class="Dislike-Img" onclick="vote( this )" src="/theme.pratilipi/images/downvoted.png" title="Downvote" alt="Downvote" data-value="0"/>
+
+			<#if userData.getEmail()??>
+				<#if review.getUserId() != userData.getId()>
+					<#if reviewDislikesSeq?seq_contains( userData.getId()?c )>
+						<img class="Dislike-Img" onclick="vote( this )" src="/theme.pratilipi/images/downvoted.png" title="Downvote" alt="Downvote" data-value="0"/>
+					<#else>
+						<img class="Dislike-Img" onclick="vote( this )" src="/theme.pratilipi/images/downvote.png" title="Downvote" alt="Downvote" data-value="1"/>
+					</#if>
 				<#else>
-					<img class="Dislike-Img" onclick="vote( this )" src="/theme.pratilipi/images/downvote.png" title="Downvote" alt="Downvote" data-value="1"/>
+					<img class="Disabled" src="/theme.pratilipi/images/downvote_disabled.png" title="Downvote" alt="Downvote" />
 				</#if>
 			<#else>
 				<img class="Disabled" src="/theme.pratilipi/images/downvote_disabled.png" title="Downvote" alt="Downvote" data-value="0" data-toggle='modal' data-target="#loginModal" onclick="window.location.href='#Comment'" />
@@ -56,11 +64,16 @@
 						</p>
 						
 						<#assign commentLikesSeq=commentLikesMap[ commentSeq[0] ]?split( "~" )>
-						<#if userData.getEmail()?? && userData.getId()?c != commentSeq[1]>
-							<#if commentLikesSeq?seq_contains( userData.getId()?c )>
-								<img class="Like-Img" onclick="vote( this )" src="/theme.pratilipi/images/upvoted.png" title="Upvote" alt="Upvote" data-value="0">
+
+						<#if userData.getEmail()?? >
+							<#if userData.getId()?c != commentSeq[1]>
+								<#if commentLikesSeq?seq_contains( userData.getId()?c )>
+									<img class="Like-Img" onclick="vote( this )" src="/theme.pratilipi/images/upvoted.png" title="Upvote" alt="Upvote" data-value="0">
+								<#else>
+									<img class="Like-Img" onclick="vote( this )" src="/theme.pratilipi/images/upvote.png" title="Upvote" alt="Upvote" data-value="1">
+								</#if>
 							<#else>
-								<img class="Like-Img" onclick="vote( this )" src="/theme.pratilipi/images/upvote.png" title="Upvote" alt="Upvote" data-value="1">
+								<img class="Disabled" src="/theme.pratilipi/images/upvote_disabled.png" title="Upvote" alt="Upvote" data-value="0"/>
 							</#if>
 						<#else>
 							<img class="Disabled" src="/theme.pratilipi/images/upvote_disabled.png" title="Upvote" alt="Upvote" data-value="0" data-toggle='modal' data-target="#loginModal" onclick="window.location.href='#Comment'">
@@ -72,11 +85,15 @@
 						</#if>
 						
 						<#assign commentDislikesSeq=commentDislikesMap[ commentSeq[0] ]?split( "~" )>
-						<#if userData.getEmail()?? && userData.getId()?c != commentSeq[1]>
-							<#if commentDislikesSeq?seq_contains( userData.getId()?c )>
-								<img class="Dislike-Img" onclick="vote( this )" src="/theme.pratilipi/images/downvoted.png" title="Downvote" alt="Downvote" data-value="0">
+						<#if userData.getEmail()??>
+							<#if userData.getId()?c != commentSeq[1]>
+								<#if commentDislikesSeq?seq_contains( userData.getId()?c )>
+									<img class="Dislike-Img" onclick="vote( this )" src="/theme.pratilipi/images/downvoted.png" title="Downvote" alt="Downvote" data-value="0">
+								<#else>
+									<img class="Dislike-Img" onclick="vote( this )" src="/theme.pratilipi/images/downvote.png" title="Downvote" alt="Downvote" data-value="1">
+								</#if>
 							<#else>
-								<img class="Dislike-Img" onclick="vote( this )" src="/theme.pratilipi/images/downvote.png" title="Downvote" alt="Downvote" data-value="1">
+								<img class="Disabled" src="/theme.pratilipi/images/downvote_disabled.png" title="Downvote" alt="Downvote">
 							</#if>
 						<#else>
 							<img class="Disabled" src="/theme.pratilipi/images/downvote_disabled.png" title="Downvote" alt="Downvote" data-value="0" data-toggle='modal' data-target="#loginModal" onclick="window.location.href='#Comment'">
@@ -101,6 +118,7 @@
 		.Comment-Div textarea {
 			margin-top: 10px;
 			width: 50%;
+			font-size : 13px;
 		}
 		
 		.Likes {

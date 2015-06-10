@@ -46,33 +46,31 @@ public class QueueNotificationServlet extends HttpServlet {
 		String notificationType = request.getParameter( "notificationType" );
 		
 		logger.log( Level.INFO, "UserId : " + request.getParameter( "userId" )
-							+ "Recipient Id : " + recipientId 
-							+ "Pratilipi Id : " + pratilipiId 
-							+ "Notification Type " + notificationType );
+							+ "; Recipient Id : " + recipientId 
+							+ "; Pratilipi Id : " + pratilipiId 
+							+ "; Notification Type : " + notificationType );
 
 		try {
 			if( userId == null || userId == 0L )
 				throw new InvalidArgumentException( "UserId is null" );
 			
-			if( recipientId == null )
+			if( recipientId == null ){
+				logger.log( Level.INFO, "Recipient Id is null" );
 				throw new InvalidArgumentException( "Recipient Id is null" );
+			}
 			
 			if( pratilipiId == null )
-				throw new InvalidArgumentException( "PratilipiId is null" );
+				throw new InvalidArgumentException( "Pratilipi Id is null" );
 			
 			if( notificationType == null )
 				throw new InvalidArgumentException( "Notification Type is null" );
-		} catch (InvalidArgumentException e1) {
-			e1.printStackTrace();
-		}
-		
-		User user = dataAccessor.getUser( userId );
-		User recipient = dataAccessor.getUser( Long.parseLong( recipientId ) );
-		Pratilipi pratilipi = com.pratilipi.data.access.DataAccessorFactory.getDataAccessor( request )
-									.getPratilipi( Long.parseLong( pratilipiId ));
-		PratilipiData pratilipiData = PratilipiContentHelper.createPratilipiData( pratilipi, null, null, request );
-		
-		try {
+			
+			User user = dataAccessor.getUser( userId );
+			User recipient = dataAccessor.getUser( Long.parseLong( recipientId ) );
+			Pratilipi pratilipi = com.pratilipi.data.access.DataAccessorFactory.getDataAccessor( request )
+					.getPratilipi( Long.parseLong( pratilipiId ));
+			PratilipiData pratilipiData = PratilipiContentHelper.createPratilipiData( pratilipi, null, null, request );
+			
 			if( user == null )
 				throw new InvalidArgumentException( "Could not find user. Invalid userId!" );
 			
@@ -81,31 +79,32 @@ public class QueueNotificationServlet extends HttpServlet {
 			
 			if( pratilipi == null )
 				throw new InvalidArgumentException( "Pratilipi is null. Invalid pratilipiId!" );
-		} catch (InvalidArgumentException e1) {
-			e1.printStackTrace();
-		}
-		
-		// Creating Email Template
-		// TODO: migrate it to DataStore
-		String subject = "Pratilipi.com - Notification";
-		
-		File file = new File( "WEB-INF/classes/com/pratilipi/servlet/content/NotificationEmailContent.ftl" );
-		List<String> lines;
-		lines = FileUtils.readLines( file, "UTF-8" );
-		String body = "";
-		for( String line : lines )
-			body = body + line;
+			
+			// Creating Email Template
+			// TODO: migrate it to DataStore
+			String subject = "Pratilipi.com - Notification";
+			File file;
+			if( pratilipiData.getLanguageId().equals( 6319546696728576L )){
+				file = new File( "WEB-INF/classes/com/pratilipi/servlet/content/NotificationEmailContentTamil.ftl" );
+				logger.log( Level.INFO, "Template Name : " + file.getName() );
+			}
+			else
+				file = new File( "WEB-INF/classes/com/pratilipi/servlet/content/NotificationEmailContent.ftl" );
+			List<String> lines;
+			lines = FileUtils.readLines( file, "UTF-8" );
+			String body = "";
+			for( String line : lines )
+				body = body + line;
 
-		EmailTemplate notificationEmailTemplate = dataAccessor.newEmailTemplate();
-		notificationEmailTemplate.setSenderName( "Team Pratilipi" );
-		notificationEmailTemplate.setSenderEmail( "contact@pratilipi.com" );
-		notificationEmailTemplate.setReplyToName( "Team Pratilipi" );
-		notificationEmailTemplate.setReplyToEmail( "no-reply@pratilipi.com" );
-		notificationEmailTemplate.setSubject( subject );
-		notificationEmailTemplate.setBody( body );
-		
-		// Sending email to the user
-		try {
+			EmailTemplate notificationEmailTemplate = dataAccessor.newEmailTemplate();
+			notificationEmailTemplate.setSenderName( "Team Pratilipi" );
+			notificationEmailTemplate.setSenderEmail( "contact@pratilipi.com" );
+			notificationEmailTemplate.setReplyToName( "Team Pratilipi" );
+			notificationEmailTemplate.setReplyToEmail( "no-reply@pratilipi.com" );
+			notificationEmailTemplate.setSubject( subject );
+			notificationEmailTemplate.setBody( body );
+			
+			//Sending email
 			Map<String, Object> dataModel = new HashMap<>();
 			dataModel.put( "user", user );
 			dataModel.put( "recipient", recipient );
@@ -113,6 +112,7 @@ public class QueueNotificationServlet extends HttpServlet {
 			dataModel.put( "notificationType", notificationType );
 			
 			logger.log( Level.INFO, "Recipient Email : " + recipient.getEmail() );
+			logger.log( Level.INFO, "Pratilipi Type : " + pratilipiData.getType() );
 			
 			if( recipient != null && recipient.getEmail() != null ){
 				logger.log( Level.INFO, "Sending email..." );
@@ -120,11 +120,10 @@ public class QueueNotificationServlet extends HttpServlet {
 						EmailUtil.createUserName( recipient ), recipient.getEmail(),
 						notificationEmailTemplate, dataModel );
 			}
-			
-		} catch( MessagingException | TemplateException e ) {
-			response.sendError( HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
-			logger.log( Level.SEVERE, "Failed to send the email !", e );
+		} catch ( MessagingException | TemplateException | InvalidArgumentException e1) {
+			e1.printStackTrace();
 		}
+		
 		
 	}
 }
