@@ -69,7 +69,7 @@ public class QueueNotificationServlet extends HttpServlet {
 			User recipient = dataAccessor.getUser( Long.parseLong( recipientId ) );
 			Pratilipi pratilipi = com.pratilipi.data.access.DataAccessorFactory.getDataAccessor( request )
 					.getPratilipi( Long.parseLong( pratilipiId ));
-			PratilipiData pratilipiData = PratilipiContentHelper.createPratilipiData( pratilipi, null, null, request );
+			PratilipiData pratilipiData = PratilipiContentHelper.createPratilipiData( pratilipi, null, null, null, request );
 			
 			if( user == null )
 				throw new InvalidArgumentException( "Could not find user. Invalid userId!" );
