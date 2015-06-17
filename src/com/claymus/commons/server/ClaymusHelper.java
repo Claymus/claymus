@@ -20,6 +20,7 @@ import com.claymus.data.transfer.UserRole;
 import com.claymus.data.transfer.shared.PageData;
 import com.claymus.service.shared.data.UserData;
 import com.google.apphosting.api.ApiProxy;
+import com.pratilipi.commons.shared.UserSex;
 
 @SuppressWarnings("serial")
 public class ClaymusHelper implements Serializable {
@@ -173,6 +174,30 @@ public class ClaymusHelper implements Serializable {
 
 					@Override
 					public void setStatus( UserStatus userStatus ) { }
+
+					@Override
+					public Date getDateOfBirth() {
+						// TODO Auto-generated method stub
+						return null;
+					}
+
+					@Override
+					public void setDateOfBirth(Date dateOfBirth) {
+						// TODO Auto-generated method stub
+						
+					}
+
+					@Override
+					public UserSex getSex() {
+						// TODO Auto-generated method stub
+						return null;
+					}
+
+					@Override
+					public void setSex(UserSex userSex) {
+						// TODO Auto-generated method stub
+						
+					}
 					
 				};
 			} else {

@@ -9,6 +9,7 @@ import javax.jdo.annotations.PrimaryKey;
 
 import com.claymus.commons.shared.UserStatus;
 import com.claymus.data.transfer.User;
+import com.pratilipi.commons.shared.UserSex;
 
 @SuppressWarnings("serial")
 @PersistenceCapable( table = "USER" )
@@ -32,6 +33,12 @@ public class UserEntity implements User {
 	
 	@Persistent( column = "EMAIL" )
 	private String email;
+	
+	@Persistent( column = "DATE_OF_BIRTH" )
+	private Date dateOfBirth;
+	
+	@Persistent( column = "SEX" )
+	private UserSex sex;
 	
 	@Persistent( column = "PHONE" )
 	private String phone;
@@ -107,6 +114,26 @@ public class UserEntity implements User {
 	@Override
 	public void setEmail( String email ) {
 		this.email = email;
+	}
+	
+	@Override
+	public Date getDateOfBirth() {
+		return dateOfBirth;
+	}
+
+	@Override
+	public void setDateOfBirth( Date dateOfBirth ) {
+		this.dateOfBirth = dateOfBirth;
+	}
+	
+	@Override
+	public UserSex getSex() {
+		return sex;
+	}
+
+	@Override
+	public void setSex( UserSex sex ) {
+		this.sex = sex;
 	}
 
 	@Override

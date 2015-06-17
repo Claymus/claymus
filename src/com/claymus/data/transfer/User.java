@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import com.claymus.commons.shared.UserStatus;
+import com.pratilipi.commons.shared.UserSex;
 
 public interface User extends Serializable {
 
@@ -30,6 +31,14 @@ public interface User extends Serializable {
 	String getEmail();
 
 	void setEmail( String email );
+	
+	Date getDateOfBirth();
+	
+	void setDateOfBirth( Date dateOfBirth );
+	
+	UserSex getSex();
+	
+	void setSex( UserSex userSex );
 
 	String getPhone();
 
