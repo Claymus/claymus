@@ -122,7 +122,7 @@ public class UserContentHelper extends PageContentHelper<
 		if( userData.getStatus() != null )
 			user.setStatus( userData.getStatus() );
 		else
-			user.setStatus( UserStatus.POSTLAUNCH_SIGNUP );
+			user.setStatus( UserStatus.ANDROID_SIGNUP );
 		
 		user = dataAccessor.createOrUpdateUser( user );
 		
