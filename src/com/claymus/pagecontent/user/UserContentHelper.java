@@ -11,6 +11,7 @@ import com.claymus.commons.server.Access;
 import com.claymus.commons.server.ClaymusHelper;
 import com.claymus.commons.server.EncryptPassword;
 import com.claymus.commons.shared.UserStatus;
+import com.claymus.commons.shared.exception.InsufficientAccessException;
 import com.claymus.commons.shared.exception.InvalidArgumentException;
 import com.claymus.data.access.DataAccessor;
 import com.claymus.data.access.DataAccessorFactory;
@@ -72,6 +73,39 @@ public class UserContentHelper extends PageContentHelper<
 	
 	public static boolean hasRequestAccessToListUserData( HttpServletRequest request ) {
 		return ClaymusHelper.get( request ).hasUserAccess( ACCESS_TO_LIST_USER_DATA );
+	}
+	
+	
+	public static UserData createUserData( Long userId, HttpServletRequest request ){
+		return createUserData( DataAccessorFactory.getDataAccessor( request ).getUser( userId ) );
+	}
+	
+	public static UserData createUserData( String email, HttpServletRequest request ){
+		return createUserData( DataAccessorFactory.getDataAccessor( request ).getUserByEmail( email ) );
+	}
+	
+	public static UserData createUserData( User user ){
+		
+		UserData userData = new UserData();
+		userData.setId( user.getId() );
+		userData.setFirstName( user.getFirstName() );
+		userData.setLastName( user.getLastName() );
+		String name = null;
+		if( userData.getFirstName() == null && userData.getLastName() == null )
+			name = userData.getEmail();
+		else if( userData.getFirstName() != null && userData.getLastName() == null )
+			name = userData.getFirstName();
+		else if( userData.getFirstName() != null && userData.getLastName() != null )
+			name = userData.getFirstName() + " " + userData.getLastName();
+		userData.setName( name );
+		userData.setEmail( user.getEmail() );
+		userData.setDateOfBirth( user.getDateOfBirth() );
+		userData.setSex( user.getSex() );
+		userData.setCampaign( user.getCampaign() );
+		userData.setReferer( user.getReferer() );
+		userData.setStatus( user.getStatus() );
+		
+		return userData;
 	}
 	
 	public static AccessToken registerUser( UserData userData, HttpServletRequest request ) 
@@ -143,6 +177,37 @@ public class UserContentHelper extends PageContentHelper<
 		accessToken = claymusHelper.updateAccessToken( accessToken.getId(), user.getId(), new Date(), null, null );
 		
 		return accessToken;
+	}
+	
+	public static UserData updateUserProfile( UserData userData, HttpServletRequest request ) 
+			throws InsufficientAccessException, InvalidArgumentException{
+		
+		DataAccessor dataAccessor = DataAccessorFactory.getDataAccessor( request );
+		User user = dataAccessor.getUser( userData.getId() );
+		Logger.getLogger( UserContentHelper.class.getName() ).log( Level.INFO, "User : " + user );
+		
+		if( user == null )
+			throw new InvalidArgumentException( "User Id is invalid" );
+		
+		if( userData.hasName() ){
+			String fullName = userData.getName();
+			Logger.getLogger( UserContentHelper.class.getName() ).log( Level.INFO, "Name : " + fullName );
+			Logger.getLogger( UserContentHelper.class.getName() ).log( Level.INFO, "First Name : " + fullName.substring( 0, fullName.lastIndexOf( " " ) ) );
+			Logger.getLogger( UserContentHelper.class.getName() ).log( Level.INFO, "Second Name : " + fullName.substring( fullName.lastIndexOf( " " ) + 1 ) );
+			user.setFirstName( fullName.substring( 0, fullName.lastIndexOf( " " ) ));
+			user.setLastName( fullName.substring( fullName.lastIndexOf( " " ) + 1 ));
+		}
+		if( userData.hasEmail() )
+			user.setEmail( userData.getEmail() );
+		if( userData.hasDateOfBirth() )
+			user.setDateOfBirth( userData.getDateOfBirth() );
+		if( userData.hasSex() )
+			user.setSex( userData.getSex() );
+		
+		user = dataAccessor.createOrUpdateUser( user );
+		
+		
+		return createUserData( user );
 	}
 	
 }

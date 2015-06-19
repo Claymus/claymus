@@ -20,6 +20,7 @@ public class UserData implements IsSerializable {
 	private boolean hasLastName;
 	
 	private String name;
+	private boolean hasName;
 
 	private String email;
 	private boolean hasEmail;
@@ -90,6 +91,11 @@ public class UserData implements IsSerializable {
 	
 	public void setName( String name ){
 		this.name = name;
+		this.hasName = true;
+	}
+	
+	public boolean hasName(){
+		return hasName;
 	}
 
 	public String getEmail() {
