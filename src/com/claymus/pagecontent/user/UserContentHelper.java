@@ -76,6 +76,48 @@ public class UserContentHelper extends PageContentHelper<
 	}
 	
 	
+	public static AccessToken socialLogin( UserData userData, HttpServletRequest request ) 
+			throws InvalidArgumentException{
+
+		DataAccessor dataAccessor = DataAccessorFactory.getDataAccessor( request );
+		User user = dataAccessor.getUserByEmail( userData.getEmail() );
+		
+		AccessToken accessToken;
+		if( user == null ){
+			userData.setStatus( UserStatus.ANDROID_SIGNUP_GOOGLE );
+			accessToken = registerUser( userData, request );
+		} else
+			accessToken = ClaymusHelper.get( request ).createAccessToken( user.getId() );
+
+		return accessToken;
+	}
+	
+	public static AccessToken userLogin( UserData userData, HttpServletRequest request ) 
+			throws InvalidArgumentException{
+		
+		DataAccessor dataAccessor = DataAccessorFactory.getDataAccessor( request );
+		AccessToken accessToken = dataAccessor.newAccessToken();
+		User user = dataAccessor.getUserByEmail( userData.getEmail() );
+		
+		if( user == null )
+			throw new InvalidArgumentException( "Invalid User ID" );
+		if( user != null && user.getPassword() == null )
+			throw new InvalidArgumentException( "You are registered via social login. Please use the same to login." );
+		
+		if( user != null && userData.getPassword() != null ) {
+			if( !EncryptPassword.check( userData.getPassword(), user.getPassword() ) )
+				throw new InvalidArgumentException( "Invalid user secret." );
+			
+			ClaymusHelper claymusHelper = ClaymusHelper.get( request );
+			accessToken = claymusHelper.createAccessToken( user.getId() ); 
+		} else
+			throw new InvalidArgumentException( "User Secret cannot be empty" );
+		
+		return accessToken;
+		
+	}
+	
+	
 	public static UserData createUserData( Long userId, HttpServletRequest request ){
 		return createUserData( DataAccessorFactory.getDataAccessor( request ).getUser( userId ) );
 	}
@@ -146,8 +188,17 @@ public class UserContentHelper extends PageContentHelper<
 					+ "Kindly contact the administrator." );
 		}
 		
-		String firstName = userData.getName().trim().substring( 0, userData.getName().lastIndexOf( " " ));
-		String lastName = userData.getName().trim().substring( userData.getName().lastIndexOf( " " ) + 1 );
+		String firstName = null;
+		String lastName = null;
+		if( userData.getName() != null && userData.getName().trim().lastIndexOf( " " ) != -1 ){
+			firstName = userData.getName().trim().substring( 0, userData.getName().trim().lastIndexOf( " " ));
+			lastName = userData.getName().trim().substring( userData.getName().trim().lastIndexOf( " " ) + 1 );
+		} else if( userData.getName() != null && userData.getName().trim().lastIndexOf( " " ) == -1 ){
+			firstName = userData.getName();
+		} else{
+			firstName = userData.getFirstName();
+			lastName = userData.getLastName();
+		}
 		
 		user.setFirstName( firstName );
 		user.setLastName( lastName );
@@ -173,8 +224,7 @@ public class UserContentHelper extends PageContentHelper<
 		
 		//Update Access Token Entity
 		ClaymusHelper claymusHelper = ClaymusHelper.get( request );
-		AccessToken accessToken = ( AccessToken ) request.getAttribute( ClaymusHelper.REQUEST_ATTRIB_ACCESS_TOKEN );
-		accessToken = claymusHelper.updateAccessToken( accessToken.getId(), user.getId(), new Date(), null, null );
+		AccessToken accessToken = claymusHelper.createAccessToken( user.getId() );
 		
 		return accessToken;
 	}
