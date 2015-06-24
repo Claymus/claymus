@@ -8,6 +8,7 @@ import java.util.List;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
+import com.claymus.commons.shared.ClaymusAccessTokenType;
 import com.claymus.commons.shared.UserStatus;
 import com.claymus.data.access.DataAccessor;
 import com.claymus.data.access.DataAccessorFactory;
@@ -42,6 +43,8 @@ public class ClaymusHelper implements Serializable {
 	private static final String URL_LOGOUT_PAGE = "/logout?dest=";
 	private static final String URL_REGISTER_PAGE = "#signup";
 	private static final String URL_FORGOTPASSWORD_PAGE = "#forgotpassword";
+	
+	private static final long ACCESS_TOKEN_VALIDITY = 60 * 60 * 24 * 7 * 1000; // 1 Wk
 	
 	protected final HttpServletRequest request;
 	
@@ -391,6 +394,18 @@ public class ClaymusHelper implements Serializable {
 		
 		return accessToken;
 		
+	}
+	
+	public final AccessToken createAccessToken( Long userId ){
+		
+		DataAccessor dataAccessor = DataAccessorFactory.getDataAccessor( request );
+		AccessToken accessToken = dataAccessor.newAccessToken();
+		accessToken.setUserId( userId );
+		accessToken.setType( ClaymusAccessTokenType.USER.toString() );
+		accessToken.setExpiry( new Date( new Date().getTime() + ACCESS_TOKEN_VALIDITY ) ); // 1Wk
+		accessToken = dataAccessor.createAccessToken( accessToken );
+		
+		return accessToken;
 	}
 	
 }
