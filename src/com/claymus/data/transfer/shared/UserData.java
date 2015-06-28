@@ -31,6 +31,8 @@ public class UserData implements IsSerializable {
 	private UserSex sex;
 	private boolean hasSex;
 	
+	private String profileImageUrl;
+	
 	private String campaign;
 	
 	private String referer;
@@ -135,6 +137,14 @@ public class UserData implements IsSerializable {
 	
 	public boolean hasSex(){
 		return hasSex;
+	}
+	
+	public String getProfileImageUrl(){
+		return profileImageUrl;
+	}
+	
+	public void setProfileImageUrl( String profileImageUrl ){
+		this.profileImageUrl = profileImageUrl;
 	}
 
 	public String getCampaign() {

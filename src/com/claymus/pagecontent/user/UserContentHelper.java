@@ -142,6 +142,8 @@ public class UserContentHelper extends PageContentHelper<
 		userData.setName( name );
 		userData.setEmail( user.getEmail() );
 		userData.setDateOfBirth( user.getDateOfBirth() );
+		if( user.getProfileImageUrl() != null )
+			userData.setProfileImageUrl( user.getProfileImageUrl() );
 		userData.setSex( user.getSex() );
 		userData.setCampaign( user.getCampaign() );
 		userData.setReferer( user.getReferer() );
@@ -241,14 +243,13 @@ public class UserContentHelper extends PageContentHelper<
 		
 		if( userData.hasName() ){
 			String fullName = userData.getName();
-			Logger.getLogger( UserContentHelper.class.getName() ).log( Level.INFO, "Name : " + fullName );
-			Logger.getLogger( UserContentHelper.class.getName() ).log( Level.INFO, "First Name : " + fullName.substring( 0, fullName.lastIndexOf( " " ) ) );
-			Logger.getLogger( UserContentHelper.class.getName() ).log( Level.INFO, "Second Name : " + fullName.substring( fullName.lastIndexOf( " " ) + 1 ) );
 			user.setFirstName( fullName.substring( 0, fullName.lastIndexOf( " " ) ));
 			user.setLastName( fullName.substring( fullName.lastIndexOf( " " ) + 1 ));
 		}
 		if( userData.hasEmail() )
 			user.setEmail( userData.getEmail() );
+		if( userData.hasPassword() )
+			user.setPassword( userData.getPassword() );
 		if( userData.hasDateOfBirth() )
 			user.setDateOfBirth( userData.getDateOfBirth() );
 		if( userData.hasSex() )
