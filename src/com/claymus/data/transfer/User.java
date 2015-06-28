@@ -36,6 +36,10 @@ public interface User extends Serializable {
 	
 	void setDateOfBirth( Date dateOfBirth );
 	
+	String getProfileImageUrl();
+	
+	void setProfileImageUrl( String profileImageUrl );
+	
 	UserSex getSex();
 	
 	void setSex( UserSex userSex );
@@ -52,12 +56,19 @@ public interface User extends Serializable {
 
 	String setReferer( String referer );
 	
-	Date getSignUpDate();
-	
-	void setSignUpDate( Date date );
-
 	UserStatus getStatus();
 	
 	void setStatus( UserStatus userStatus );
 	
+	String getFacebookRefreshToken();
+	
+	void setFacebookRefreshToken( String facebookRefreshToken );
+	
+	String getGoogleRefreshToken();
+	
+	void setGoogleRefreshToken( String googleRefreshToken );
+	
+	Date getSignUpDate();
+	
+	void setSignUpDate( Date date );
 }

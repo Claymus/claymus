@@ -180,27 +180,43 @@ public class ClaymusHelper implements Serializable {
 
 					@Override
 					public Date getDateOfBirth() {
-						// TODO Auto-generated method stub
 						return null;
 					}
 
 					@Override
-					public void setDateOfBirth(Date dateOfBirth) {
-						// TODO Auto-generated method stub
-						
-					}
+					public void setDateOfBirth(Date dateOfBirth) { }
 
 					@Override
 					public UserSex getSex() {
-						// TODO Auto-generated method stub
 						return null;
 					}
 
 					@Override
-					public void setSex(UserSex userSex) {
-						// TODO Auto-generated method stub
-						
+					public void setSex(UserSex userSex) { }
+
+					@Override
+					public String getProfileImageUrl() {
+						return null;
 					}
+
+					@Override
+					public void setProfileImageUrl(String profileImageUrl) { }
+
+					@Override
+					public String getFacebookRefreshToken() {
+						return null;
+					}
+
+					@Override
+					public void setFacebookRefreshToken( String facebookRefreshToken) { }
+
+					@Override
+					public String getGoogleRefreshToken() {
+						return null;
+					}
+
+					@Override
+					public void setGoogleRefreshToken(String googleRefreshToken) { }
 					
 				};
 			} else {
