@@ -5,6 +5,7 @@
     <name>invite-user</name>
     <rate>1/s</rate>
     <bucket-size>1</bucket-size>
+    <target>www</target>
     <max-concurrent-requests>1</max-concurrent-requests>
     <retry-parameters>
       <task-age-limit>90d</task-age-limit>
@@ -18,6 +19,7 @@
     <name>welcome-user</name>
     <rate>1/s</rate>
     <bucket-size>1</bucket-size>
+    <target>www</target>
     <max-concurrent-requests>1</max-concurrent-requests>
     <retry-parameters>
       <task-age-limit>90d</task-age-limit>
@@ -31,6 +33,7 @@
     <name>reset-password</name>
     <rate>1/s</rate>
     <bucket-size>1</bucket-size>
+    <target>www</target>
     <max-concurrent-requests>1</max-concurrent-requests>
     <retry-parameters>
       <task-age-limit>90d</task-age-limit>
