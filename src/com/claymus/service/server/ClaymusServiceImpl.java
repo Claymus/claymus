@@ -1,6 +1,7 @@
 package com.claymus.service.server;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -338,8 +339,13 @@ public class ClaymusServiceImpl extends RemoteServiceServlet
 		// Request via password reset link
 		} else {
 			
-			user = dataAccessor.getUserByEmail( userEmail );
+			try {
+				userEmail = java.net.URLDecoder.decode( userEmail, "UTF-8");
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
 			
+			user = dataAccessor.getUserByEmail( userEmail );
 			if( request.getToken() == null
 					|| ! user.getPassword().equals( request.getToken() ) )
 				throw new InvalidArgumentException(
