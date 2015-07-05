@@ -9,7 +9,7 @@ import javax.jdo.annotations.PrimaryKey;
 
 import com.claymus.commons.shared.UserStatus;
 import com.claymus.data.transfer.User;
-import com.pratilipi.commons.shared.UserSex;
+import com.pratilipi.commons.shared.UserGender;
 
 @SuppressWarnings("serial")
 @PersistenceCapable( table = "USER" )
@@ -37,11 +37,11 @@ public class UserEntity implements User {
 	@Persistent( column = "DATE_OF_BIRTH" )
 	private Date dateOfBirth;
 	
-	@Persistent( column = "PROFILE_IMAGE_URL" )
-	private String profileImageUrl;
-	
-	@Persistent( column = "SEX" )
-	private UserSex sex;
+	@Persistent( column = "GENDER" )
+	private UserGender gender;
+
+	@Persistent( column = "PROFILE_PIC_URL" )
+	private String profilePicUrl;
 	
 	@Persistent( column = "PHONE" )
 	private String phone;
@@ -136,25 +136,25 @@ public class UserEntity implements User {
 	}
 	
 	@Override
-	public String getProfileImageUrl(){
-		return profileImageUrl;
-	}
-	
-	@Override
-	public void setProfileImageUrl( String profileImageUrl ){
-		this.profileImageUrl = profileImageUrl;
-	}
-	
-	@Override
-	public UserSex getSex() {
-		return sex;
+	public UserGender getGender() {
+		return gender;
 	}
 
 	@Override
-	public void setSex( UserSex sex ) {
-		this.sex = sex;
+	public void setGender( UserGender sex ) {
+		this.gender = sex;
 	}
-
+	
+	@Override
+	public String getProfilePicUrl(){
+		return profilePicUrl;
+	}
+	
+	@Override
+	public void setProfilePicUrl( String profilePicUrl ){
+		this.profilePicUrl = profilePicUrl;
+	}
+	
 	@Override
 	public String getPhone() {
 		return phone;

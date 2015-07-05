@@ -4,7 +4,7 @@ import java.util.Date;
 
 import com.claymus.commons.shared.UserStatus;
 import com.google.gwt.user.client.rpc.IsSerializable;
-import com.pratilipi.commons.shared.UserSex;
+import com.pratilipi.commons.shared.UserGender;
 
 public class UserData implements IsSerializable {
 	
@@ -28,14 +28,21 @@ public class UserData implements IsSerializable {
 	private Date dateOfBirth;
 	private boolean hasDateOfBirth;
 	
-	private UserSex sex;
-	private boolean hasSex;
+	private UserGender gender;
+	private boolean hasGender;
 	
-	private String profileImageUrl;
+	private String profilePicUrl;
+	private boolean hasProfilePicUrl;
 	
 	private String campaign;
 	
 	private String referer;
+	
+	private String facebookRefreshToken;
+	private boolean hasFacebookRefreshToken;
+	
+	private String googleRefreshToken;
+	private boolean hasGoogleRefreshToken;
 	
 	private UserStatus status;
 
@@ -126,25 +133,30 @@ public class UserData implements IsSerializable {
 		return hasDateOfBirth;
 	}
 
-	public UserSex getSex() {
-		return sex;
+	public UserGender getGender() {
+		return gender;
 	}
 
-	public void setSex(UserSex sex) {
-		this.sex = sex;
-		this.hasSex = true;
+	public void setGender(UserGender gender) {
+		this.gender = gender;
+		this.hasGender = true;
 	}
 	
-	public boolean hasSex(){
-		return hasSex;
+	public boolean hasGender(){
+		return hasGender;
 	}
 	
-	public String getProfileImageUrl(){
-		return profileImageUrl;
+	public String getProfilePicUrl(){
+		return profilePicUrl;
 	}
 	
-	public void setProfileImageUrl( String profileImageUrl ){
-		this.profileImageUrl = profileImageUrl;
+	public void setProfilePicUrl( String profilePicUrl ){
+		this.profilePicUrl = profilePicUrl;
+		this.hasProfilePicUrl = true;
+	}
+	
+	public boolean hasProfilePicUrl(){
+		return hasProfilePicUrl;
 	}
 
 	public String getCampaign() {
@@ -161,6 +173,32 @@ public class UserData implements IsSerializable {
 
 	public void setReferer(String referer) {
 		this.referer = referer;
+	}
+	
+	public String getFacebookRefreshToken(){
+		return facebookRefreshToken;
+	}
+	
+	public void setFacebookRefreshToken( String facebookRefreshToken ){
+		this.facebookRefreshToken = facebookRefreshToken;
+		this.hasFacebookRefreshToken = true;
+	}
+	
+	public boolean hasFacebookRefreshToken(){
+		return hasFacebookRefreshToken;
+	}
+	
+	public String getGoogleRefreshToken(){
+		return googleRefreshToken;
+	}
+	
+	public void setGoogleRefreshToken( String googleRefreshToken ){
+		this.googleRefreshToken = googleRefreshToken;
+		this.hasGoogleRefreshToken = true;
+	}
+	
+	public boolean hasGoogleRefreshToken(){
+		return hasGoogleRefreshToken;
 	}
 
 	public UserStatus getStatus() {

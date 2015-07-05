@@ -1,7 +1,10 @@
 package com.claymus.pagecontent.user;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -10,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import com.claymus.commons.server.Access;
 import com.claymus.commons.server.ClaymusHelper;
 import com.claymus.commons.server.EncryptPassword;
+import com.claymus.commons.server.GoogleUtil;
 import com.claymus.commons.shared.UserStatus;
 import com.claymus.commons.shared.exception.InsufficientAccessException;
 import com.claymus.commons.shared.exception.InvalidArgumentException;
@@ -25,6 +29,8 @@ import com.claymus.pagecontent.user.shared.UserContentData;
 import com.claymus.taskqueue.Task;
 import com.claymus.taskqueue.TaskQueue;
 import com.claymus.taskqueue.TaskQueueFactory;
+import com.google.appengine.labs.repackaged.org.json.JSONException;
+import com.pratilipi.commons.shared.UserGender;
 
 public class UserContentHelper extends PageContentHelper<
 		UserContent,
@@ -73,6 +79,56 @@ public class UserContentHelper extends PageContentHelper<
 	
 	public static boolean hasRequestAccessToListUserData( HttpServletRequest request ) {
 		return ClaymusHelper.get( request ).hasUserAccess( ACCESS_TO_LIST_USER_DATA );
+	}
+	
+	public static AccessToken googleLogin( String idToken, HttpServletRequest request ) 
+			throws IOException, JSONException, InvalidArgumentException, GeneralSecurityException{
+		
+		DataAccessor dataAccessor = DataAccessorFactory.getDataAccessor( request );
+		
+		Map<String, String> googleCredentials = dataAccessor.getAppProperty( "Google.Credentials" ).getValue();
+		GoogleUtil googleUtil = new GoogleUtil( googleCredentials );
+		Map<String, String> tokenMap = googleUtil.getTokens( idToken );
+		if( tokenMap == null )
+			return null;
+		
+		User user = dataAccessor.getUserByEmail( tokenMap.get( "user_email" ));
+		UserData userData = new UserData();
+		AccessToken accessToken;
+		Map<String, String> userDataMap = googleUtil.getUserProfile( tokenMap.get( "access_token" ), tokenMap.get( "user_id" ));
+
+		if( user == null ){
+			userData.setName( userDataMap.get( GoogleUtil.GOOGLE_USER_DISPLAYNAME ));
+			userData.setEmail( userDataMap.get( GoogleUtil.GOOGLE_USER_EMAIL ));
+			if( userDataMap.get( GoogleUtil.GOOGLE_USER_GENDER ).toUpperCase().equals( UserGender.MALE.toString() ))
+				userData.setGender( UserGender.MALE );
+			else if( userDataMap.get( GoogleUtil.GOOGLE_USER_GENDER ).toUpperCase().equals( UserGender.FEMALE.toString() ))
+				userData.setGender( UserGender.FEMALE );
+			else
+				userData.setGender( UserGender.TRANSGENDER );
+			userData.setProfilePicUrl( userDataMap.get( GoogleUtil.GOOGLE_USER_IMAGE_URL ));
+			userData.setGoogleRefreshToken( tokenMap.get( GoogleUtil.GOOGLE_REFRESHTOKEN ));
+			userData.setStatus( UserStatus.ANDROID_SIGNUP_GOOGLE );
+			accessToken = registerUser( userData, request );
+		} else{
+			if( user.getStatus() != UserStatus.ANDROID_SIGNUP_GOOGLE )
+				user.setStatus( UserStatus.ANDROID_SIGNUP_GOOGLE );
+			user.setGoogleRefreshToken( tokenMap.get( GoogleUtil.GOOGLE_REFRESHTOKEN ));
+			user.setProfilePicUrl( userDataMap.get( GoogleUtil.GOOGLE_USER_IMAGE_URL ));
+			
+			if( userDataMap.get( GoogleUtil.GOOGLE_USER_GENDER ).toUpperCase().equals( UserGender.MALE.toString() ))
+				user.setGender( UserGender.MALE );
+			else if( userDataMap.get( GoogleUtil.GOOGLE_USER_GENDER ).toUpperCase().equals( UserGender.FEMALE.toString() ))
+				user.setGender( UserGender.FEMALE );
+			else
+				user.setGender( UserGender.TRANSGENDER );
+			
+			user = dataAccessor.createOrUpdateUser( user );
+			accessToken = ClaymusHelper.get( request ).createAccessToken( user.getId() );
+		}
+
+		return accessToken;
+		
 	}
 	
 	
@@ -142,9 +198,9 @@ public class UserContentHelper extends PageContentHelper<
 		userData.setName( name );
 		userData.setEmail( user.getEmail() );
 		userData.setDateOfBirth( user.getDateOfBirth() );
-		if( user.getProfileImageUrl() != null )
-			userData.setProfileImageUrl( user.getProfileImageUrl() );
-		userData.setSex( user.getSex() );
+		if( user.getProfilePicUrl() != null )
+			userData.setProfilePicUrl( user.getProfilePicUrl() );
+		userData.setGender( user.getGender() );
 		userData.setCampaign( user.getCampaign() );
 		userData.setReferer( user.getReferer() );
 		userData.setStatus( user.getStatus() );
@@ -206,10 +262,18 @@ public class UserContentHelper extends PageContentHelper<
 		user.setLastName( lastName );
 		if( userData.getPassword() != null )
 			user.setPassword( EncryptPassword.getSaltedHash( userData.getPassword() ) );
+		if( userData.hasProfilePicUrl() )
+			user.setProfilePicUrl( userData.getProfilePicUrl() );
 		if( userData.getStatus() != null )
 			user.setStatus( userData.getStatus() );
 		else
 			user.setStatus( UserStatus.ANDROID_SIGNUP );
+		if( userData.hasFacebookRefreshToken() )
+			user.setFacebookRefreshToken( userData.getFacebookRefreshToken() );
+		if( userData.hasGoogleRefreshToken() ){
+			logger.log( Level.INFO, "User Refresh Token : " + userData.getGoogleRefreshToken() );
+			user.setGoogleRefreshToken( userData.getGoogleRefreshToken() );
+		}
 		
 		user = dataAccessor.createOrUpdateUser( user );
 		
@@ -252,8 +316,8 @@ public class UserContentHelper extends PageContentHelper<
 			user.setPassword( userData.getPassword() );
 		if( userData.hasDateOfBirth() )
 			user.setDateOfBirth( userData.getDateOfBirth() );
-		if( userData.hasSex() )
-			user.setSex( userData.getSex() );
+		if( userData.hasGender() )
+			user.setGender( userData.getGender() );
 		
 		user = dataAccessor.createOrUpdateUser( user );
 		

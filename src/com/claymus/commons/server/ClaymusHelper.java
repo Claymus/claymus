@@ -21,7 +21,7 @@ import com.claymus.data.transfer.UserRole;
 import com.claymus.data.transfer.shared.PageData;
 import com.claymus.service.shared.data.UserData;
 import com.google.apphosting.api.ApiProxy;
-import com.pratilipi.commons.shared.UserSex;
+import com.pratilipi.commons.shared.UserGender;
 
 @SuppressWarnings("serial")
 public class ClaymusHelper implements Serializable {
@@ -187,20 +187,20 @@ public class ClaymusHelper implements Serializable {
 					public void setDateOfBirth(Date dateOfBirth) { }
 
 					@Override
-					public UserSex getSex() {
+					public UserGender getGender() {
 						return null;
 					}
 
 					@Override
-					public void setSex(UserSex userSex) { }
+					public void setGender(UserGender userSex) { }
 
 					@Override
-					public String getProfileImageUrl() {
+					public String getProfilePicUrl() {
 						return null;
 					}
 
 					@Override
-					public void setProfileImageUrl(String profileImageUrl) { }
+					public void setProfilePicUrl(String profileImageUrl) { }
 
 					@Override
 					public String getFacebookRefreshToken() {

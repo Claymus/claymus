@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import com.claymus.commons.shared.UserStatus;
-import com.pratilipi.commons.shared.UserSex;
+import com.pratilipi.commons.shared.UserGender;
 
 public interface User extends Serializable {
 
@@ -36,14 +36,14 @@ public interface User extends Serializable {
 	
 	void setDateOfBirth( Date dateOfBirth );
 	
-	String getProfileImageUrl();
+	UserGender getGender();
 	
-	void setProfileImageUrl( String profileImageUrl );
+	void setGender( UserGender userGender );
 	
-	UserSex getSex();
+	String getProfilePicUrl();
 	
-	void setSex( UserSex userSex );
-
+	void setProfilePicUrl( String profilePicUrl );
+	
 	String getPhone();
 
 	void setPhone( String phone );
