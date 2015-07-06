@@ -60,9 +60,9 @@ public interface User extends Serializable {
 	
 	void setStatus( UserStatus userStatus );
 	
-	String getFacebookRefreshToken();
+	String getSocialId();
 	
-	void setFacebookRefreshToken( String facebookRefreshToken );
+	void setSocialId( String socialId );
 	
 	String getGoogleRefreshToken();
 	

@@ -38,8 +38,8 @@ public class UserData implements IsSerializable {
 	
 	private String referer;
 	
-	private String facebookRefreshToken;
-	private boolean hasFacebookRefreshToken;
+	private String socialId;
+	private boolean hasSocialId;
 	
 	private String googleRefreshToken;
 	private boolean hasGoogleRefreshToken;
@@ -175,17 +175,17 @@ public class UserData implements IsSerializable {
 		this.referer = referer;
 	}
 	
-	public String getFacebookRefreshToken(){
-		return facebookRefreshToken;
+	public String getSocialId(){
+		return socialId;
 	}
 	
-	public void setFacebookRefreshToken( String facebookRefreshToken ){
-		this.facebookRefreshToken = facebookRefreshToken;
-		this.hasFacebookRefreshToken = true;
+	public void setSocialId( String socialId ){
+		this.socialId = socialId;
+		this.hasSocialId = true;
 	}
 	
-	public boolean hasFacebookRefreshToken(){
-		return hasFacebookRefreshToken;
+	public boolean hasSocialId(){
+		return hasSocialId;
 	}
 	
 	public String getGoogleRefreshToken(){

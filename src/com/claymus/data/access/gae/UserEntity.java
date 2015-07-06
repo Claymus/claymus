@@ -55,8 +55,8 @@ public class UserEntity implements User {
 	@Persistent( column = "STATUS" )
 	private UserStatus status;
 	
-	@Persistent( column = "FACEBOOK_REFRESH_TOKEN" )
-	private String facebookRefreshToken;
+	@Persistent( column = "SOCIAL_ID" )
+	private String socialId;
 	
 	@Persistent( column = "GOOGLE_REFRESH_TOKEN" )
 	private String googleRefreshToken;
@@ -196,13 +196,13 @@ public class UserEntity implements User {
 	}
 	
 	@Override
-	public String getFacebookRefreshToken(){
-		return facebookRefreshToken;
+	public String getSocialId(){
+		return socialId;
 	}
 	
 	@Override
-	public void setFacebookRefreshToken( String facebookRefreshToken ){
-		this.facebookRefreshToken = facebookRefreshToken;
+	public void setSocialId( String socialId ){
+		this.socialId = socialId;
 	}
 	
 	@Override
