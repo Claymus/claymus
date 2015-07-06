@@ -56,6 +56,7 @@ public class AccessTokenFilter implements Filter {
 			accessToken.setType( ClaymusAccessTokenType.USER.toString() );
 			accessToken.setUserId( 0L );
 			accessToken.setExpiry( new Date( new Date().getTime() + 604800000 ) ); // 1Wk
+			accessToken.setLastUpdatedDate( new Date() );
 			accessToken = dataAccessor.createAccessToken( accessToken );
 			
 			accessTokenId = accessToken.getId();

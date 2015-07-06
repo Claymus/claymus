@@ -504,7 +504,7 @@ public class DataAccessorGaeImpl implements DataAccessor {
 		accessToken.setCreationDate( new Date() );
 		if( accessToken.getExpiry() == null )
 			accessToken.setExpiry( new Date( new Date().getTime() + 3600000 ) ); // 1Hr
-
+		accessToken.setLastUpdatedDate( new Date() );
 		Transaction tx = null;
 		while( true ) {
 			((AccessTokenEntity) accessToken).setId( UUID.randomUUID().toString() );

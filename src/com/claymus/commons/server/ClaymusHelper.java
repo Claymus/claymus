@@ -38,13 +38,14 @@ public class ClaymusHelper implements Serializable {
 	@Deprecated
 	public static final String URL_RESOURCE_STATIC =
 			ClaymusHelper.getSystemProperty( "resource.static" );
+	
+	public static final long ACCESS_TOKEN_VALIDITY = 60 * 60 * 24 * 7 * 1000; // 1 Wk
 
 	private static final String URL_LOGIN_PAGE = "#signin";
 	private static final String URL_LOGOUT_PAGE = "/logout?dest=";
 	private static final String URL_REGISTER_PAGE = "#signup";
 	private static final String URL_FORGOTPASSWORD_PAGE = "#forgotpassword";
 	
-	private static final long ACCESS_TOKEN_VALIDITY = 60 * 60 * 24 * 7 * 1000; // 1 Wk
 	
 	protected final HttpServletRequest request;
 	
@@ -203,12 +204,12 @@ public class ClaymusHelper implements Serializable {
 					public void setProfilePicUrl(String profileImageUrl) { }
 
 					@Override
-					public String getFacebookRefreshToken() {
+					public String getSocialId() {
 						return null;
 					}
 
 					@Override
-					public void setFacebookRefreshToken( String facebookRefreshToken) { }
+					public void setSocialId( String socialId) { }
 
 					@Override
 					public String getGoogleRefreshToken() {
@@ -406,6 +407,7 @@ public class ClaymusHelper implements Serializable {
 		if( expiry != null )
 			accessToken.setExpiry( expiry );
 		
+		accessToken.setLastUpdatedDate( new Date() );
 		dataAccessor.updateAccessToken( accessToken );
 		
 		return accessToken;
@@ -419,6 +421,7 @@ public class ClaymusHelper implements Serializable {
 		accessToken.setUserId( userId );
 		accessToken.setType( ClaymusAccessTokenType.USER.toString() );
 		accessToken.setExpiry( new Date( new Date().getTime() + ACCESS_TOKEN_VALIDITY ) ); // 1Wk
+		accessToken.setLastUpdatedDate( new Date() );
 		accessToken = dataAccessor.createAccessToken( accessToken );
 		
 		return accessToken;

@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -91,6 +94,21 @@ public class ClaymusServiceFilter implements Filter {
 			send401Resposne( response, "Access Token is expired." );
 
 		} else {
+			Logger.getLogger( ClaymusServiceFilter.class.getName() ).log( Level.INFO, "Old Expiry" + accessToken.getExpiry() );
+			boolean isUpdatedToday = false;
+			if( accessToken.getLastUpdatedDate() != null ){
+				Long timeDiff = new Date().getTime() - accessToken.getLastUpdatedDate().getTime();
+				Logger.getLogger( ClaymusServiceFilter.class.getName() ).log( Level.INFO, "Time Diff : " + timeDiff );
+				isUpdatedToday = timeDiff < 3600 * 24;
+			}
+			if( !isUpdatedToday
+					&& accessToken.getUserId() != 0L 
+					&& accessToken.getLogOutDate() == null ){
+				Logger.getLogger( ClaymusServiceFilter.class.getName() ).log( Level.INFO, "Access Token expiry updated" );
+				accessToken.setExpiry( new Date( new Date().getTime() + ClaymusHelper.ACCESS_TOKEN_VALIDITY ) );
+				accessToken.setLastUpdatedDate( new Date() );
+				accessToken = dataAccessor.updateAccessToken( accessToken );
+			}
 			request.setAttribute( ClaymusHelper.REQUEST_ATTRIB_ACCESS_TOKEN, accessToken );
 			chain.doFilter( request, response );
 		}

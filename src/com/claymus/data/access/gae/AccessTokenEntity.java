@@ -36,6 +36,9 @@ public class AccessTokenEntity implements AccessToken {
 	
 	@Persistent( column = "LOGOUT_DATE" )
 	private Date logOutDate;
+	
+	@Persistent( column = "LAST_UPDATED_DATE" )
+	private Date lastUpdatedDate;
 
 	
 	@Override
@@ -120,6 +123,16 @@ public class AccessTokenEntity implements AccessToken {
 	@Override
 	public void setLogOutDate( Date logOutDate ) {
 		this.logOutDate = logOutDate;
+	}
+
+	@Override
+	public Date getLastUpdatedDate() {
+		return lastUpdatedDate;
+	}
+
+	@Override
+	public void setLastUpdatedDate(Date lastUpdatedDate) {
+		this.lastUpdatedDate = lastUpdatedDate;
 	}
 	
 }
