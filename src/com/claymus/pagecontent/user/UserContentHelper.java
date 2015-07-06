@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import com.claymus.commons.server.Access;
 import com.claymus.commons.server.ClaymusHelper;
 import com.claymus.commons.server.EncryptPassword;
+import com.claymus.commons.server.FacebookUtil;
 import com.claymus.commons.server.GoogleUtil;
 import com.claymus.commons.shared.UserStatus;
 import com.claymus.commons.shared.exception.InsufficientAccessException;
@@ -82,11 +83,11 @@ public class UserContentHelper extends PageContentHelper<
 	}
 	
 	public static AccessToken googleLogin( String idToken, HttpServletRequest request ) 
-			throws IOException, JSONException, InvalidArgumentException, GeneralSecurityException{
+			throws IOException, InvalidArgumentException, GeneralSecurityException, JSONException{
 		
 		DataAccessor dataAccessor = DataAccessorFactory.getDataAccessor( request );
 		
-		Map<String, String> googleCredentials = dataAccessor.getAppProperty( "Google.Credentials" ).getValue();
+		Map<String, String> googleCredentials = dataAccessor.getAppProperty( GoogleUtil.APP_PROPERTY_ID ).getValue();
 		GoogleUtil googleUtil = new GoogleUtil( googleCredentials );
 		Map<String, String> tokenMap = googleUtil.getTokens( idToken );
 		if( tokenMap == null )
@@ -109,19 +110,15 @@ public class UserContentHelper extends PageContentHelper<
 			userData.setProfilePicUrl( userDataMap.get( GoogleUtil.GOOGLE_USER_IMAGE_URL ));
 			userData.setGoogleRefreshToken( tokenMap.get( GoogleUtil.GOOGLE_REFRESHTOKEN ));
 			userData.setStatus( UserStatus.ANDROID_SIGNUP_GOOGLE );
+			userData.setSocialId(  tokenMap.get( "user_id" ) );
 			accessToken = registerUser( userData, request );
 		} else{
-			if( user.getStatus() != UserStatus.ANDROID_SIGNUP_GOOGLE )
+			if( user.getStatus() != UserStatus.ANDROID_SIGNUP_GOOGLE ){
 				user.setStatus( UserStatus.ANDROID_SIGNUP_GOOGLE );
-			user.setGoogleRefreshToken( tokenMap.get( GoogleUtil.GOOGLE_REFRESHTOKEN ));
-			user.setProfilePicUrl( userDataMap.get( GoogleUtil.GOOGLE_USER_IMAGE_URL ));
-			
-			if( userDataMap.get( GoogleUtil.GOOGLE_USER_GENDER ).toUpperCase().equals( UserGender.MALE.toString() ))
-				user.setGender( UserGender.MALE );
-			else if( userDataMap.get( GoogleUtil.GOOGLE_USER_GENDER ).toUpperCase().equals( UserGender.FEMALE.toString() ))
-				user.setGender( UserGender.FEMALE );
-			else
-				user.setGender( UserGender.TRANSGENDER );
+				user.setGoogleRefreshToken( tokenMap.get( GoogleUtil.GOOGLE_REFRESHTOKEN ));
+				user.setProfilePicUrl( userDataMap.get( GoogleUtil.GOOGLE_USER_IMAGE_URL ));
+				user.setSocialId(  tokenMap.get( "user_id" ) );
+			}
 			
 			user = dataAccessor.createOrUpdateUser( user );
 			accessToken = ClaymusHelper.get( request ).createAccessToken( user.getId() );
@@ -131,23 +128,47 @@ public class UserContentHelper extends PageContentHelper<
 		
 	}
 	
-	
-	public static AccessToken socialLogin( UserData userData, HttpServletRequest request ) 
-			throws InvalidArgumentException{
-
-		DataAccessor dataAccessor = DataAccessorFactory.getDataAccessor( request );
-		User user = dataAccessor.getUserByEmail( userData.getEmail() );
+	public static AccessToken facebookLogin( String socialId, String fbAccessToken, HttpServletRequest request ) 
+			throws JSONException, IOException, InvalidArgumentException{
 		
+		DataAccessor dataAccessor = DataAccessorFactory.getDataAccessor( request );
+		Map<String, String> fbCredentials = dataAccessor.getAppProperty( FacebookUtil.APP_PROPERTY_ID ).getValue();
+		FacebookUtil fbUtil = new FacebookUtil( fbCredentials );
+		if( !fbUtil.validateAccessToken( socialId, fbAccessToken) )
+			throw new InvalidArgumentException( "Invalid Access Token" );
+		
+		Map<String, String> userDataMap = fbUtil.getUserProfile( socialId, fbAccessToken );
+		User user = dataAccessor.getUserByEmail( userDataMap.get( FacebookUtil.FACEBOOK_USER_EMAIL ) );
+		UserData userData = new UserData();
 		AccessToken accessToken;
+		
+	
 		if( user == null ){
-			userData.setStatus( UserStatus.ANDROID_SIGNUP_GOOGLE );
+			userData.setName( userDataMap.get( FacebookUtil.FACEBOOK_USER_NAME ));
+			userData.setEmail( userDataMap.get( FacebookUtil.FACEBOOK_USER_EMAIL ));
+			if( userDataMap.get( FacebookUtil.FACEBOOK_USER_GENDER ).toUpperCase().equals( UserGender.MALE.toString() ))
+				userData.setGender( UserGender.MALE );
+			else if( userDataMap.get( FacebookUtil.FACEBOOK_USER_GENDER ).toUpperCase().equals( UserGender.FEMALE.toString() ))
+				userData.setGender( UserGender.FEMALE );
+			else
+				userData.setGender( UserGender.TRANSGENDER );
+			userData.setProfilePicUrl( userDataMap.get( FacebookUtil.FACEBOOK_USER_PROFILE_PIC_URL ));
+			userData.setStatus( UserStatus.ANDROID_SIGNUP_FACEBOOK );
+			userData.setSocialId( userDataMap.get( FacebookUtil.FACEBOOK_USER_ID ));
 			accessToken = registerUser( userData, request );
-		} else
+		} else {
+			if( user.getStatus() != UserStatus.ANDROID_SIGNUP_FACEBOOK ){
+				user.setStatus( UserStatus.ANDROID_SIGNUP_FACEBOOK );
+				user.setProfilePicUrl( userDataMap.get( FacebookUtil.FACEBOOK_USER_PROFILE_PIC_URL ));
+				userData.setSocialId( userDataMap.get( FacebookUtil.FACEBOOK_USER_ID ));
+			}
+			user = dataAccessor.createOrUpdateUser( user );
 			accessToken = ClaymusHelper.get( request ).createAccessToken( user.getId() );
-
+		}
 		return accessToken;
 	}
 	
+
 	public static AccessToken userLogin( UserData userData, HttpServletRequest request ) 
 			throws InvalidArgumentException{
 		
@@ -268,8 +289,8 @@ public class UserContentHelper extends PageContentHelper<
 			user.setStatus( userData.getStatus() );
 		else
 			user.setStatus( UserStatus.ANDROID_SIGNUP );
-		if( userData.hasFacebookRefreshToken() )
-			user.setFacebookRefreshToken( userData.getFacebookRefreshToken() );
+		if( userData.hasSocialId() )
+			user.setSocialId( userData.getSocialId() );
 		if( userData.hasGoogleRefreshToken() ){
 			logger.log( Level.INFO, "User Refresh Token : " + userData.getGoogleRefreshToken() );
 			user.setGoogleRefreshToken( userData.getGoogleRefreshToken() );
