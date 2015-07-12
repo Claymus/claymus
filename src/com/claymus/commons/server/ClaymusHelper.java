@@ -4,8 +4,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 import com.claymus.commons.shared.ClaymusAccessTokenType;
@@ -71,8 +72,10 @@ public class ClaymusHelper implements Serializable {
 	
 	
 	public final boolean isUserLoggedIn() {
+		Logger.getLogger( ClaymusHelper.class.getName() ).log( Level.INFO, "Is Access Token Null : " + String.valueOf( accessToken == null ));
 		if( accessToken == null )
 			accessToken = ( AccessToken ) request.getAttribute( REQUEST_ATTRIB_ACCESS_TOKEN );
+		Logger.getLogger( ClaymusHelper.class.getName() ).log( Level.INFO, "User ID : " + accessToken.getUserId() );
 		return accessToken.getUserId() != 0L;
 	}
 
@@ -262,12 +265,27 @@ public class ClaymusHelper implements Serializable {
 	}
 	
 	public final String getCookieValue( String cookieName ) {
-		Cookie[] cookies = request.getCookies();
-		if( cookies == null ) return null;
-		for( Cookie cookie : cookies ) {
-			if( cookie.getName().equals( cookieName ) )
-				return cookie.getValue();
+		String cookieString;
+		if( request.getHeader( "Cookie" ) != null ){
+			cookieString = request.getHeader( "Cookie" );
+			Logger.getLogger( ClaymusHelper.class.getName() ).log( Level.INFO, "Cookie String : " + cookieString );
 		}
+		else {
+			cookieString = request.getHeader( "Coikoe" );
+			Logger.getLogger( ClaymusHelper.class.getName() ).log( Level.INFO, "Coikoe String : " + cookieString );
+		}
+		
+		if( cookieString != null ){
+			String[] cookieArray = cookieString.split( ";" );
+			for( int i=0; i < cookieArray.length; ++i ){
+				if( cookieArray[ i ].contains( cookieName )){
+					int index = cookieArray[ i ].indexOf( "=" );
+					Logger.getLogger( ClaymusHelper.class.getName() ).log( Level.INFO, "Cookie : " + cookieArray[ i ] );
+					return cookieArray[ i ].substring( index + 1 );
+				}
+			}
+		}
+		
 		return null;
 	}
 	
