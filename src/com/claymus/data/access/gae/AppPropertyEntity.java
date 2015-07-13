@@ -6,9 +6,10 @@ import javax.jdo.annotations.PrimaryKey;
 
 import com.claymus.data.transfer.AppProperty;
 
-@SuppressWarnings("serial")
 @PersistenceCapable( table = "APP_PROPERTY" )
 public class AppPropertyEntity implements AppProperty {
+
+	private static final long serialVersionUID = 9031802007755452031L;
 
 	@PrimaryKey
 	@Persistent( column = "APP_PROPERTY_ID" )
