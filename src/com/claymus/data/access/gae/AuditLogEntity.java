@@ -10,9 +10,10 @@ import javax.jdo.annotations.PrimaryKey;
 import com.claymus.data.transfer.AuditLog;
 import com.google.appengine.api.datastore.Text;
 
-@SuppressWarnings("serial")
 @PersistenceCapable( table = "AUDIT_LOG" )
 public class AuditLogEntity implements AuditLog {
+
+	private static final long serialVersionUID = -2027252778248254540L;
 
 	@PrimaryKey
 	@Persistent( column = "AUDIT_LOG_ID", valueStrategy = IdGeneratorStrategy.IDENTITY )
