@@ -11,10 +11,11 @@ import com.claymus.commons.shared.UserStatus;
 import com.claymus.data.transfer.User;
 import com.pratilipi.commons.shared.UserGender;
 
-@SuppressWarnings("serial")
 @PersistenceCapable( table = "USER" )
 public class UserEntity implements User {
 	
+	private static final long serialVersionUID = -3740558387788310210L;
+
 	@PrimaryKey
 	@Persistent( column = "USER_ID", valueStrategy = IdGeneratorStrategy.IDENTITY )
 	private Long id;
