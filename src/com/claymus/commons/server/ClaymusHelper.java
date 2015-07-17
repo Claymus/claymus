@@ -268,11 +268,9 @@ public class ClaymusHelper implements Serializable {
 		String cookieString;
 		if( request.getHeader( "Cookie" ) != null ){
 			cookieString = request.getHeader( "Cookie" );
-			Logger.getLogger( ClaymusHelper.class.getName() ).log( Level.INFO, "Cookie String : " + cookieString );
 		}
 		else {
 			cookieString = request.getHeader( "Coikoe" );
-			Logger.getLogger( ClaymusHelper.class.getName() ).log( Level.INFO, "Coikoe String : " + cookieString );
 		}
 		
 		if( cookieString != null ){
@@ -280,7 +278,6 @@ public class ClaymusHelper implements Serializable {
 			for( int i=0; i < cookieArray.length; ++i ){
 				if( cookieArray[ i ].contains( cookieName )){
 					int index = cookieArray[ i ].indexOf( "=" );
-					Logger.getLogger( ClaymusHelper.class.getName() ).log( Level.INFO, "Cookie : " + cookieArray[ i ] );
 					return cookieArray[ i ].substring( index + 1 );
 				}
 			}
