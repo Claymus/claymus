@@ -1,6 +1,7 @@
 package com.claymus.servlet;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,7 +17,11 @@ import com.claymus.commons.server.FreeMarkerUtil;
 import com.claymus.commons.shared.exception.UnexpectedServerException;
 import com.claymus.data.access.DataAccessor;
 import com.claymus.data.access.DataAccessorFactory;
+import com.claymus.data.access.DataListCursorTuple;
 import com.claymus.data.transfer.Page;
+import com.pratilipi.common.type.PratilipiState;
+import com.pratilipi.commons.shared.PratilipiPageType;
+import com.pratilipi.data.type.Pratilipi;
 
 @SuppressWarnings("serial")
 public class SiteMapServlet extends HttpServlet {
@@ -29,9 +34,23 @@ public class SiteMapServlet extends HttpServlet {
 	public void doGet(
 			HttpServletRequest request,
 			HttpServletResponse response ) throws IOException {
-
+		
+		logger.log( Level.INFO, "Website crawler" );
 		DataAccessor dataAccessor = DataAccessorFactory.getDataAccessor( request );
-		List<Page> pageList = dataAccessor.getPageList( null, 1000 ).getDataList();
+		DataListCursorTuple<Page> pageListCursorTuple = dataAccessor.getPageList( null, 1000 ); 
+		List<Page> pageList = new ArrayList<Page>( pageListCursorTuple.getDataList().size() );
+		for( Page page : pageListCursorTuple.getDataList() ){
+			if( page.getType().equals( PratilipiPageType.PRATILIPI.toString() ) ){
+				Pratilipi pratilipi = com.pratilipi.data.access.DataAccessorFactory
+											.getDataAccessor( request )
+											.getPratilipi( page.getPrimaryContentId() );
+				if( pratilipi.getState() == PratilipiState.PUBLISHED 
+						|| pratilipi.getState() == PratilipiState.PUBLISHED_PAID )
+					pageList.add( page );
+			} else
+				pageList.add( page );
+		}
+		logger.log( Level.INFO, "No. of pages crawled : " + pageList.size() );
 
 		// Creating data model required for template processing
 		Map<String, Object> dataModel = new HashMap<>();
