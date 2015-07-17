@@ -14,6 +14,7 @@ import javax.cache.CacheManager;
 
 import com.google.appengine.api.memcache.InvalidValueException;
 import com.google.appengine.api.memcache.stdimpl.GCacheFactory;
+import com.google.apphosting.api.ApiProxy.ApiProxyException;
 
 public class MemcacheGaeImpl implements Memcache {
 
@@ -72,7 +73,8 @@ public class MemcacheGaeImpl implements Memcache {
 			Cache cache = CacheManager.getInstance().getCacheFactory()
 					.createCache(props);
 			cache.put( key, value );
-		} catch( CacheException ex ) {
+		} catch( CacheException | ApiProxyException ex ) {
+			remove( key );
 			logger.log( Level.SEVERE, "Failed to create cache instance.", ex);
 		}
 		
@@ -86,7 +88,8 @@ public class MemcacheGaeImpl implements Memcache {
 			Cache cache = CacheManager.getInstance().getCacheFactory()
 					.createCache( props );
 			cache.put( key, value );
-		} catch (CacheException ex) {
+		} catch (CacheException | ApiProxyException ex) {
+			remove( key );
 			logger.log( Level.SEVERE, "Failed to create cache instance.", ex);
 		}
 	}
@@ -99,7 +102,7 @@ public class MemcacheGaeImpl implements Memcache {
 			Cache cache = CacheManager.getInstance().getCacheFactory()
 					.createCache( props );
 			cache.putAll( keyValueMap );
-		} catch (CacheException ex) {
+		} catch (CacheException | ApiProxyException ex) {
 			logger.log( Level.SEVERE, "Failed to create cache instance.", ex);
 		}
 	}
