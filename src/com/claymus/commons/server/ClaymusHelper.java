@@ -214,14 +214,6 @@ public class ClaymusHelper implements Serializable {
 					@Override
 					public void setSocialId( String socialId) { }
 
-					@Override
-					public String getGoogleRefreshToken() {
-						return null;
-					}
-
-					@Override
-					public void setGoogleRefreshToken(String googleRefreshToken) { }
-					
 				};
 			} else {
 				DataAccessor dataAccessor = DataAccessorFactory.getDataAccessor( request );

@@ -59,9 +59,6 @@ public class UserEntity implements User {
 	@Persistent( column = "SOCIAL_ID" )
 	private String socialId;
 	
-	@Persistent( column = "GOOGLE_REFRESH_TOKEN" )
-	private String googleRefreshToken;
-	
 	@Persistent( column = "SIGN_UP_DATE" )
 	private Date signUpDate;
 
@@ -204,16 +201,6 @@ public class UserEntity implements User {
 	@Override
 	public void setSocialId( String socialId ){
 		this.socialId = socialId;
-	}
-	
-	@Override
-	public String getGoogleRefreshToken(){
-		return googleRefreshToken;
-	}
-	
-	@Override
-	public void setGoogleRefreshToken( String googleRefreshToken ){
-		this.googleRefreshToken = googleRefreshToken;
 	}
 	
 	@Override

@@ -64,10 +64,6 @@ public interface User extends Serializable {
 	
 	void setSocialId( String socialId );
 	
-	String getGoogleRefreshToken();
-	
-	void setGoogleRefreshToken( String googleRefreshToken );
-	
 	Date getSignUpDate();
 	
 	void setSignUpDate( Date date );

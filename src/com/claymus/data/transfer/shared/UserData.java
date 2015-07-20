@@ -41,9 +41,6 @@ public class UserData implements IsSerializable {
 	private String socialId;
 	private boolean hasSocialId;
 	
-	private String googleRefreshToken;
-	private boolean hasGoogleRefreshToken;
-	
 	private UserStatus status;
 
 	
@@ -188,19 +185,6 @@ public class UserData implements IsSerializable {
 		return hasSocialId;
 	}
 	
-	public String getGoogleRefreshToken(){
-		return googleRefreshToken;
-	}
-	
-	public void setGoogleRefreshToken( String googleRefreshToken ){
-		this.googleRefreshToken = googleRefreshToken;
-		this.hasGoogleRefreshToken = true;
-	}
-	
-	public boolean hasGoogleRefreshToken(){
-		return hasGoogleRefreshToken;
-	}
-
 	public UserStatus getStatus() {
 		return status;
 	}
