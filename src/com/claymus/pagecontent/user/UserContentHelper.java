@@ -82,21 +82,20 @@ public class UserContentHelper extends PageContentHelper<
 		return ClaymusHelper.get( request ).hasUserAccess( ACCESS_TO_LIST_USER_DATA );
 	}
 	
-	public static AccessToken googleLogin( String idToken, HttpServletRequest request ) 
+	public static AccessToken googleLogin( String googleAccessToken, String socialId, HttpServletRequest request ) 
 			throws IOException, InvalidArgumentException, GeneralSecurityException, JSONException{
 		
 		DataAccessor dataAccessor = DataAccessorFactory.getDataAccessor( request );
 		
 		Map<String, String> googleCredentials = dataAccessor.getAppProperty( GoogleUtil.APP_PROPERTY_ID ).getValue();
 		GoogleUtil googleUtil = new GoogleUtil( googleCredentials );
-		Map<String, String> tokenMap = googleUtil.getTokens( idToken );
-		if( tokenMap == null )
-			return null;
+		if( !googleUtil.isValid( googleAccessToken, socialId ) )
+			throw new InvalidArgumentException( "Invalid Access Token" );
 		
-		User user = dataAccessor.getUserByEmail( tokenMap.get( "user_email" ));
+		Map<String, String> userDataMap = googleUtil.getUserProfile( googleAccessToken, socialId );
+		User user = dataAccessor.getUserByEmail( userDataMap.get( "user_email" ));
 		UserData userData = new UserData();
 		AccessToken accessToken;
-		Map<String, String> userDataMap = googleUtil.getUserProfile( tokenMap.get( "access_token" ), tokenMap.get( "user_id" ));
 
 		if( user == null ){
 			userData.setName( userDataMap.get( GoogleUtil.GOOGLE_USER_DISPLAYNAME ));
@@ -108,16 +107,14 @@ public class UserContentHelper extends PageContentHelper<
 			else
 				userData.setGender( UserGender.TRANSGENDER );
 			userData.setProfilePicUrl( userDataMap.get( GoogleUtil.GOOGLE_USER_IMAGE_URL ));
-			userData.setGoogleRefreshToken( tokenMap.get( GoogleUtil.GOOGLE_REFRESHTOKEN ));
 			userData.setStatus( UserStatus.ANDROID_SIGNUP_GOOGLE );
-			userData.setSocialId(  tokenMap.get( "user_id" ) );
+			userData.setSocialId(  socialId );
 			accessToken = registerUser( userData, request );
 		} else{
 			if( user.getStatus() != UserStatus.ANDROID_SIGNUP_GOOGLE ){
 				user.setStatus( UserStatus.ANDROID_SIGNUP_GOOGLE );
-				user.setGoogleRefreshToken( tokenMap.get( GoogleUtil.GOOGLE_REFRESHTOKEN ));
 				user.setProfilePicUrl( userDataMap.get( GoogleUtil.GOOGLE_USER_IMAGE_URL ));
-				user.setSocialId(  tokenMap.get( "user_id" ) );
+				user.setSocialId(  socialId );
 			}
 			
 			user = dataAccessor.createOrUpdateUser( user );
@@ -291,10 +288,6 @@ public class UserContentHelper extends PageContentHelper<
 			user.setStatus( UserStatus.ANDROID_SIGNUP );
 		if( userData.hasSocialId() )
 			user.setSocialId( userData.getSocialId() );
-		if( userData.hasGoogleRefreshToken() ){
-			logger.log( Level.INFO, "User Refresh Token : " + userData.getGoogleRefreshToken() );
-			user.setGoogleRefreshToken( userData.getGoogleRefreshToken() );
-		}
 		
 		user = dataAccessor.createOrUpdateUser( user );
 		

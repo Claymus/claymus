@@ -22,6 +22,7 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
+import com.google.appengine.labs.repackaged.org.json.JSONArray;
 import com.google.appengine.labs.repackaged.org.json.JSONException;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
 
@@ -34,6 +35,8 @@ public class GoogleUtil {
 	public static String GOOGLE_REFRESHTOKEN = "refresh_token";
 	public static String GOOGLE_IDTOKEN = "id_token";
 	public static String GOOGLE_USER_USERID = "user_id";
+	public static String GOOGLE_USER_EMAILS = "emails";
+	public static String GOOGLE_USER_EMAIL_TYPE = "account";
 	public static String GOOGLE_USER_EMAIL = "user_email";
 	public static String GOOGLE_USER_DISPLAYNAME = "displayName";
 	public static String GOOGLE_USER_GENDER = "gender";
@@ -50,6 +53,7 @@ public class GoogleUtil {
 	private final Logger logger = Logger.getLogger( GoogleUtil.class.getName() );
 
 	private String getTokensUrl = "https://www.googleapis.com/oauth2/v3/token";
+	private String getTokenInfo = "https://www.googleapis.com/oauth2/v3/tokeninfo?";
 	private String peopleApiUrl = "https://www.googleapis.com/plus/v1/people/";
 	
 	public GoogleUtil( Map<String, String> googleCredentials ){
@@ -58,7 +62,7 @@ public class GoogleUtil {
 	}
 	
 	
-	public boolean isValid( String idTokenString ) 
+	public boolean isValid( String accessTokenString ) 
 			throws GeneralSecurityException, IOException{
 		
 		NetHttpTransport transport = new NetHttpTransport();
@@ -67,16 +71,62 @@ public class GoogleUtil {
 												    .setAudience( Arrays.asList( clientId ) )
 												    .build();
 		
-		GoogleIdToken idToken = verifier.verify( idTokenString );
+		GoogleIdToken idToken = verifier.verify( accessTokenString );
 		if ( idToken != null ) {
 		  Payload payload = idToken.getPayload();
 		  userId = payload.getSubject();
 		  userEmail = payload.getEmail();
+		  logger.log( Level.INFO, "User Email : " + userEmail );
+		  logger.log( Level.INFO, "User Id : " + userId );
 		  return true;
 		} else {
 			logger.log( Level.INFO, "Invalid Id Token" );
 		}
 		
+		
+		return false;
+	}
+	
+	public boolean isValid( String accessToken, String socialId ) throws IOException, JSONException{
+		URL url;
+		try{
+			String urlParameters = URLEncoder.encode( "access_token", "UTF-8" ) + "=" + URLEncoder.encode( accessToken, "UTF-8" );
+			
+			//Create Connection
+			url = new URL( getTokenInfo + urlParameters );
+			URLConnection connection = url.openConnection();
+			
+			//Get Response
+			BufferedReader inputBuffer = new BufferedReader( new InputStreamReader( connection.getInputStream() ) );
+			String inputLine;
+			StringBuffer appAccessTokenBuffer = new StringBuffer();
+			while ( ( inputLine = inputBuffer.readLine() ) != null )
+				appAccessTokenBuffer.append(inputLine + "\n");
+			inputBuffer.close();
+			JSONObject accessTokenJSON = new JSONObject( appAccessTokenBuffer.toString() );
+			logger.log( Level.INFO, "JSON Response : " + appAccessTokenBuffer.toString() );
+			
+			if( accessTokenJSON.has( "error_description" )){
+				logger.log( Level.SEVERE, "Error returned by google token end point : " + accessTokenJSON.getString( "error_description" ));
+				return false;
+			}
+			
+			logger.log( Level.INFO, "Email verified : " + accessTokenJSON.get( "email_verified" ).equals( "true" ) );
+			logger.log( Level.INFO, "Client ID : " + accessTokenJSON.get( "aud" ).toString().equals( clientId ) );
+			if( accessTokenJSON.get( "email_verified" ).equals( "true" ) 
+					&& accessTokenJSON.get( "aud" ).toString().equals( clientId )
+					&& accessTokenJSON.get( "sub" ).equals( socialId ) ){
+				logger.log( Level.INFO, "Access Token is valid" );
+				logger.log( Level.INFO, "Email : " + userEmail );
+				logger.log( Level.INFO, "User Id : " + socialId );
+				
+				return true;
+			}
+			
+			
+		} catch( UnsupportedEncodingException e ){
+			logger.log( Level.SEVERE, "", e);
+		}
 		
 		return false;
 	}
@@ -120,11 +170,14 @@ public class GoogleUtil {
 				return null;
 			}
 			
-			if( isValid( accessTokenJSON.getString( GOOGLE_IDTOKEN ))){
+			if( isValid( accessTokenJSON.getString( GOOGLE_IDTOKEN ) )){
 				if( accessTokenJSON.has( GOOGLE_ACCESSTOKEN ))
 					returnMap.put( GOOGLE_ACCESSTOKEN, accessTokenJSON.getString( GOOGLE_ACCESSTOKEN ) );
 				if( accessTokenJSON.has( GOOGLE_REFRESHTOKEN ))
 					returnMap.put( GOOGLE_REFRESHTOKEN, accessTokenJSON.getString( GOOGLE_REFRESHTOKEN ) );
+				logger.log( Level.INFO, "Access Token is valid" );
+				logger.log( Level.INFO, "Email : " + userEmail );
+				logger.log( Level.INFO, "User Id : " + userId ); 
 				returnMap.put( GOOGLE_USER_USERID, userId );
 				returnMap.put( GOOGLE_USER_EMAIL,  userEmail );
 				return returnMap;
@@ -159,6 +212,13 @@ public class GoogleUtil {
 			logger.log( Level.INFO, appAccessTokenBuffer.toString());
 			JSONObject accessTokenJSON = new JSONObject( appAccessTokenBuffer.toString() );
 			Map<String, String> returnMap = new HashMap<>();
+			if( accessTokenJSON.has( "emails" )){
+				JSONArray emailObjectsList = accessTokenJSON.getJSONArray( "emails" );
+				for( int i = 0; i < emailObjectsList.length(); ++i ){
+					if( emailObjectsList.getJSONObject( i ).get( "type" ).equals( GOOGLE_USER_EMAIL_TYPE ) )
+						returnMap.put( GOOGLE_USER_EMAIL, emailObjectsList.getJSONObject( i ).get( "value" ).toString() );
+				}
+			}
 			if( accessTokenJSON.has( GOOGLE_USER_DISPLAYNAME ))
 				returnMap.put( GOOGLE_USER_DISPLAYNAME, accessTokenJSON.getString( GOOGLE_USER_DISPLAYNAME ));
 			if( accessTokenJSON.has( GOOGLE_USER_GENDER ))
