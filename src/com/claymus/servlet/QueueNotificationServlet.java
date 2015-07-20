@@ -21,8 +21,8 @@ import com.claymus.data.access.DataAccessorFactory;
 import com.claymus.data.transfer.EmailTemplate;
 import com.claymus.data.transfer.User;
 import com.claymus.email.EmailUtil;
-import com.pratilipi.data.transfer.Pratilipi;
 import com.pratilipi.data.transfer.shared.PratilipiData;
+import com.pratilipi.data.type.Pratilipi;
 import com.pratilipi.pagecontent.pratilipi.PratilipiContentHelper;
 
 import freemarker.template.TemplateException;
