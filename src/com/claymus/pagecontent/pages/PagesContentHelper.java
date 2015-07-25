@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
 import com.claymus.commons.server.Access;
 import com.claymus.commons.server.ClaymusHelper;
 import com.claymus.commons.server.UserAccessHelper;
