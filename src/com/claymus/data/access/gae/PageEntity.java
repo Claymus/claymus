@@ -13,6 +13,8 @@ import com.claymus.data.transfer.Page;
 @PersistenceCapable( table = "PAGE" )
 public class PageEntity implements Page {
 
+	private static final long serialVersionUID = 6798007451769465807L;
+
 	@PrimaryKey
 	@Persistent( column = "PAGE_ID", valueStrategy = IdGeneratorStrategy.IDENTITY )
 	private Long id;
