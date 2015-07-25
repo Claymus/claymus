@@ -69,10 +69,16 @@ public class FacebookUtil {
 			inputBuffer.close();
 			logger.log( Level.INFO, "Response : " + appAccessTokenBuffer.toString() );
 			JSONObject accessTokenJSON = new JSONObject( appAccessTokenBuffer.toString() );
+			
+			if( accessTokenJSON.has( "error" )){
+				logger.log( Level.SEVERE, "Error returned by Facebook token end point : " + accessTokenJSON.getString( "error" ));
+				return false;
+			}
+			
 			JSONObject dataJSON = accessTokenJSON.getJSONObject( "data" );
 
 			if( dataJSON.has( "error" )){
-				logger.log( Level.SEVERE, "Error returned by google token end point : " + dataJSON.getString( "error_description" ));
+				logger.log( Level.SEVERE, "Error returned by Facebook token end point : " + dataJSON.getString( "error_description" ));
 				return false;
 			}
 			
