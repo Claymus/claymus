@@ -7,6 +7,8 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
+import com.claymus.commons.shared.UserSignUpSource;
+import com.claymus.commons.shared.UserState;
 import com.claymus.commons.shared.UserStatus;
 import com.claymus.data.transfer.User;
 import com.pratilipi.commons.shared.UserGender;
@@ -41,26 +43,29 @@ public class UserEntity implements User {
 	@Persistent( column = "GENDER" )
 	private UserGender gender;
 
-	@Persistent( column = "PROFILE_PIC_URL" )
-	private String profilePicUrl;
-	
 	@Persistent( column = "PHONE" )
 	private String phone;
 	
+	@Deprecated
 	@Persistent( column = "CAMPAIGN" )
 	private String campaign;
 	
+	@Deprecated
 	@Persistent( column = "REFERER" )
 	private String referer;
 	
+	@Deprecated
 	@Persistent( column = "STATUS" )
 	private UserStatus status;
 	
-	@Persistent( column = "SOCIAL_ID" )
-	private String socialId;
-	
+	@Persistent( column = "STATE" )
+	private UserState state;
+
 	@Persistent( column = "SIGN_UP_DATE" )
 	private Date signUpDate;
+	
+	@Persistent( column = "SIGN_UP_SOURCE" )
+	private UserSignUpSource signUpSource;
 
 	
 	@Override
@@ -144,16 +149,6 @@ public class UserEntity implements User {
 	}
 	
 	@Override
-	public String getProfilePicUrl(){
-		return profilePicUrl;
-	}
-	
-	@Override
-	public void setProfilePicUrl( String profilePicUrl ){
-		this.profilePicUrl = profilePicUrl;
-	}
-	
-	@Override
 	public String getPhone() {
 		return phone;
 	}
@@ -194,13 +189,29 @@ public class UserEntity implements User {
 	}
 	
 	@Override
-	public String getSocialId(){
-		return socialId;
+	public UserState getState() {
+		if( state != null )
+			return state;
+		
+		switch( status ) {
+			case PRELAUNCH_REFERRAL:
+			case POSTLAUNCH_REFERRAL:
+				return UserState.REFERRAL;
+			case PRELAUNCH_SIGNUP:
+			case POSTLAUNCH_SIGNUP:
+			case POSTLAUNCH_SIGNUP_SOCIALLOGIN:
+			case ANDROID_SIGNUP:
+			case ANDROID_SIGNUP_FACEBOOK:
+			case ANDROID_SIGNUP_GOOGLE:
+				return UserState.REGISTERED;
+		}
+		
+		return UserState.REGISTERED;
 	}
-	
+
 	@Override
-	public void setSocialId( String socialId ){
-		this.socialId = socialId;
+	public void setState( UserState state ) {
+		this.state = state;
 	}
 	
 	@Override
@@ -208,8 +219,39 @@ public class UserEntity implements User {
 		return signUpDate;
 	}
 
+	@Override
 	public void setSignUpDate( Date signUpDate ) {
 		this.signUpDate = signUpDate;
+	}
+	
+	@Override
+	public UserSignUpSource getSignUpSource() {
+		if( signUpSource != null )
+			return signUpSource;
+		
+		switch( status ) {
+			case PRELAUNCH_REFERRAL:
+			case PRELAUNCH_SIGNUP:
+				return UserSignUpSource.PRE_LAUNCH_WEBSITE;
+			case POSTLAUNCH_REFERRAL:
+			case POSTLAUNCH_SIGNUP:
+				return UserSignUpSource.WEBSITE;
+			case POSTLAUNCH_SIGNUP_SOCIALLOGIN:
+				return UserSignUpSource.WEBSITE_FACEBOOK;
+			case ANDROID_SIGNUP:
+				return UserSignUpSource.ANDROID_APP;
+			case ANDROID_SIGNUP_FACEBOOK:
+				return UserSignUpSource.ANDROID_APP_FACEBOOK;
+			case ANDROID_SIGNUP_GOOGLE:
+				return UserSignUpSource.ANDROID_APP_GOOGLE;
+		}
+		
+		return null;
+	}
+
+	@Override
+	public void setSignUpSource( UserSignUpSource signUpSource ) {
+		this.signUpSource = signUpSource;
 	}
 
 }

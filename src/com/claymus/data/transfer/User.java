@@ -3,6 +3,8 @@ package com.claymus.data.transfer;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.claymus.commons.shared.UserSignUpSource;
+import com.claymus.commons.shared.UserState;
 import com.claymus.commons.shared.UserStatus;
 import com.pratilipi.commons.shared.UserGender;
 
@@ -40,10 +42,6 @@ public interface User extends Serializable {
 	
 	void setGender( UserGender userGender );
 	
-	String getProfilePicUrl();
-	
-	void setProfilePicUrl( String profilePicUrl );
-	
 	String getPhone();
 
 	void setPhone( String phone );
@@ -60,11 +58,15 @@ public interface User extends Serializable {
 	
 	void setStatus( UserStatus userStatus );
 	
-	String getSocialId();
-	
-	void setSocialId( String socialId );
+	UserState getState();
+
+	void setState( UserState userState );
 	
 	Date getSignUpDate();
 	
 	void setSignUpDate( Date date );
+	
+	UserSignUpSource getSignUpSource();
+
+	void setSignUpSource( UserSignUpSource signUpSource );
 }
