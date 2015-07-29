@@ -10,6 +10,8 @@ import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 
 import com.claymus.commons.shared.ClaymusAccessTokenType;
+import com.claymus.commons.shared.UserSignUpSource;
+import com.claymus.commons.shared.UserState;
 import com.claymus.commons.shared.UserStatus;
 import com.claymus.data.access.DataAccessor;
 import com.claymus.data.access.DataAccessorFactory;
@@ -199,20 +201,21 @@ public class ClaymusHelper implements Serializable {
 					public void setGender(UserGender userSex) { }
 
 					@Override
-					public String getProfilePicUrl() {
+					public UserState getState() {
 						return null;
 					}
 
 					@Override
-					public void setProfilePicUrl(String profileImageUrl) { }
+					public void setState(UserState userState) {	}
 
 					@Override
-					public String getSocialId() {
+					public UserSignUpSource getSignUpSource() {
 						return null;
 					}
 
 					@Override
-					public void setSocialId( String socialId) { }
+					public void setSignUpSource(UserSignUpSource signUpSource) { }
+
 
 				};
 			} else {

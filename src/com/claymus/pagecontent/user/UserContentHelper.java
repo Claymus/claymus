@@ -106,15 +106,11 @@ public class UserContentHelper extends PageContentHelper<
 				userData.setGender( UserGender.FEMALE );
 			else
 				userData.setGender( UserGender.TRANSGENDER );
-			userData.setProfilePicUrl( userDataMap.get( GoogleUtil.GOOGLE_USER_IMAGE_URL ));
 			userData.setStatus( UserStatus.ANDROID_SIGNUP_GOOGLE );
-			userData.setSocialId(  socialId );
 			accessToken = registerUser( userData, request );
 		} else{
 			if( user.getStatus() != UserStatus.ANDROID_SIGNUP_GOOGLE ){
 				user.setStatus( UserStatus.ANDROID_SIGNUP_GOOGLE );
-				user.setProfilePicUrl( userDataMap.get( GoogleUtil.GOOGLE_USER_IMAGE_URL ));
-				user.setSocialId(  socialId );
 			}
 			
 			user = dataAccessor.createOrUpdateUser( user );
@@ -149,15 +145,11 @@ public class UserContentHelper extends PageContentHelper<
 				userData.setGender( UserGender.FEMALE );
 			else
 				userData.setGender( UserGender.TRANSGENDER );
-			userData.setProfilePicUrl( userDataMap.get( FacebookUtil.FACEBOOK_USER_PROFILE_PIC_URL ));
 			userData.setStatus( UserStatus.ANDROID_SIGNUP_FACEBOOK );
-			userData.setSocialId( userDataMap.get( FacebookUtil.FACEBOOK_USER_ID ));
 			accessToken = registerUser( userData, request );
 		} else {
 			if( user.getStatus() != UserStatus.ANDROID_SIGNUP_FACEBOOK ){
 				user.setStatus( UserStatus.ANDROID_SIGNUP_FACEBOOK );
-				user.setProfilePicUrl( userDataMap.get( FacebookUtil.FACEBOOK_USER_PROFILE_PIC_URL ));
-				userData.setSocialId( userDataMap.get( FacebookUtil.FACEBOOK_USER_ID ));
 			}
 			user = dataAccessor.createOrUpdateUser( user );
 			accessToken = ClaymusHelper.get( request ).createAccessToken( user.getId() );
@@ -216,8 +208,6 @@ public class UserContentHelper extends PageContentHelper<
 		userData.setName( name );
 		userData.setEmail( user.getEmail() );
 		userData.setDateOfBirth( user.getDateOfBirth() );
-		if( user.getProfilePicUrl() != null )
-			userData.setProfilePicUrl( user.getProfilePicUrl() );
 		userData.setGender( user.getGender() );
 		userData.setCampaign( user.getCampaign() );
 		userData.setReferer( user.getReferer() );
@@ -280,14 +270,10 @@ public class UserContentHelper extends PageContentHelper<
 		user.setLastName( lastName );
 		if( userData.getPassword() != null )
 			user.setPassword( EncryptPassword.getSaltedHash( userData.getPassword() ) );
-		if( userData.hasProfilePicUrl() )
-			user.setProfilePicUrl( userData.getProfilePicUrl() );
 		if( userData.getStatus() != null )
 			user.setStatus( userData.getStatus() );
 		else
 			user.setStatus( UserStatus.ANDROID_SIGNUP );
-		if( userData.hasSocialId() )
-			user.setSocialId( userData.getSocialId() );
 		
 		user = dataAccessor.createOrUpdateUser( user );
 		

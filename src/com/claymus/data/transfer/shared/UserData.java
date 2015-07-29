@@ -31,15 +31,9 @@ public class UserData implements IsSerializable {
 	private UserGender gender;
 	private boolean hasGender;
 	
-	private String profilePicUrl;
-	private boolean hasProfilePicUrl;
-	
 	private String campaign;
 	
 	private String referer;
-	
-	private String socialId;
-	private boolean hasSocialId;
 	
 	private UserStatus status;
 
@@ -142,19 +136,6 @@ public class UserData implements IsSerializable {
 	public boolean hasGender(){
 		return hasGender;
 	}
-	
-	public String getProfilePicUrl(){
-		return profilePicUrl;
-	}
-	
-	public void setProfilePicUrl( String profilePicUrl ){
-		this.profilePicUrl = profilePicUrl;
-		this.hasProfilePicUrl = true;
-	}
-	
-	public boolean hasProfilePicUrl(){
-		return hasProfilePicUrl;
-	}
 
 	public String getCampaign() {
 		return campaign;
@@ -170,19 +151,6 @@ public class UserData implements IsSerializable {
 
 	public void setReferer(String referer) {
 		this.referer = referer;
-	}
-	
-	public String getSocialId(){
-		return socialId;
-	}
-	
-	public void setSocialId( String socialId ){
-		this.socialId = socialId;
-		this.hasSocialId = true;
-	}
-	
-	public boolean hasSocialId(){
-		return hasSocialId;
 	}
 	
 	public UserStatus getStatus() {
