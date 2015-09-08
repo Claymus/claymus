@@ -14,12 +14,18 @@ import com.claymus.data.transfer.User;
 @PersistenceCapable( table = "USER" )
 public class UserEntity implements User {
 	
+	private static final long serialVersionUID = 5942981653445086715L;
+
 	@PrimaryKey
 	@Persistent( column = "USER_ID", valueStrategy = IdGeneratorStrategy.IDENTITY )
 	private Long id;
 	
+	@Persistent( column = "FACEBOOK_ID" )
+	private String facebookId;
+
 	@Persistent( column = "PASSWORD" )
 	private String password;
+	
 	
 	@Persistent( column = "FIRST_NAME" )
 	private String firstName;
@@ -30,11 +36,20 @@ public class UserEntity implements User {
 	@Persistent( column = "NICK_NAME" )
 	private String nickName;
 	
+	
+	@Persistent( column = "GENDER" )
+	private Gender gender;
+	
+	@Persistent( column = "DATE_OF_BIRTH" )
+	private Date dateOfBirth;
+
+
 	@Persistent( column = "EMAIL" )
 	private String email;
 	
 	@Persistent( column = "PHONE" )
 	private String phone;
+	
 	
 	@Persistent( column = "CAMPAIGN" )
 	private String campaign;
@@ -44,9 +59,16 @@ public class UserEntity implements User {
 	
 	@Persistent( column = "STATUS" )
 	private UserStatus status;
-	
+
+	@Persistent( column = "STATE" )
+	private UserState state;
+
+
 	@Persistent( column = "SIGN_UP_DATE" )
 	private Date signUpDate;
+
+	@Persistent( column = "SIGN_UP_SOURCE" )
+	private UserSignUpSource signUpSource;
 
 	
 	@Override
