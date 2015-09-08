@@ -16,14 +16,18 @@ import com.pratilipi.commons.shared.UserGender;
 @PersistenceCapable( table = "USER" )
 public class UserEntity implements User {
 	
-	private static final long serialVersionUID = -3740558387788310210L;
+	private static final long serialVersionUID = 5942981653445086715L;
 
 	@PrimaryKey
 	@Persistent( column = "USER_ID", valueStrategy = IdGeneratorStrategy.IDENTITY )
 	private Long id;
 	
+	@Persistent( column = "FACEBOOK_ID" )
+	private String facebookId;
+	
 	@Persistent( column = "PASSWORD" )
 	private String password;
+	
 	
 	@Persistent( column = "FIRST_NAME" )
 	private String firstName;
@@ -34,17 +38,22 @@ public class UserEntity implements User {
 	@Persistent( column = "NICK_NAME" )
 	private String nickName;
 	
-	@Persistent( column = "EMAIL" )
-	private String email;
+
+	@Persistent( column = "GENDER" )
+	private Gender gender;
 	
 	@Persistent( column = "DATE_OF_BIRTH" )
 	private Date dateOfBirth;
+	
+	@Persistent( column = "EMAIL" )
+	private String email;
 	
 	@Persistent( column = "GENDER" )
 	private UserGender gender;
 
 	@Persistent( column = "PHONE" )
 	private String phone;
+
 	
 	@Deprecated
 	@Persistent( column = "CAMPAIGN" )
@@ -60,6 +69,7 @@ public class UserEntity implements User {
 	
 	@Persistent( column = "STATE" )
 	private UserState state;
+
 
 	@Persistent( column = "SIGN_UP_DATE" )
 	private Date signUpDate;
