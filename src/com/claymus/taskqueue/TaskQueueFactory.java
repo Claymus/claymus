@@ -10,6 +10,7 @@ public class TaskQueueFactory {
 	private static final String QUEUE_INVITE_USER = "invite-user";
 	private static final String QUEUE_WELCOME_USER = "welcome-user";
 	private static final String QUEUE_RESET_PASSWORD = "reset-password";
+	private static final String QUEUE_USER = "user";
 	
 	
 	public static TaskQueue getInviteUserTaskQueue() {
@@ -22,6 +23,10 @@ public class TaskQueueFactory {
 
 	public static TaskQueue getResetPasswordTaskQueue() {
 		return getTaskQueue( QUEUE_RESET_PASSWORD );
+	}
+	
+	public static TaskQueue getUserTaskQueue() {
+		return getTaskQueue( QUEUE_USER );
 	}
 
 	protected static TaskQueue getTaskQueue( String taskQueueName ) {
