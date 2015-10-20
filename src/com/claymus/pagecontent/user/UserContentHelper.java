@@ -105,7 +105,7 @@ public class UserContentHelper extends PageContentHelper<
 			else if( userDataMap.get( GoogleUtil.GOOGLE_USER_GENDER ).toUpperCase().equals( UserGender.FEMALE.toString() ))
 				userData.setGender( UserGender.FEMALE );
 			else
-				userData.setGender( UserGender.TRANSGENDER );
+				userData.setGender( UserGender.OTHER );
 			userData.setStatus( UserStatus.ANDROID_SIGNUP_GOOGLE );
 			accessToken = registerUser( userData, request );
 		} else{
@@ -144,7 +144,7 @@ public class UserContentHelper extends PageContentHelper<
 			else if( userDataMap.get( FacebookUtil.FACEBOOK_USER_GENDER ).toUpperCase().equals( UserGender.FEMALE.toString() ))
 				userData.setGender( UserGender.FEMALE );
 			else
-				userData.setGender( UserGender.TRANSGENDER );
+				userData.setGender( UserGender.OTHER );
 			userData.setStatus( UserStatus.ANDROID_SIGNUP_FACEBOOK );
 			accessToken = registerUser( userData, request );
 		} else {
