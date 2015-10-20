@@ -188,10 +188,12 @@ public class ClaymusServiceImpl extends RemoteServiceServlet
 		userRole.setRoleId( "member" );
 		dataAccessor.createOrUpdateUserRole( userRole );
 
-		Task task = TaskQueueFactory.newTask();
-		task.addParam( "userId", user.getId().toString() );
+		Task task = TaskQueueFactory.newTask()
+		.setUrl( "/user/email" )
+		.addParam( "userId", userData.getId().toString() )
+		.addParam( "sendWelcomeMail", "true" );
 		
-		TaskQueue taskQueue = TaskQueueFactory.getWelcomeUserTaskQueue();
+		TaskQueue taskQueue = TaskQueueFactory.getUserTaskQueue();
 		taskQueue.add( task );
 		
 		//Update Access Token Entity
