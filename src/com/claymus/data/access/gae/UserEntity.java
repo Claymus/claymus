@@ -39,8 +39,8 @@ public class UserEntity implements User {
 	private String nickName;
 	
 
-	@Persistent( column = "GENDER" )
-	private Gender gender;
+//	@Persistent( column = "GENDER" )
+//	private Gender gender;
 	
 	@Persistent( column = "DATE_OF_BIRTH" )
 	private Date dateOfBirth;
