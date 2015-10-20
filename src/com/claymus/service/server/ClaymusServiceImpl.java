@@ -189,9 +189,9 @@ public class ClaymusServiceImpl extends RemoteServiceServlet
 		dataAccessor.createOrUpdateUserRole( userRole );
 
 		Task task = TaskQueueFactory.newTask()
-		.setUrl( "/user/email" )
-		.addParam( "userId", userData.getId().toString() )
-		.addParam( "sendWelcomeMail", "true" );
+						.setUrl( "/user/email" )
+						.addParam( "userId", user.getId().toString() )
+						.addParam( "sendWelcomeMail", "true" );
 		
 		TaskQueue taskQueue = TaskQueueFactory.getUserTaskQueue();
 		taskQueue.add( task );
