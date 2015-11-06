@@ -21,7 +21,6 @@ import com.claymus.commons.shared.exception.UnexpectedServerException;
 import com.claymus.data.access.DataAccessor;
 import com.claymus.data.access.DataAccessorFactory;
 import com.claymus.data.access.DataListCursorTuple;
-import com.claymus.data.transfer.AccessToken;
 import com.claymus.data.transfer.EmailTemplate;
 import com.claymus.data.transfer.PageContent;
 import com.claymus.data.transfer.RoleAccess;
@@ -62,6 +61,7 @@ import com.claymus.taskqueue.Task;
 import com.claymus.taskqueue.TaskQueue;
 import com.claymus.taskqueue.TaskQueueFactory;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import com.pratilipi.data.type.AccessToken;
 import com.pratilipi.pagecontent.author.AuthorContentHelper;
 
 import freemarker.template.TemplateException;

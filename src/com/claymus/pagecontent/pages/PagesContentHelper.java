@@ -16,7 +16,6 @@ import com.claymus.commons.shared.exception.InvalidArgumentException;
 import com.claymus.data.access.DataAccessor;
 import com.claymus.data.access.DataAccessorFactory;
 import com.claymus.data.access.DataListCursorTuple;
-import com.claymus.data.transfer.AccessToken;
 import com.claymus.data.transfer.AuditLog;
 import com.claymus.data.transfer.Page;
 import com.claymus.data.transfer.shared.PageData;
@@ -25,6 +24,7 @@ import com.claymus.pagecontent.pages.gae.PagesContentEntity;
 import com.claymus.pagecontent.pages.shared.PagesContentData;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.pratilipi.data.type.AccessToken;
 
 public class PagesContentHelper extends PageContentHelper<
 		PagesContent,

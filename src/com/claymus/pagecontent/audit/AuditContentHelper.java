@@ -13,7 +13,6 @@ import com.claymus.commons.shared.exception.InsufficientAccessException;
 import com.claymus.data.access.DataAccessor;
 import com.claymus.data.access.DataAccessorFactory;
 import com.claymus.data.access.DataListCursorTuple;
-import com.claymus.data.transfer.AccessToken;
 import com.claymus.data.transfer.AuditLog;
 import com.claymus.data.transfer.User;
 import com.claymus.data.transfer.shared.AccessTokenData;
@@ -22,6 +21,7 @@ import com.claymus.pagecontent.PageContentHelper;
 import com.claymus.pagecontent.audit.gae.AuditContentEntity;
 import com.claymus.pagecontent.audit.shared.AuditContentData;
 import com.claymus.service.shared.data.UserData;
+import com.pratilipi.data.type.AccessToken;
 
 public class AuditContentHelper extends PageContentHelper<
 		AuditContent,

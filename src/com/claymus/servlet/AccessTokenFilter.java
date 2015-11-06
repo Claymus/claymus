@@ -17,7 +17,7 @@ import com.claymus.commons.server.ClaymusHelper;
 import com.claymus.commons.shared.ClaymusAccessTokenType;
 import com.claymus.data.access.DataAccessor;
 import com.claymus.data.access.DataAccessorFactory;
-import com.claymus.data.transfer.AccessToken;
+import com.pratilipi.data.type.AccessToken;
 
 public class AccessTokenFilter implements Filter {
 	

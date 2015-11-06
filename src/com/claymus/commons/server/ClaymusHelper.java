@@ -16,7 +16,6 @@ import com.claymus.commons.shared.UserStatus;
 import com.claymus.data.access.DataAccessor;
 import com.claymus.data.access.DataAccessorFactory;
 import com.claymus.data.access.Memcache;
-import com.claymus.data.transfer.AccessToken;
 import com.claymus.data.transfer.Page;
 import com.claymus.data.transfer.RoleAccess;
 import com.claymus.data.transfer.User;
@@ -25,6 +24,7 @@ import com.claymus.data.transfer.shared.PageData;
 import com.claymus.service.shared.data.UserData;
 import com.google.apphosting.api.ApiProxy;
 import com.pratilipi.commons.shared.UserGender;
+import com.pratilipi.data.type.AccessToken;
 
 @SuppressWarnings("serial")
 public class ClaymusHelper implements Serializable {

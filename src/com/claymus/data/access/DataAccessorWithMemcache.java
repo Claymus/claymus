@@ -8,7 +8,6 @@ import javax.jdo.PersistenceManager;
 
 import com.claymus.commons.shared.CommentFilter;
 import com.claymus.commons.shared.CommentParentType;
-import com.claymus.data.transfer.AccessToken;
 import com.claymus.data.transfer.AppProperty;
 import com.claymus.data.transfer.AuditLog;
 import com.claymus.data.transfer.Comment;
@@ -21,6 +20,7 @@ import com.claymus.data.transfer.RoleAccess;
 import com.claymus.data.transfer.User;
 import com.claymus.data.transfer.UserRole;
 import com.claymus.pagecontent.blogpost.BlogPostContent;
+import com.pratilipi.data.type.AccessToken;
 
 @SuppressWarnings("serial")
 public class DataAccessorWithMemcache implements DataAccessor {

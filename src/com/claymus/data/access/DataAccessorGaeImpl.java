@@ -19,7 +19,6 @@ import javax.jdo.Transaction;
 
 import com.claymus.commons.shared.CommentFilter;
 import com.claymus.commons.shared.CommentParentType;
-import com.claymus.data.access.gae.AccessTokenEntity;
 import com.claymus.data.access.gae.AppPropertyEntity;
 import com.claymus.data.access.gae.AuditLogEntity;
 import com.claymus.data.access.gae.CommentEntity;
@@ -31,7 +30,6 @@ import com.claymus.data.access.gae.RoleAccessEntity;
 import com.claymus.data.access.gae.RoleEntity;
 import com.claymus.data.access.gae.UserEntity;
 import com.claymus.data.access.gae.UserRoleEntity;
-import com.claymus.data.transfer.AccessToken;
 import com.claymus.data.transfer.AppProperty;
 import com.claymus.data.transfer.AuditLog;
 import com.claymus.data.transfer.Comment;
@@ -47,6 +45,8 @@ import com.claymus.pagecontent.blogpost.BlogPostContent;
 import com.claymus.pagecontent.blogpost.gae.BlogPostContentEntity;
 import com.google.appengine.api.datastore.Cursor;
 import com.google.appengine.datanucleus.query.JDOCursorHelper;
+import com.pratilipi.data.type.AccessToken;
+import com.pratilipi.data.type.gae.AccessTokenEntity;
 
 @SuppressWarnings("serial")
 public class DataAccessorGaeImpl implements DataAccessor {

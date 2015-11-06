@@ -20,7 +20,6 @@ import com.claymus.commons.shared.exception.InsufficientAccessException;
 import com.claymus.commons.shared.exception.InvalidArgumentException;
 import com.claymus.data.access.DataAccessor;
 import com.claymus.data.access.DataAccessorFactory;
-import com.claymus.data.transfer.AccessToken;
 import com.claymus.data.transfer.User;
 import com.claymus.data.transfer.UserRole;
 import com.claymus.data.transfer.shared.UserData;
@@ -32,6 +31,7 @@ import com.claymus.taskqueue.TaskQueue;
 import com.claymus.taskqueue.TaskQueueFactory;
 import com.google.appengine.labs.repackaged.org.json.JSONException;
 import com.pratilipi.commons.shared.UserGender;
+import com.pratilipi.data.type.AccessToken;
 
 public class UserContentHelper extends PageContentHelper<
 		UserContent,

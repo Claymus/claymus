@@ -25,10 +25,10 @@ import org.apache.commons.io.IOUtils;
 import com.claymus.commons.server.ClaymusHelper;
 import com.claymus.data.access.DataAccessor;
 import com.claymus.data.access.DataAccessorFactory;
-import com.claymus.data.transfer.AccessToken;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
+import com.pratilipi.data.type.AccessToken;
 
 public class ClaymusServiceFilter implements Filter {
 	
