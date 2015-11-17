@@ -23,6 +23,7 @@ import com.claymus.data.access.gae.AppPropertyEntity;
 import com.claymus.data.access.gae.AuditLogEntity;
 import com.claymus.data.access.gae.CommentEntity;
 import com.claymus.data.access.gae.EmailTemplateEntity;
+import com.claymus.data.access.gae.PageContentEntity;
 import com.claymus.data.access.gae.PageContentEntityStub;
 import com.claymus.data.access.gae.PageEntity;
 import com.claymus.data.access.gae.PageLayoutEntity;
@@ -47,6 +48,7 @@ import com.google.appengine.api.datastore.Cursor;
 import com.google.appengine.datanucleus.query.JDOCursorHelper;
 import com.pratilipi.data.type.AccessToken;
 import com.pratilipi.data.type.gae.AccessTokenEntity;
+import com.sun.corba.se.spi.servicecontext.UEInfoServiceContext;
 
 @SuppressWarnings("serial")
 public class DataAccessorGaeImpl implements DataAccessor {
@@ -171,6 +173,17 @@ public class DataAccessorGaeImpl implements DataAccessor {
 		return createOrUpdateEntity( role );
 	}
 
+	@Override
+	public Boolean deleteUser( Long id ){
+		try{
+//			deleteEntity( UserEntity.class, id );
+			return false;
+		} catch(JDOObjectNotFoundException e ){
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
 
 	@Override
 	public UserRole newUserRole() {
@@ -194,6 +207,17 @@ public class DataAccessorGaeImpl implements DataAccessor {
 		( (UserRoleEntity) userRole ).setId(
 				userRole.getUserId() + "-" + userRole.getRoleId() );
 		return createOrUpdateEntity( userRole );
+	}
+
+	@Override
+	public Boolean deleteUserRole( String id ){
+		try {
+//			deleteEntity( UserRoleEntity.class, id );
+			return false;
+		} catch( JDOObjectNotFoundException e ) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 	
@@ -304,6 +328,16 @@ public class DataAccessorGaeImpl implements DataAccessor {
 		return createOrUpdateEntity( page );
 	}
 
+	@Override
+	public Boolean deletePage( Long id ){
+		try {
+//			deleteEntity( PageEntity.class, id );
+			return false;
+		} catch( JDOObjectNotFoundException e ) {
+			e.printStackTrace();
+			return false;
+		}
+	}
 	
 	@Override
 	public PageContent getPageContent( Long id ) {
@@ -370,6 +404,17 @@ public class DataAccessorGaeImpl implements DataAccessor {
 		return createOrUpdateEntity( pageContent );
 	}
 
+	@Override
+	public Boolean deletePageContent( Long id ){
+		try {
+//			deleteEntity( PageContentEntity.class, id );
+			return false;
+		} catch( JDOObjectNotFoundException e ) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
 
 	@Override
 	public PageLayout newPageLayout() {
@@ -468,6 +513,16 @@ public class DataAccessorGaeImpl implements DataAccessor {
 		return createOrUpdateEntity( comment );
 	}
 
+	@Override
+	public Boolean deleteComment( Long id ){
+		try {
+//			deleteEntity( CommentEntity.class, id );
+			return false;
+		} catch( JDOObjectNotFoundException e ) {
+			e.printStackTrace();
+			return false;
+		}
+	}
 
 	@Override
 	public AccessToken newAccessToken() {

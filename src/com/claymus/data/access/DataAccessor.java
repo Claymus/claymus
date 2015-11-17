@@ -43,6 +43,8 @@ public interface DataAccessor extends Serializable {
 	List<User> getUserList();
 
 	User createOrUpdateUser( User user );
+	
+	Boolean deleteUser( Long id );
 
 	
 	Role newRole();
@@ -57,6 +59,8 @@ public interface DataAccessor extends Serializable {
 	List<UserRole> getUserRoleList( Long userId );
 
 	UserRole createOrUpdateUserRole( UserRole userRole );
+	
+	Boolean deleteUserRole( String id );
 
 	
 	RoleAccess newRoleAccess();
@@ -78,6 +82,8 @@ public interface DataAccessor extends Serializable {
 
 	Page createOrUpdatePage( Page page );
 	
+	Boolean deletePage( Long id );
+	
 
 	PageContent getPageContent( Long id );
 
@@ -86,6 +92,8 @@ public interface DataAccessor extends Serializable {
 	DataListCursorTuple<BlogPostContent> getBlogPostContentList( Long blogId, String cursor, int resultCount );
 
 	PageContent createOrUpdatePageContent( PageContent pageContent );
+	
+	Boolean deletePageContent( Long id );
 	
 	
 	PageLayout newPageLayout();
@@ -107,6 +115,8 @@ public interface DataAccessor extends Serializable {
 	DataListCursorTuple<Comment> getCommentList( CommentFilter commentFilter , String cursor, Integer resultCount );
 	
 	Comment createOrUpdateComment( Comment comment );
+	
+	Boolean deleteComment( Long id );
 	
 	
 	AccessToken newAccessToken();

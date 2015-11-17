@@ -128,6 +128,16 @@ public class DataAccessorWithMemcache implements DataAccessor {
 		return user;
 	}
 
+	@Override
+	public Boolean deleteUser( Long id ){
+		User user = memcache.get( PREFIX_USER + id );
+		if( user != null ){
+			memcache.remove( PREFIX_USER + id );
+			memcache.remove( PREFIX_USER + user.getEmail() );
+		}
+		return dataAccessor.deleteUser( id );
+	}
+	
 	
 	@Override
 	public Role newRole() {
@@ -176,6 +186,10 @@ public class DataAccessorWithMemcache implements DataAccessor {
 		return dataAccessor.createOrUpdateUserRole( userRole );
 	}
 
+	@Override
+	public Boolean deleteUserRole( String id ){
+		return dataAccessor.deleteUserRole( id );
+	}
 	
 	@Override
 	public RoleAccess newRoleAccess() {
@@ -257,6 +271,20 @@ public class DataAccessorWithMemcache implements DataAccessor {
 		return page;
 	}
 
+	@Override
+	public Boolean deletePage(Long id) {
+		Page page = memcache.get( PREFIX_PAGE + id );
+		if( page != null ){
+			memcache.remove( PREFIX_PAGE + id );
+			if( page.getUriAlias() != null )
+				memcache.remove( PREFIX_PAGE +  page.getUriAlias() );
+			else
+				memcache.remove( PREFIX_PAGE +  page.getUri() );
+			
+		}
+		return dataAccessor.deletePage( id );
+	}
+	
 	
 	@Override
 	public PageContent getPageContent( Long id ) {
@@ -292,6 +320,14 @@ public class DataAccessorWithMemcache implements DataAccessor {
 		memcache.put( PREFIX_PAGE_CONTENT + pageContent.getId(), pageContent );
 		memcache.remove( PREFIX_PAGE_CONTENT_LIST + pageContent.getPageId() );
 		return pageContent;
+	}
+
+	@Override
+	public Boolean deletePageContent(Long id) {
+		PageContent pageContent = memcache.get( PREFIX_PAGE_CONTENT + id );
+		if( pageContent != null )
+			memcache.remove(  PREFIX_PAGE_CONTENT + id );
+		return dataAccessor.deletePageContent( id );
 	}
 
 
@@ -353,6 +389,14 @@ public class DataAccessorWithMemcache implements DataAccessor {
 		return dataAccessor.createOrUpdateComment( comment );
 	}
 
+	@Override
+	public Boolean deleteComment(Long id) {
+		Comment comment = memcache.get( PREFIX_COMMENT + id );
+		if( comment != null )
+			memcache.remove( PREFIX_COMMENT + id );
+		return dataAccessor.deleteComment( id );
+	}
+	
 	
 	@Override
 	public AccessToken newAccessToken() {
