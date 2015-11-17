@@ -229,7 +229,8 @@
 		}
 		
 		function onEnter(object){
-			if (event.which == 13) {
+			if (event.which == 13 || event.which == 10
+					event.keycode == 13 || event.keycode == 10 ) {
 				event.preventDefault();
 				postComment(object);
 				object.value = "";
