@@ -23,7 +23,6 @@ import com.claymus.data.access.gae.AppPropertyEntity;
 import com.claymus.data.access.gae.AuditLogEntity;
 import com.claymus.data.access.gae.CommentEntity;
 import com.claymus.data.access.gae.EmailTemplateEntity;
-import com.claymus.data.access.gae.PageContentEntity;
 import com.claymus.data.access.gae.PageContentEntityStub;
 import com.claymus.data.access.gae.PageEntity;
 import com.claymus.data.access.gae.PageLayoutEntity;
@@ -48,7 +47,6 @@ import com.google.appengine.api.datastore.Cursor;
 import com.google.appengine.datanucleus.query.JDOCursorHelper;
 import com.pratilipi.data.type.AccessToken;
 import com.pratilipi.data.type.gae.AccessTokenEntity;
-import com.sun.corba.se.spi.servicecontext.UEInfoServiceContext;
 
 @SuppressWarnings("serial")
 public class DataAccessorGaeImpl implements DataAccessor {
@@ -407,7 +405,7 @@ public class DataAccessorGaeImpl implements DataAccessor {
 	@Override
 	public Boolean deletePageContent( Long id ){
 		try {
-//			deleteEntity( PageContentEntity.class, id );
+//			deleteEntity( PageContentEntityStub.class, id );
 			return false;
 		} catch( JDOObjectNotFoundException e ) {
 			e.printStackTrace();
