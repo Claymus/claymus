@@ -35,6 +35,7 @@ public class ClaymusFilter implements Filter {
 
 		DataAccessor dataAccessor = DataAccessorFactory.getDataAccessor( request );
 		Page page;
+		String userAgent;
 
 		
 		if( requestUri.startsWith( "/api/" )
@@ -54,7 +55,8 @@ public class ClaymusFilter implements Filter {
 			
 		} else if( ( page = dataAccessor.getPage( requestUri ) ) != null
 				&& page.getUriAlias() != null
-				&& ! requestUri.equals( page.getUriAlias() ) ) {
+				&& ! requestUri.equals( page.getUriAlias() )
+				&& ( ( userAgent = request.getHeader( "user-agent" ) ) == null || userAgent.isEmpty() || ! userAgent.startsWith( "facebookexternalhit/1.1" ) ) ) {
 			
 			response.setStatus( HttpServletResponse.SC_MOVED_PERMANENTLY );
 			response.setHeader( "Location", page.getUriAlias() );
