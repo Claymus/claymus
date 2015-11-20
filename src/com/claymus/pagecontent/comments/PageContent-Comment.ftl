@@ -44,7 +44,7 @@
 			
 			<br/>
 			<#if userData.getEmail()??>
-				<textarea placeholder="Reply to above review" rows=2 onkeydown="onEnter(this)"></textarea>
+				<textarea placeholder="Reply to above review" rows=2  onfocus="onFocus(this)" onblur="onBlur(this)" onkeydown="onEnter(this, event)"></textarea>
 			<#else>
 				<textarea placeholder="Reply to above review" rows=2 data-toggle='modal' data-target="#loginModal" onclick="window.location.href='#Comment'"></textarea>
 			</#if>
@@ -146,12 +146,28 @@
 			font-size : 80%;
 		}
 		
+		.tiny {
+			font-size : 60%;
+			color : green;
+		}
 	</style>
 	
 	
 	<script>
 	
 		var requestType;
+		
+		function onFocus( object ){
+			var parentDiv = jQuery( object ).parent();
+			var node = jQuery( "<p></p>" );
+			node.text( "Press ENTER to submit comment. Press SHIFT+ENTER for new line." );
+			node.addClass( 'tiny' );
+			parentDiv.append( node );
+		}
+		
+		function onBlur( object ){
+			jQuery( object ).parent().children(".tiny").remove();
+		}
 		
 		function ajaxPost( object ){
 			var tagName = jQuery( object ).prop( "tagName" );
@@ -238,22 +254,48 @@
 		}
 		
 		function postComment(object){
-			addComment( object );
-			ajaxPost( object )
+			var comment = object.value;
+			if( comment ){
+				addComment( object );
+				ajaxPost( object )
+			}
 		}
 		
 		function vote( object ){
 			ajaxPost( object );
 		}
 		
-		function onEnter(object){
+		function getCursorPosition(object){
+			if (object.selectionStart) { 
+		        return object.selectionStart; 
+		    } else if (document.selection) { 
+		        object.focus();
+		        var r = document.selection.createRange(); 
+		        if (r == null) { 
+		            return 0;
+		        }
+		        var re = object.createTextRange(), rc = re.duplicate();
+		        re.moveToBookmark(r.getBookmark());
+		        rc.setEndPoint('EndToStart', re);
+		        return rc.text.length;
+		    }  
+		    return 0; 
+		}
+		
+		function onEnter(object, event){
+			var content = object.value;
+			var caret = getCursorPosition(object);
 			if (event.which == 13 || event.which == 10
-					event.keycode == 13 || event.keycode == 10) {
+					|| event.keycode == 13 || event.keycode == 10) {
 				//iOS safari send 10 when enter key is pressed.
 				event.preventDefault();
-				postComment(object);
-				object.value = "";
-				object.blur();
+				if(event.shiftKey){
+		            object.value = content.substring(0, caret) + "\n" + content.substring(caret, content.length);
+		        } else{
+					postComment(object);
+					object.value = "";
+					object.blur();
+				}
 				return false;
 			 }
 		}
