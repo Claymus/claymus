@@ -34,7 +34,7 @@ public class MemcacheGaeImpl implements Memcache {
 			else
 				logger.log( Level.INFO, "Cache Hit: " + key );
 			return value;
-		} catch( InvalidValueException e ) {
+		} catch( InvalidValueException | ClassCastException e ) {
 			logger.log( Level.SEVERE, "Failed to typecaste cached value to required type.", e );
 			return null;
 		} catch( CacheException e ) {

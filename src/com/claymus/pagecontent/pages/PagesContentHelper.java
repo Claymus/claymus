@@ -22,7 +22,7 @@ import com.claymus.pagecontent.pages.gae.PagesContentEntity;
 import com.claymus.pagecontent.pages.shared.PagesContentData;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.pratilipi.commons.shared.PageType;
+import com.pratilipi.common.type.PageType;
 import com.pratilipi.data.type.AccessToken;
 import com.pratilipi.data.type.Page;
 
