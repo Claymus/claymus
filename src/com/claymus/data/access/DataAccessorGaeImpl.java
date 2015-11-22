@@ -24,7 +24,6 @@ import com.claymus.data.access.gae.AuditLogEntity;
 import com.claymus.data.access.gae.CommentEntity;
 import com.claymus.data.access.gae.EmailTemplateEntity;
 import com.claymus.data.access.gae.PageContentEntityStub;
-import com.claymus.data.access.gae.PageEntity;
 import com.claymus.data.access.gae.PageLayoutEntity;
 import com.claymus.data.access.gae.RoleAccessEntity;
 import com.claymus.data.access.gae.RoleEntity;
@@ -34,7 +33,6 @@ import com.claymus.data.transfer.AppProperty;
 import com.claymus.data.transfer.AuditLog;
 import com.claymus.data.transfer.Comment;
 import com.claymus.data.transfer.EmailTemplate;
-import com.claymus.data.transfer.Page;
 import com.claymus.data.transfer.PageContent;
 import com.claymus.data.transfer.PageLayout;
 import com.claymus.data.transfer.Role;
@@ -46,7 +44,9 @@ import com.claymus.pagecontent.blogpost.gae.BlogPostContentEntity;
 import com.google.appengine.api.datastore.Cursor;
 import com.google.appengine.datanucleus.query.JDOCursorHelper;
 import com.pratilipi.data.type.AccessToken;
+import com.pratilipi.data.type.Page;
 import com.pratilipi.data.type.gae.AccessTokenEntity;
+import com.pratilipi.data.type.gae.PageEntity;
 
 @SuppressWarnings("serial")
 public class DataAccessorGaeImpl implements DataAccessor {

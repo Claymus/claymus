@@ -18,9 +18,9 @@ import com.claymus.commons.shared.exception.UnexpectedServerException;
 import com.claymus.data.access.DataAccessor;
 import com.claymus.data.access.DataAccessorFactory;
 import com.claymus.data.access.DataListCursorTuple;
-import com.claymus.data.transfer.Page;
 import com.pratilipi.common.type.PratilipiState;
 import com.pratilipi.commons.shared.PratilipiPageType;
+import com.pratilipi.data.type.Page;
 import com.pratilipi.data.type.Pratilipi;
 
 @SuppressWarnings("serial")

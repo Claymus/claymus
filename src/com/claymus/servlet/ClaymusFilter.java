@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.claymus.data.access.DataAccessor;
 import com.claymus.data.access.DataAccessorFactory;
-import com.claymus.data.transfer.Page;
+import com.pratilipi.data.type.Page;
 
 public class ClaymusFilter implements Filter {
 	

@@ -26,7 +26,6 @@ import com.claymus.commons.shared.exception.InvalidArgumentException;
 import com.claymus.commons.shared.exception.UnexpectedServerException;
 import com.claymus.data.access.DataAccessor;
 import com.claymus.data.access.DataAccessorFactory;
-import com.claymus.data.transfer.Page;
 import com.claymus.data.transfer.PageContent;
 import com.claymus.data.transfer.PageLayout;
 import com.claymus.data.transfer.WebsiteLayout;
@@ -46,6 +45,7 @@ import com.claymus.websitewidget.WebsiteWidgetProcessor;
 import com.claymus.websitewidget.WebsiteWidgetRegistry;
 import com.claymus.websitewidget.html.HtmlWidgetHelper;
 import com.claymus.websitewidget.navigation.NavigationWidgetHelper;
+import com.pratilipi.data.type.Page;
 
 @SuppressWarnings("serial")
 public class ClaymusMain extends HttpServlet {

@@ -12,7 +12,6 @@ import com.claymus.data.transfer.AppProperty;
 import com.claymus.data.transfer.AuditLog;
 import com.claymus.data.transfer.Comment;
 import com.claymus.data.transfer.EmailTemplate;
-import com.claymus.data.transfer.Page;
 import com.claymus.data.transfer.PageContent;
 import com.claymus.data.transfer.PageLayout;
 import com.claymus.data.transfer.Role;
@@ -21,6 +20,7 @@ import com.claymus.data.transfer.User;
 import com.claymus.data.transfer.UserRole;
 import com.claymus.pagecontent.blogpost.BlogPostContent;
 import com.pratilipi.data.type.AccessToken;
+import com.pratilipi.data.type.Page;
 
 @SuppressWarnings("serial")
 public class DataAccessorWithMemcache implements DataAccessor {
