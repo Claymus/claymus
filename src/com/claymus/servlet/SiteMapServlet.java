@@ -19,7 +19,7 @@ import com.claymus.data.access.DataAccessor;
 import com.claymus.data.access.DataAccessorFactory;
 import com.claymus.data.access.DataListCursorTuple;
 import com.pratilipi.common.type.PratilipiState;
-import com.pratilipi.commons.shared.PratilipiPageType;
+import com.pratilipi.commons.shared.PageType;
 import com.pratilipi.data.type.Page;
 import com.pratilipi.data.type.Pratilipi;
 
@@ -40,7 +40,7 @@ public class SiteMapServlet extends HttpServlet {
 		DataListCursorTuple<Page> pageListCursorTuple = dataAccessor.getPageList( null, 1000 ); 
 		List<Page> pageList = new ArrayList<Page>( pageListCursorTuple.getDataList().size() );
 		for( Page page : pageListCursorTuple.getDataList() ){
-			if( page.getType().equals( PratilipiPageType.PRATILIPI.toString() ) ){
+			if( page.getType().equals( PageType.PRATILIPI.toString() ) ){
 				Pratilipi pratilipi = com.pratilipi.data.access.DataAccessorFactory
 											.getDataAccessor( request )
 											.getPratilipi( page.getPrimaryContentId() );

@@ -10,7 +10,6 @@ import com.claymus.commons.server.Access;
 import com.claymus.commons.server.ClaymusHelper;
 import com.claymus.commons.server.UserAccessHelper;
 import com.claymus.commons.shared.ClaymusAccessTokenType;
-import com.claymus.commons.shared.ClaymusPageType;
 import com.claymus.commons.shared.exception.InsufficientAccessException;
 import com.claymus.commons.shared.exception.InvalidArgumentException;
 import com.claymus.data.access.DataAccessor;
@@ -23,6 +22,7 @@ import com.claymus.pagecontent.pages.gae.PagesContentEntity;
 import com.claymus.pagecontent.pages.shared.PagesContentData;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.pratilipi.commons.shared.PageType;
 import com.pratilipi.data.type.AccessToken;
 import com.pratilipi.data.type.Page;
 
@@ -143,7 +143,7 @@ public class PagesContentHelper extends PageContentHelper<
 			auditLog.setAccessId( ACCESS_TO_ADD_PAGE_DATA.getId() );
 			auditLog.setEventDataOld( gson.toJson( page ) );
 			
-			page.setType( ClaymusPageType.GENERIC.toString() );
+			page.setType( PageType.GENERIC.toString() );
 			page.setUriAlias( uriAlias );
 			page.setTitle( title );
 			page.setCreationDate( new Date() );
