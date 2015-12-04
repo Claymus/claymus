@@ -155,6 +155,17 @@ public class DataAccessorGaeImpl implements DataAccessor {
 		return createOrUpdateEntity( user );
 	}
 
+	@Override
+	public Boolean deleteUser( Long id ){
+		try{
+//			deleteEntity( UserEntity.class, id );
+			return false;
+		} catch(JDOObjectNotFoundException e ){
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
 	
 	@Override
 	public Role newRole() {
@@ -171,17 +182,6 @@ public class DataAccessorGaeImpl implements DataAccessor {
 		return createOrUpdateEntity( role );
 	}
 
-	@Override
-	public Boolean deleteUser( Long id ){
-		try{
-//			deleteEntity( UserEntity.class, id );
-			return false;
-		} catch(JDOObjectNotFoundException e ){
-			e.printStackTrace();
-			return false;
-		}
-	}
-	
 
 	@Override
 	public UserRole newUserRole() {
@@ -522,6 +522,7 @@ public class DataAccessorGaeImpl implements DataAccessor {
 		}
 	}
 
+	
 	@Override
 	public AccessToken newAccessToken() {
 		return new AccessTokenEntity();
