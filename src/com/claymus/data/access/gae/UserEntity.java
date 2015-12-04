@@ -11,7 +11,7 @@ import com.claymus.commons.shared.UserSignUpSource;
 import com.claymus.commons.shared.UserState;
 import com.claymus.commons.shared.UserStatus;
 import com.claymus.data.transfer.User;
-import com.pratilipi.commons.shared.UserGender;
+import com.pratilipi.common.type.Gender;
 
 @PersistenceCapable( table = "USER" )
 public class UserEntity implements User {
@@ -39,8 +39,8 @@ public class UserEntity implements User {
 	private String nickName;
 	
 
-//	@Persistent( column = "GENDER" )
-//	private Gender gender;
+	@Persistent( column = "GENDER" )
+	private Gender gender;
 	
 	@Persistent( column = "DATE_OF_BIRTH" )
 	private Date dateOfBirth;
@@ -48,9 +48,6 @@ public class UserEntity implements User {
 	@Persistent( column = "EMAIL" )
 	private String email;
 	
-	@Persistent( column = "GENDER" )
-	private UserGender gender;
-
 	@Persistent( column = "PHONE" )
 	private String phone;
 
@@ -149,12 +146,12 @@ public class UserEntity implements User {
 	}
 	
 	@Override
-	public UserGender getGender() {
+	public Gender getGender() {
 		return gender;
 	}
 
 	@Override
-	public void setGender( UserGender sex ) {
+	public void setGender( Gender sex ) {
 		this.gender = sex;
 	}
 	

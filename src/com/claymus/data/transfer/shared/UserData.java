@@ -4,7 +4,7 @@ import java.util.Date;
 
 import com.claymus.commons.shared.UserStatus;
 import com.google.gwt.user.client.rpc.IsSerializable;
-import com.pratilipi.commons.shared.UserGender;
+import com.pratilipi.common.type.Gender;
 
 public class UserData implements IsSerializable {
 	
@@ -28,7 +28,7 @@ public class UserData implements IsSerializable {
 	private Date dateOfBirth;
 	private boolean hasDateOfBirth;
 	
-	private UserGender gender;
+	private Gender gender;
 	private boolean hasGender;
 	
 	private String campaign;
@@ -124,11 +124,11 @@ public class UserData implements IsSerializable {
 		return hasDateOfBirth;
 	}
 
-	public UserGender getGender() {
+	public Gender getGender() {
 		return gender;
 	}
 
-	public void setGender(UserGender gender) {
+	public void setGender(Gender gender) {
 		this.gender = gender;
 		this.hasGender = true;
 	}

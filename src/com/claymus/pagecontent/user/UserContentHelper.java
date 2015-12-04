@@ -30,7 +30,7 @@ import com.claymus.taskqueue.Task;
 import com.claymus.taskqueue.TaskQueue;
 import com.claymus.taskqueue.TaskQueueFactory;
 import com.google.appengine.labs.repackaged.org.json.JSONException;
-import com.pratilipi.commons.shared.UserGender;
+import com.pratilipi.common.type.Gender;
 import com.pratilipi.data.type.AccessToken;
 
 public class UserContentHelper extends PageContentHelper<
@@ -100,12 +100,12 @@ public class UserContentHelper extends PageContentHelper<
 		if( user == null ){
 			userData.setName( userDataMap.get( GoogleUtil.GOOGLE_USER_DISPLAYNAME ));
 			userData.setEmail( userDataMap.get( GoogleUtil.GOOGLE_USER_EMAIL ));
-			if( userDataMap.get( GoogleUtil.GOOGLE_USER_GENDER ).toUpperCase().equals( UserGender.MALE.toString() ))
-				userData.setGender( UserGender.MALE );
-			else if( userDataMap.get( GoogleUtil.GOOGLE_USER_GENDER ).toUpperCase().equals( UserGender.FEMALE.toString() ))
-				userData.setGender( UserGender.FEMALE );
+			if( userDataMap.get( GoogleUtil.GOOGLE_USER_GENDER ).toUpperCase().equals( Gender.MALE.toString() ))
+				userData.setGender( Gender.MALE );
+			else if( userDataMap.get( GoogleUtil.GOOGLE_USER_GENDER ).toUpperCase().equals( Gender.FEMALE.toString() ))
+				userData.setGender( Gender.FEMALE );
 			else
-				userData.setGender( UserGender.OTHER );
+				userData.setGender( Gender.OTHER );
 			userData.setStatus( UserStatus.ANDROID_SIGNUP_GOOGLE );
 			accessToken = registerUser( userData, request );
 		} else{
@@ -139,12 +139,12 @@ public class UserContentHelper extends PageContentHelper<
 		if( user == null ){
 			userData.setName( userDataMap.get( FacebookUtil.FACEBOOK_USER_NAME ));
 			userData.setEmail( userDataMap.get( FacebookUtil.FACEBOOK_USER_EMAIL ));
-			if( userDataMap.get( FacebookUtil.FACEBOOK_USER_GENDER ).toUpperCase().equals( UserGender.MALE.toString() ))
-				userData.setGender( UserGender.MALE );
-			else if( userDataMap.get( FacebookUtil.FACEBOOK_USER_GENDER ).toUpperCase().equals( UserGender.FEMALE.toString() ))
-				userData.setGender( UserGender.FEMALE );
+			if( userDataMap.get( FacebookUtil.FACEBOOK_USER_GENDER ).toUpperCase().equals( Gender.MALE.toString() ))
+				userData.setGender( Gender.MALE );
+			else if( userDataMap.get( FacebookUtil.FACEBOOK_USER_GENDER ).toUpperCase().equals( Gender.FEMALE.toString() ))
+				userData.setGender( Gender.FEMALE );
 			else
-				userData.setGender( UserGender.OTHER );
+				userData.setGender( Gender.OTHER );
 			userData.setStatus( UserStatus.ANDROID_SIGNUP_FACEBOOK );
 			accessToken = registerUser( userData, request );
 		} else {

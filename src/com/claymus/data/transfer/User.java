@@ -6,7 +6,7 @@ import java.util.Date;
 import com.claymus.commons.shared.UserSignUpSource;
 import com.claymus.commons.shared.UserState;
 import com.claymus.commons.shared.UserStatus;
-import com.pratilipi.commons.shared.UserGender;
+import com.pratilipi.common.type.Gender;
 
 public interface User extends Serializable {
 
@@ -38,9 +38,9 @@ public interface User extends Serializable {
 	
 	void setDateOfBirth( Date dateOfBirth );
 	
-	UserGender getGender();
+	Gender getGender();
 	
-	void setGender( UserGender userGender );
+	void setGender( Gender userGender );
 	
 	String getPhone();
 

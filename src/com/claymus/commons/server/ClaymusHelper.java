@@ -22,7 +22,7 @@ import com.claymus.data.transfer.UserRole;
 import com.claymus.data.transfer.shared.PageData;
 import com.claymus.service.shared.data.UserData;
 import com.google.apphosting.api.ApiProxy;
-import com.pratilipi.commons.shared.UserGender;
+import com.pratilipi.common.type.Gender;
 import com.pratilipi.data.type.AccessToken;
 import com.pratilipi.data.type.Page;
 
@@ -193,12 +193,12 @@ public class ClaymusHelper implements Serializable {
 					public void setDateOfBirth(Date dateOfBirth) { }
 
 					@Override
-					public UserGender getGender() {
+					public Gender getGender() {
 						return null;
 					}
 
 					@Override
-					public void setGender(UserGender userSex) { }
+					public void setGender(Gender userSex) { }
 
 					@Override
 					public UserState getState() {
