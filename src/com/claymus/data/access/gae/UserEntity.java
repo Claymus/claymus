@@ -64,6 +64,9 @@ public class UserEntity implements User {
 	@Persistent( column = "STATUS" )
 	private UserStatus status;
 	
+	@Persistent( column = "VERIFICATION_TOKEN" )
+	private String verificationToken;
+	
 	@Persistent( column = "STATE" )
 	private UserState state;
 
@@ -187,7 +190,41 @@ public class UserEntity implements User {
 
 	@Override
 	public UserStatus getStatus() {
-		return status;
+		
+		if( status != null )
+			return status;
+		
+		switch( state ) {
+			case REFERRAL:
+				if( signUpSource == UserSignUpSource.PRE_LAUNCH_WEBSITE )
+					return UserStatus.PRELAUNCH_REFERRAL;
+				else
+					return UserStatus.POSTLAUNCH_REFERRAL;
+			case REGISTERED:
+			case ACTIVE:
+				switch( signUpSource ) {
+					case PRE_LAUNCH_WEBSITE:
+						return UserStatus.PRELAUNCH_SIGNUP;
+					case WEBSITE:
+					case WEBSITE_M6:
+					case WEBSITE_M6_TAMIL:
+						return UserStatus.POSTLAUNCH_SIGNUP;
+					case WEBSITE_FACEBOOK:
+					case WEBSITE_M6_FACEBOOK:
+					case WEBSITE_M6_TAMIL_FACEBOOK:
+						return UserStatus.POSTLAUNCH_SIGNUP_SOCIALLOGIN;
+					case ANDROID_APP:
+						return UserStatus.ANDROID_SIGNUP;
+					case ANDROID_APP_FACEBOOK:
+						return UserStatus.ANDROID_SIGNUP_FACEBOOK;
+					case ANDROID_APP_GOOGLE:
+						return UserStatus.ANDROID_SIGNUP_GOOGLE;
+				}
+			case BLOCKED:
+			default:
+				return null;
+		}
+		
 	}
 
 	@Override
@@ -211,9 +248,10 @@ public class UserEntity implements User {
 			case ANDROID_SIGNUP_FACEBOOK:
 			case ANDROID_SIGNUP_GOOGLE:
 				return UserState.REGISTERED;
+			default:
+				return null;
 		}
 		
-		return UserState.REGISTERED;
 	}
 
 	@Override
@@ -251,9 +289,10 @@ public class UserEntity implements User {
 				return UserSignUpSource.ANDROID_APP_FACEBOOK;
 			case ANDROID_SIGNUP_GOOGLE:
 				return UserSignUpSource.ANDROID_APP_GOOGLE;
+			default:
+				return null;
 		}
 		
-		return null;
 	}
 
 	@Override
