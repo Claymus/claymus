@@ -29,21 +29,27 @@ public class UserEntity implements User {
 	private String password;
 	
 	
+	@Deprecated
 	@Persistent( column = "FIRST_NAME" )
 	private String firstName;
 	
+	@Deprecated
 	@Persistent( column = "LAST_NAME" )
 	private String lastName;
 	
+	@Deprecated
 	@Persistent( column = "NICK_NAME" )
 	private String nickName;
 	
 
+	@Deprecated
 	@Persistent( column = "GENDER" )
 	private Gender gender;
 	
+	@Deprecated
 	@Persistent( column = "DATE_OF_BIRTH" )
 	private Date dateOfBirth;
+
 	
 	@Persistent( column = "EMAIL" )
 	private String email;
@@ -52,24 +58,22 @@ public class UserEntity implements User {
 	private String phone;
 
 	
-	@Deprecated
-	@Persistent( column = "CAMPAIGN" )
-	private String campaign;
-	
-	@Deprecated
-	@Persistent( column = "REFERER" )
-	private String referer;
+	@Persistent( column = "VERIFICATION_TOKEN" )
+	private String verificationToken;
 	
 	@Deprecated
 	@Persistent( column = "STATUS" )
 	private UserStatus status;
-	
-	@Persistent( column = "VERIFICATION_TOKEN" )
-	private String verificationToken;
-	
+
 	@Persistent( column = "STATE" )
 	private UserState state;
-
+	
+	
+	@Persistent( column = "CAMPAIGN" )
+	private String campaign;
+	
+	@Persistent( column = "REFERER" )
+	private String referer;
 
 	@Persistent( column = "SIGN_UP_DATE" )
 	private Date signUpDate;

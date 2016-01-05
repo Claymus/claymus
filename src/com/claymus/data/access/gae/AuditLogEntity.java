@@ -9,6 +9,7 @@ import javax.jdo.annotations.PrimaryKey;
 
 import com.claymus.data.transfer.AuditLog;
 import com.google.appengine.api.datastore.Text;
+import com.pratilipi.common.type.AccessType;
 
 @PersistenceCapable( table = "AUDIT_LOG" )
 public class AuditLogEntity implements AuditLog {
@@ -22,6 +23,9 @@ public class AuditLogEntity implements AuditLog {
 	@Persistent( column = "ACCESS_ID" )
 	private String accessId;
 	
+	@Persistent( column = "ACCESS_TYPE" )
+	private AccessType accessType;
+
 	@Persistent( column = "EVENT_ID" )
 	private String eventId;
 	
@@ -32,7 +36,7 @@ public class AuditLogEntity implements AuditLog {
 	private Text eventDataNew;
 	
 	@Persistent( column = "EVENT_COMMENT" )
-	private String eventComment;
+	private Text eventComment;
 	
 	@Persistent( column = "CREATION_DATE" )
 	private Date creationDate;
@@ -85,12 +89,12 @@ public class AuditLogEntity implements AuditLog {
 
 	@Override
 	public String getEventComment() {
-		return eventComment;
+		return eventComment == null ? null : eventComment.getValue();
 	}
 
 	@Override
 	public void setEventComment( String eventComment ) {
-		this.eventComment = eventComment;
+		this.eventComment = eventComment == null ? null : new Text( eventComment );
 	}
 
 	@Override
