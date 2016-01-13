@@ -8,10 +8,10 @@ import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
 import com.claymus.commons.shared.UserSignUpSource;
-import com.claymus.commons.shared.UserState;
 import com.claymus.commons.shared.UserStatus;
 import com.claymus.data.transfer.User;
 import com.pratilipi.common.type.Gender;
+import com.pratilipi.common.type.UserState;
 
 @PersistenceCapable( table = "USER" )
 public class UserEntity implements User {

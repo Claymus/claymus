@@ -19,6 +19,7 @@ import javax.jdo.Transaction;
 
 import com.claymus.commons.shared.CommentFilter;
 import com.claymus.commons.shared.CommentParentType;
+import com.claymus.data.access.GaeQueryBuilder.Operator;
 import com.claymus.data.access.gae.AppPropertyEntity;
 import com.claymus.data.access.gae.AuditLogEntity;
 import com.claymus.data.access.gae.CommentEntity;
@@ -43,6 +44,7 @@ import com.claymus.pagecontent.blogpost.BlogPostContent;
 import com.claymus.pagecontent.blogpost.gae.BlogPostContentEntity;
 import com.google.appengine.api.datastore.Cursor;
 import com.google.appengine.datanucleus.query.JDOCursorHelper;
+import com.pratilipi.common.type.UserState;
 import com.pratilipi.data.type.AccessToken;
 import com.pratilipi.data.type.Page;
 import com.pratilipi.data.type.gae.AccessTokenEntity;
@@ -125,18 +127,24 @@ public class DataAccessorGaeImpl implements DataAccessor {
 	
 	@Override
 	public User getUser( Long id ) {
-		return id == null ? null : getEntity( UserEntity.class, id );
+		if( id == null )
+			return null;
+		User user = getEntity( UserEntity.class, id );
+		return user.getState() == UserState.DELETED ? null : user;
 	}
 	
 	@Override
 	public User getUserByEmail( String email ) {
-		Query query =
-				new GaeQueryBuilder( pm.newQuery( UserEntity.class ) )
-						.addFilter( "email", email )
-						.build();
+		Query query = new GaeQueryBuilder( pm.newQuery( UserEntity.class ) )
+				.addFilter( "email", email )
+				.addFilter( "state", UserState.DELETED, Operator.NOT_EQUALS )
+				.addOrdering( "state", true )
+				.addOrdering( "signUpDate", true )
+				.build();
 		
 		@SuppressWarnings("unchecked")
-		List<User> userList = (List<User>) query.execute( email );
+		List<User> userList = (List<User>) query.execute( email, UserState.DELETED );
+		
 		return userList.size() == 0 ? null : pm.detachCopy( userList.get( 0 ) );
 	}
 	

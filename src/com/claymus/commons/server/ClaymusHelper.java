@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.claymus.commons.shared.ClaymusAccessTokenType;
 import com.claymus.commons.shared.UserSignUpSource;
-import com.claymus.commons.shared.UserState;
 import com.claymus.commons.shared.UserStatus;
 import com.claymus.data.access.DataAccessor;
 import com.claymus.data.access.DataAccessorFactory;
@@ -23,6 +22,7 @@ import com.claymus.data.transfer.shared.PageData;
 import com.claymus.service.shared.data.UserData;
 import com.google.apphosting.api.ApiProxy;
 import com.pratilipi.common.type.Gender;
+import com.pratilipi.common.type.UserState;
 import com.pratilipi.data.type.AccessToken;
 import com.pratilipi.data.type.Page;
 

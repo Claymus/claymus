@@ -10,8 +10,13 @@ import javax.jdo.Query;
 
 public class GaeQueryBuilder {
 
+	private static final Logger logger =
+			Logger.getLogger( GaeQueryBuilder.class.getName() );
+
 	public enum Operator {
+		IS_NULL,
 		NOT_NULL,
+		NOT_EQUALS,
 		EQUALS,
 		LESS_THAN,
 		LESS_THAN_OR_EQUAL,
@@ -53,8 +58,14 @@ public class GaeQueryBuilder {
 		}
 		
 		switch( operator ) {
+			case IS_NULL:
+				filters.add( param + " == null" );
+				break;
 			case NOT_NULL:
 				filters.add( param + " != null" );
+				break;
+			case NOT_EQUALS:
+				filters.add( param + " != " + paramKey );
 				break;
 			case EQUALS:
 				filters.add( param + " == " + paramKey );
@@ -78,7 +89,7 @@ public class GaeQueryBuilder {
 				throw new UnsupportedOperationException( "Operator '" + operator + "' is not yet supported." );
 		}
 		
-		if( operator != Operator.NOT_NULL ) {
+		if( operator != Operator.IS_NULL && operator != Operator.NOT_NULL ) {
 			parameteres.add( value.getClass().getName() + " " + paramKey );
 			paramNameValueMap.put( paramKey, value );
 		}
@@ -98,6 +109,17 @@ public class GaeQueryBuilder {
 
 	public GaeQueryBuilder setRange( long start, long end ) {
 		query.setRange( start, end );
+		return this;
+	}
+
+	public GaeQueryBuilder setCursor( String cursorStr ) {
+		if( cursorStr == null )
+			return this;
+		
+		Cursor cursor = Cursor.fromWebSafeString( cursorStr );
+		Map<String, Object> extensionMap = new HashMap<String, Object>();
+		extensionMap.put( JDOCursorHelper.CURSOR_EXTENSION, cursor );
+		query.setExtensions( extensionMap );
 		return this;
 	}
 
@@ -123,6 +145,8 @@ public class GaeQueryBuilder {
 			query.setOrdering( orderingStr );
 		}
 
+		logger.log( Level.INFO, query.toString() );
+		
 		return query;
 	}
 

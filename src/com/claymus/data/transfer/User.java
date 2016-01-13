@@ -4,9 +4,9 @@ import java.io.Serializable;
 import java.util.Date;
 
 import com.claymus.commons.shared.UserSignUpSource;
-import com.claymus.commons.shared.UserState;
 import com.claymus.commons.shared.UserStatus;
 import com.pratilipi.common.type.Gender;
+import com.pratilipi.common.type.UserState;
 
 public interface User extends Serializable {
 
