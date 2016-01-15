@@ -32,6 +32,7 @@ import com.claymus.taskqueue.TaskQueueFactory;
 import com.google.appengine.labs.repackaged.org.json.JSONException;
 import com.pratilipi.common.type.Gender;
 import com.pratilipi.data.type.AccessToken;
+import com.pratilipi.data.type.Author;
 
 public class UserContentHelper extends PageContentHelper<
 		UserContent,
@@ -185,19 +186,27 @@ public class UserContentHelper extends PageContentHelper<
 	
 	
 	public static UserData createUserData( Long userId, HttpServletRequest request ){
-		return createUserData( DataAccessorFactory.getDataAccessor( request ).getUser( userId ) );
+		return createUserData( DataAccessorFactory.getDataAccessor( request ).getUser( userId ), request );
 	}
 	
 	public static UserData createUserData( String email, HttpServletRequest request ){
-		return createUserData( DataAccessorFactory.getDataAccessor( request ).getUserByEmail( email ) );
+		return createUserData( DataAccessorFactory.getDataAccessor( request ).getUserByEmail( email ), request );
 	}
 	
-	public static UserData createUserData( User user ){
+	public static UserData createUserData( User user, HttpServletRequest request ){
 		
 		UserData userData = new UserData();
 		userData.setId( user.getId() );
-		userData.setFirstName( user.getFirstName() );
-		userData.setLastName( user.getLastName() );
+		Author author = com.pratilipi.data.access.DataAccessorFactory
+										.getDataAccessor(request).getAuthorByUserId( user.getId() );
+		if( author != null ){
+			//Get User name from author table.
+			userData.setFirstName( author.getFirstNameEn() );
+			userData.setLastName( author.getLastNameEn() );
+		} else {
+			userData.setFirstName( user.getFirstName() );
+			userData.setLastName( user.getLastName() );
+		}
 		String name = null;
 		if( userData.getFirstName() == null && userData.getLastName() == null )
 			name = userData.getEmail();
@@ -322,7 +331,7 @@ public class UserContentHelper extends PageContentHelper<
 		user = dataAccessor.createOrUpdateUser( user );
 		
 		
-		return createUserData( user );
+		return createUserData( user, request );
 	}
 	
 }
