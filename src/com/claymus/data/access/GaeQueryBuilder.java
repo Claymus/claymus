@@ -8,6 +8,9 @@ import java.util.Map;
 
 import javax.jdo.Query;
 
+import com.google.appengine.api.datastore.Cursor;
+import com.google.appengine.datanucleus.query.JDOCursorHelper;
+
 public class GaeQueryBuilder {
 
 	private static final Logger logger =
