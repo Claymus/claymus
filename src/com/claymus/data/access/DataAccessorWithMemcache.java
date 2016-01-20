@@ -244,11 +244,11 @@ public class DataAccessorWithMemcache implements DataAccessor {
 	
 	@Override
 	public Page getPage( String pageType, Long primaryContentId ) {
-		Page page = memcache.get( PREFIX_PAGE + pageType + "-" + primaryContentId );
+		Page page = memcache.get( PREFIX_PAGE + pageType + "::" + primaryContentId );
 		if( page == null ) {
 			page = dataAccessor.getPage( pageType, primaryContentId );
 			if( page != null )
-				memcache.put( PREFIX_PAGE + pageType + "-" + primaryContentId, page );
+				memcache.put( PREFIX_PAGE + pageType + "::" + primaryContentId, page );
 		}
 		return page;
 	}
@@ -267,7 +267,7 @@ public class DataAccessorWithMemcache implements DataAccessor {
 		if( page.getUriAlias() != null )
 			memcache.put( PREFIX_PAGE + page.getUriAlias(), page );
 		if( page.getPrimaryContentId() != null )
-			memcache.put( PREFIX_PAGE + page.getType() + "-" + page.getPrimaryContentId(), page );
+			memcache.put( PREFIX_PAGE + page.getType() + "::" + page.getPrimaryContentId(), page );
 		return page;
 	}
 
