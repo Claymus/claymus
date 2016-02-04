@@ -46,6 +46,7 @@ public class AccessTokenFilter implements Filter {
 			accessTokenId = claymusHelper.getCookieValue( COOKIE_ACCESS_TOKEN );
 		} else {
 			Cookie cookie = new Cookie( COOKIE_ACCESS_TOKEN, accessTokenId );
+			cookie.setDomain( "pratilipi.com" );
 			cookie.setPath( "/" );
 			response.addCookie( cookie );
 		}
@@ -61,6 +62,7 @@ public class AccessTokenFilter implements Filter {
 			
 			accessTokenId = accessToken.getId();
 			Cookie cookie = new Cookie( COOKIE_ACCESS_TOKEN, accessToken.getId() );
+			cookie.setDomain( "pratilipi.com" );
 			cookie.setPath( "/" );
 			response.addCookie(cookie );
 		}
