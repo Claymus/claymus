@@ -201,12 +201,10 @@ public class UserContentHelper extends PageContentHelper<
 										.getDataAccessor(request).getAuthorByUserId( user.getId() );
 		if( author != null ){
 			//Get User name from author table.
-			userData.setFirstName( author.getFirstNameEn() );
-			userData.setLastName( author.getLastNameEn() );
-		} else {
-			userData.setFirstName( user.getFirstName() );
-			userData.setLastName( user.getLastName() );
+			userData.setFirstName( author.getFirstName() );
+			userData.setLastName( author.getLastName() );
 		}
+		
 		String name = null;
 		if( userData.getFirstName() == null && userData.getLastName() == null )
 			name = userData.getEmail();

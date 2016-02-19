@@ -26,6 +26,9 @@ public class EmailUtil {
 	private final static Properties properties = new Properties();
 	private final static Session session =
 			Session.getDefaultInstance( properties, null );
+	
+	private final static String archiveMailId = "mail-archive@pratilipi.com";
+	private final static String archiveMailName = "Prartilipi Mail Archive";
 
 	
 	public static void sendMail( String recepientName, String recepientEmail,
@@ -36,6 +39,7 @@ public class EmailUtil {
 	
 		msg.setFrom( new InternetAddress( emailTemplate.getSenderEmail(), emailTemplate.getSenderName() ) );
 		msg.addRecipient( Message.RecipientType.TO, new InternetAddress( recepientEmail, recepientName ) );
+		msg.addRecipient( Message.RecipientType.BCC, new InternetAddress( archiveMailId, archiveMailName ) );
 		msg.setReplyTo( new Address[]{ new InternetAddress( emailTemplate.getReplyToEmail(), emailTemplate.getReplyToName() ) } );
 
 		Writer writer = new StringWriter();
