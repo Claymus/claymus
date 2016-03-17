@@ -40,6 +40,134 @@ public class QueueNotificationServlet extends HttpServlet {
 			HttpServletResponse response ) throws IOException {
 
 		DataAccessor dataAccessor = DataAccessorFactory.getDataAccessor( request );
+		/**
+		 * Below commented code is developed as part of 'Follow' notification.
+		 */
+//		try {
+//			String notificationType = request.getParameter( "notificationType" );
+//			if( notificationType == null )
+//				throw new InvalidArgumentException( "Notification Type is null" );
+			
+//			if( notificationType.equals( "FOLLOWEE" )){
+//				Long followerId = Long.parseLong( request.getParameter( "followerId" ) );
+//				Long recipientId = Long.parseLong( request.getParameter( "recipientId" ));
+//				
+//				User follower = dataAccessor.getUser( followerId );
+//				Author author = com.pratilipi.data.access.DataAccessorFactory.getDataAccessor( request )
+//										.getAuthor( recipientId );
+//				User recipient = dataAccessor.getUser( author.getUserId() );
+//				
+//				// Creating Email Template
+//				// TODO: migrate it to DataStore
+//				String subject = "Pratilipi.com - Notification";
+//				File file = new File( "WEB-INF/classes/com/pratilipi/servlet/content/FolloweeEmailContent.ftl" );
+//				List<String> lines;
+//				lines = FileUtils.readLines( file, "UTF-8" );
+//				String body = "";
+//				for( String line : lines )
+//					body = body + line;
+//				
+//				EmailTemplate notificationEmailTemplate = dataAccessor.newEmailTemplate();
+//				notificationEmailTemplate.setSenderName( "Team Pratilipi" );
+//				notificationEmailTemplate.setSenderEmail( "contact@pratilipi.com" );
+//				notificationEmailTemplate.setReplyToName( "Team Pratilipi" );
+//				notificationEmailTemplate.setReplyToEmail( "no-reply@pratilipi.com" );
+//				notificationEmailTemplate.setSubject( subject );
+//				notificationEmailTemplate.setBody( body );
+//				
+//				//Sending email
+//				Map<String, Object> dataModel = new HashMap<>();
+//				dataModel.put( "follower", follower );
+//				dataModel.put( "recipient", recipient );
+//				
+//				if( recipient != null && recipient.getEmail() != null ){
+//					logger.log( Level.INFO, "Sending email..." );
+//					EmailUtil.sendMail(
+//							EmailUtil.createUserName( recipient ), recipient.getEmail(),
+//							notificationEmailTemplate, dataModel );
+//				}
+//				
+//			} else if( notificationType.equals( "FOLLOWER" )){
+//				Long recipientId = Long.parseLong( request.getParameter( "recipientId" ) );
+//				Long authorId = Long.parseLong( request.getParameter( "authorId" ));
+//				
+//				User recipient = dataAccessor.getUser( recipientId );
+//				AuthorData authorData = PratilipiHelper.get( request )
+//										.createAuthorData( authorId );
+//				
+//				// Creating Email Template
+//				// TODO: migrate it to DataStore
+//				String subject = "Pratilipi.com - Followed an Author";
+//				File file = new File( "WEB-INF/classes/com/pratilipi/servlet/content/FollowerEmailContent.ftl" );
+//				List<String> lines;
+//				lines = FileUtils.readLines( file, "UTF-8" );
+//				String body = "";
+//				for( String line : lines )
+//					body = body + line;
+//				
+//				EmailTemplate notificationEmailTemplate = dataAccessor.newEmailTemplate();
+//				notificationEmailTemplate.setSenderName( "Team Pratilipi" );
+//				notificationEmailTemplate.setSenderEmail( "contact@pratilipi.com" );
+//				notificationEmailTemplate.setReplyToName( "Team Pratilipi" );
+//				notificationEmailTemplate.setReplyToEmail( "no-reply@pratilipi.com" );
+//				notificationEmailTemplate.setSubject( subject );
+//				notificationEmailTemplate.setBody( body );
+//				
+//				//Sending email
+//				Map<String, Object> dataModel = new HashMap<>();
+//				dataModel.put( "recipient", recipient );
+//				dataModel.put( "authorData", authorData );
+//				
+//				if( recipient != null && recipient.getEmail() != null ){
+//					logger.log( Level.INFO, "Sending email..." );
+//					EmailUtil.sendMail(
+//							EmailUtil.createUserName( recipient ), recipient.getEmail(),
+//							notificationEmailTemplate, dataModel );
+//				}
+//				
+//			} else if( notificationType.equals( "PUBLISH" )){
+//				Long recipientId = Long.parseLong( request.getParameter( "recipientId" ) );
+//				Long authorId = Long.parseLong( request.getParameter( "authorId" ));
+//				Long pratilipiId = Long.parseLong( request.getParameter( "pratilipiId" ));
+//				
+//				User recipient = dataAccessor.getUser( recipientId );
+//				AuthorData authorData = PratilipiHelper.get( request )
+//										.createAuthorData( authorId );
+//				com.pratilipi.service.shared.data.PratilipiData pratilipiData = PratilipiHelper.get( request )
+//												.createPratilipiData( pratilipiId );
+//				
+//				// Creating Email Template
+//				// TODO: migrate it to DataStore
+//				String subject = "Pratilipi.com - New Content Published";
+//				File file = new File( "WEB-INF/classes/com/pratilipi/servlet/content/PublishNotification.ftl" );
+//				List<String> lines;
+//				lines = FileUtils.readLines( file, "UTF-8" );
+//				String body = "";
+//				for( String line : lines )
+//					body = body + line;
+//				
+//				EmailTemplate notificationEmailTemplate = dataAccessor.newEmailTemplate();
+//				notificationEmailTemplate.setSenderName( "Team Pratilipi" );
+//				notificationEmailTemplate.setSenderEmail( "contact@pratilipi.com" );
+//				notificationEmailTemplate.setReplyToName( "Team Pratilipi" );
+//				notificationEmailTemplate.setReplyToEmail( "no-reply@pratilipi.com" );
+//				notificationEmailTemplate.setSubject( subject );
+//				notificationEmailTemplate.setBody( body );
+//				
+//				//Sending email
+//				Map<String, Object> dataModel = new HashMap<>();
+//				dataModel.put( "recipient", recipient );
+//				dataModel.put( "authorData", authorData );
+//				dataModel.put( "pratilipiData", pratilipiData);
+//				
+//				if( recipient != null && recipient.getEmail() != null ){
+//					logger.log( Level.INFO, "Sending email..." );
+//					EmailUtil.sendMail(
+//							EmailUtil.createUserName( recipient ), recipient.getEmail(),
+//							notificationEmailTemplate, dataModel );
+//				}
+//				
+//			} else{
 		Long userId = Long.parseLong( request.getParameter( "userId" ) );
 		String recipientId = request.getParameter( "recipientId" );
 		String pratilipiId = request.getParameter( "pratilipiId" );
@@ -120,6 +248,7 @@ public class QueueNotificationServlet extends HttpServlet {
 						EmailUtil.createUserName( recipient ), recipient.getEmail(),
 						notificationEmailTemplate, dataModel );
 			}
+//			}
 		} catch ( MessagingException | TemplateException | InvalidArgumentException e1) {
 			e1.printStackTrace();
 		}
