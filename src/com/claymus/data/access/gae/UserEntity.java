@@ -81,7 +81,10 @@ public class UserEntity implements User {
 	@Persistent( column = "SIGN_UP_SOURCE" )
 	private UserSignUpSource signUpSource;
 
-	
+	@Persistent( column = "LAST_UPDATED" )
+	private Date lastUpdated;
+
+
 	@Override
 	public Long getId() {
 		return id;
