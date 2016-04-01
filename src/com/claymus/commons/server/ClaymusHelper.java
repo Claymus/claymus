@@ -24,6 +24,7 @@ import com.google.apphosting.api.ApiProxy;
 import com.pratilipi.common.type.Gender;
 import com.pratilipi.common.type.UserState;
 import com.pratilipi.data.type.AccessToken;
+import com.pratilipi.data.type.Author;
 import com.pratilipi.data.type.Page;
 
 @SuppressWarnings("serial")
@@ -341,10 +342,12 @@ public class ClaymusHelper implements Serializable {
 	
 	public final UserData createUserData( User user ) {
 		UserData userData = new UserData();
-		
+		//HACK TO GET USER NAME FROM AUTHOR TABLE.
+		Author author = com.pratilipi.data.access.DataAccessorFactory.getDataAccessor( request )
+								.getAuthorByUserId( user.getId() );
 		userData.setId( user.getId() );
-		userData.setFirstName( user.getFirstName() );
-		userData.setLastName( user.getLastName() );
+		userData.setFirstName( author.getFirstName() );
+		userData.setLastName( author.getLastName() );
 		userData.setEmail( user.getEmail() );
 		userData.setStatus( user.getStatus() );
 		
