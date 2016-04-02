@@ -343,11 +343,16 @@ public class ClaymusHelper implements Serializable {
 	public final UserData createUserData( User user ) {
 		UserData userData = new UserData();
 		//HACK TO GET USER NAME FROM AUTHOR TABLE.
-		Author author = com.pratilipi.data.access.DataAccessorFactory.getDataAccessor( request )
-								.getAuthorByUserId( user.getId() );
 		userData.setId( user.getId() );
-		userData.setFirstName( author.getFirstName() );
-		userData.setLastName( author.getLastName() );
+		if( !user.getId().equals( 0L) ){
+			Author author = com.pratilipi.data.access.DataAccessorFactory.getDataAccessor( request )
+								.getAuthorByUserId( user.getId() );
+			userData.setFirstName( author.getFirstName() );
+			userData.setLastName( author.getLastName() );
+		} else{
+			userData.setFirstName( user.getFirstName() );
+			userData.setLastName( user.getLastName() );
+		}
 		userData.setEmail( user.getEmail() );
 		userData.setStatus( user.getStatus() );
 		
