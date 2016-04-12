@@ -241,6 +241,13 @@ public class ClaymusHelper implements Serializable {
 		} else if( currentUserRoleList == null ) {
 			DataAccessor dataAccessor = DataAccessorFactory.getDataAccessor( request );
 			currentUserRoleList = dataAccessor.getUserRoleList( getCurrentUserId() );
+			//Hack used for users registered on new website.
+			if( currentUserRoleList == null ){
+				UserRole tempRole = dataAccessor.newUserRole();
+				tempRole.setRoleId( "member" );
+				tempRole.setUserId(getCurrentUserId());
+				currentUserRoleList.add( tempRole );
+			}
 		}
 		
 		return currentUserRoleList;
